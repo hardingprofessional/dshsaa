@@ -1,11 +1,22 @@
 import unittest
 import dshsaa.raw as raw
+#! /usr/bin/env python3
 
-class TestRawMethods(unittest.TestCase)
+import ctypes as c
+
+class TestMainDLL(unittest.TestCase):
 
 	def setUp(self):
 		# init a maindll class object to work off of
-		maindll = raw.MainDLL.DllMainInit()
+		maindll = raw.maindll.DllMainInit()
 		
+	def test_DllMainInit(self):
+		maindll = raw.maindll.DllMainInit()
+		self.assertEqual(type(maindll), type(c.c_int64(5)))
 
-	def test_
+	def tearDown(self):
+		print("need to implement removal of log file")
+
+
+if __name__ == '__main__':
+	unittest.main()

@@ -1,3 +1,5 @@
+#! /usr/bin/env python3
+
 import raw.settings as settings
 import ctypes as c
 import pdb
