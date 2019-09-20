@@ -1,7 +1,6 @@
+#! /usr/bin/env python3
 import unittest
 import dshsaa.raw as raw
-#! /usr/bin/env python3
-
 import ctypes as c
 
 class TestMainDLL(unittest.TestCase):
