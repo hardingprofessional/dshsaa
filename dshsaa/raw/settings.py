@@ -3,9 +3,6 @@
 """
 settings.py is an internal module to the raw package which addresses operating system specific architecture.
 """
-
-print("running settings.py")
-
 import os
 import platform
 import ctypes as c
@@ -22,8 +19,44 @@ LIB_ASTRO_NAME = None
 LIB_SGP4_NAME = None
 
 ## Useful ctypes data objects
-byte512 = c.c_char * 512
+double512 = c.c_double * 512
 vector = c.c_double * 3
+class stay_int64(c.c_int64):
+	"""
+	ctypes primitives are automatically converted into python primitives unless subclassed. In order to consistently type check int64 numerical types, I subclassed c_int64 but changed no properties or methods
+	"""
+	
+
+## Useful ctypes conversion patterns
+def byte_to_str(byte_obj):
+	byte_obj = byte_obj.value
+	byte_obj = byte_obj.decode()
+	byte_obj = byte_obj.rstrip()
+	return byte_obj
+
+def vector_to_list(vector_obj):
+	return [float(vector_obj[0]), float(vector_obj[1]), float(vector_obj[2])]
+
+def feed_list_into_array(li, ar):
+	"""
+	python:function:: feed_list_into_array
+	feeds the contents of a python list into a ctypes array
+	:param list li: a list of python elements 
+	:param ctypes_array ar: a fully initialized ctype array
+	:return ar: returns the fully initialized ctype array with the python list contents in it
+	"""
+	if len(li) > len(ar):
+		raise Exception("feeding a list of greater length into a ctypes array of lesser length will result in a memory buffer overflow event")
+	for i in range(len(li)):
+		ar[i] = ar._type_(li[i])
+	return ar
+		
+
+## 
+def enforce_limit(byte_obj, length):
+	if len(byte_obj) >= length-1:
+		byte_obj = byte_obj[0:length-2] + bytes(1)
+	return byte_obj
 
 ## Start
 # This set of functions sets important global variables based on operating system and environment conditions
