@@ -1,6 +1,6 @@
 ### Python ###
 # Byte-compiled / optimized / DLL files
-__pycache__/
+**__pycache__/
 *.py[cod]
 *$py.class
 
@@ -12,3 +12,9 @@ dshsaa/libdll/
 
 # sphinx output
 build/
+
+# kate swap files
+**.kate-swp
+
+# vim swap files
+**.swp
