@@ -20,6 +20,7 @@ LIB_SGP4_NAME = None
 
 ## Useful ctypes data objects
 double512 = c.c_double * 512
+double128 = c.c_double * 128
 vector = c.c_double * 3
 class stay_int64(c.c_int64):
 	"""
@@ -53,9 +54,20 @@ def feed_list_into_array(li, ar):
 		
 
 ## 
-def enforce_limit(byte_obj, length):
-	if len(byte_obj) >= length-1:
-		byte_obj = byte_obj[0:length-2] + bytes(1)
+def enforce_limit(byte_obj, length, terminator=True):
+	"""
+	python:function:: enforce_limit
+	When sending byte strings to DLL, this function will trim any byte strings in excess of a specified limit and ensure they end in a proper terminator
+	:param bytes byte_obj: The byte string we wish to limit in length
+	:param terminator: if true, enforce last byte is \0, else leave last byte as is
+	:return bytes byte_obj: The byte string trimmed to the appropriate length with the final address guaranteed to be \0
+	"""
+	if terminator:
+		if len(byte_obj) >= length:
+			byte_obj = byte_obj[0:length-1] + bytes(1)
+	else:
+		if len(byte_obj) > length:
+			byte_obj = byte_obj[0:length]
 	return byte_obj
 
 ## Start

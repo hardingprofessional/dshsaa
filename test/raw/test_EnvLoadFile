@@ -1,0 +1,7 @@
+
+
+
+*** Geopotential Model ***
+BCONST=WGS-72  
+*** FK Model ***
+FKCONST=FK5 

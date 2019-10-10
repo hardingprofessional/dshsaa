@@ -12,7 +12,7 @@ class TestTimeDLL(unittest.TestCase):
 		self.maindll_handle = maindll.DllMainInit()
 		self.timedll_retcode = timedll.TimeFuncInit(self.maindll_handle)
 		if self.timedll_retcode != 0:
-			raise Exception("timedll init retcode was %i != 0" % self.timedll_retcode)
+			raise Exception("timedll init retcode was %i != 0" % (self.timedll_retcode))
 		return None
 
 	def test_DTGToUTC(self):
