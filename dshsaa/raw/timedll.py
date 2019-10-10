@@ -464,13 +464,135 @@ def UTCToDTG20(ds50UTC):
 	dtg20 = settings.byte_to_str(dtg20)
 	return dtg20
 
-
-
 ## UTCToET
+C_TIMEDLL.UTCToET.restype = c.c_double
+C_TIMEDLL.UTCToET.argtypes = [c.c_double]
+def UTCToET(ds50UTC):
+	"""
+	python:function::UTCToET
+	Converts a time in ds50UTC to a time in ds50ET using timing constants records in memory. If no timing constants records were loaded, ds50UTC and ds50UT1 are the same. 
+	:param double ds50UTC: Days since 1950, UTC to be converted.
+	:return double ds50ET: The number of days since 1950, ET. Partial days may be returned.
+	"""
+	ds50UTC = c.c_double(ds50UTC)
+	ds50ET = C_TIMEDLL.UTCToET(ds50UTC)
+	return ds50ET
+
 ## UTCToTAI
-## UTCToConRec
+C_TIMEDLL.UTCToTAI.restype = c.c_double
+C_TIMEDLL.UTCToTAI.argtypes = [c.c_double]
+def UTCToTAI(ds50UTC):
+	"""
+	python:function::UTCToTAI
+	Converts a time in ds50UTC to a time in ds50TAI using timing constants records in memory. If no timing constants records were loaded, ds50UTC and ds50TAI are the same. 
+	:param double ds50UTC: Days since 1950, UTC to be converted.
+	:return double ds50TAI: The number of days since 1950, TAI. Partial days may be returned.
+	"""
+	ds50UTC = c.c_double(ds50UTC)
+	ds50TAI = C_TIMEDLL.UTCToTAI(ds50UTC)
+	return ds50TAI
+
+## UTCToTConRec
+C_TIMEDLL.UTCToTConRec.argtypes = [c.c_double] + [c.POINTER(c.c_double)] * 5
+def UTCToTConRec(ds50UTC):
+	"""
+	python:function::UTCToTConRec
+	Retrieves the timing constants record, if exists, at the requested input time in ds50UTC. If the requested record is not found, 0's will be returned for all of the constants. You can use this fact to determine whether the record was found or not. Simply check the taiMinusUTC value after calling this function. Since that value can never be 0 for a valid record, if it is 0 the record was not found. 
+	:param float ds50UTC: Input days since 1950, UTC
+	:return float taiMinusUTC: Returned TAI minus UTC offset at requested time (seconds)
+	:return float ut1MinusUTC: Returned UT1 minus UTC offset at requested time (seconds)
+	:return float ut1Rate: Returned UT1 rate of change versus UTC at Reference time (msec/day)
+	:return float polarX: Returned interpolated polar wander (X direction) at requested time (arc-seconds)
+	:return float polarY: Returned interpolated polar wander (Y direction) at requested time (arc-seconds)
+	"""
+	taiMinusUTC = c.c_double()
+	ut1MinusUTC = c.c_double()
+	ut1Rate = c.c_double()
+	polarX = c.c_double()
+	polarY = c.c_double()
+	C_TIMEDLL.UTCToTConRec(ds50UTC, c.byref(taiMinusUTC), c.byref(ut1MinusUTC), c.byref(ut1Rate), c.byref(polarX), c.byref(polarY))
+	taiMinusUTC = taiMinusUTC.value
+	ut1MinusUTC = ut1MinusUTC.value
+	ut1Rate = ut1Rate.value
+	polarX = polarX.value
+	polarY = polarY.value
+	return (taiMinusUTC, ut1MinusUTC, ut1Rate, polarX, polarY)
+
 ## UTCToTimeComps1
+C_TIMEDLL.UTCToTimeComps1.argtypes = [c.c_double] + [c.POINTER(c.c_int)] * 4 + [c.POINTER(c.c_double)]
+def UTCToTimeComps1(ds50UTC):
+	"""
+	python:function::UTCToTimeComps1
+	"""
+	ds50UTC = c.c_double(ds50UTC)
+	year = c.c_int()
+	dayOfYear = c.c_int()
+	hh = c.c_int()
+	mm = c.c_int()
+	sss = c.c_double()
+	C_TIMEDLL.UTCToTimeComps1(ds50UTC, c.byref(year), c.byref(dayOfYear), c.byref(hh), c.byref(mm), c.byref(sss))
+	year = year.value
+	dayOfYear = dayOfYear.value
+	hh = hh.value
+	mm = mm.value
+	sss = sss.value
+	return (year, dayOfYear, hh, mm, sss)
+
 ## UTCToTimeComps2
+C_TIMEDLL.UTCToTimeComps2.argtypes = [c.c_double] + [c.POINTER(c.c_int)] * 5 + [c.POINTER(c.c_double)]
+def UTCToTimeComps2(ds50UTC):
+	"""
+	python:function::UTCToTimeCOmps2
+	"""
+	ds50UTC = c.c_double(ds50UTC)
+	year = c.c_int()
+	month = c.c_int()
+	dayOfMonth = c.c_int()
+	hh = c.c_int()
+	mm = c.c_int()
+	sss = c.c_double()
+	C_TIMEDLL.UTCToTimeComps2(ds50UTC, c.byref(year), c.byref(month), c.byref(dayOfMonth), c.byref(hh), c.byref(mm), c.byref(sss))
+	year = year.value
+	month = month.value
+	dayOfMonth = dayOfMonth.value
+	hh = hh.value
+	mm = mm.value
+	sss = sss.value
+	return(year, month, dayOfMonth, hh, mm, sss)
+
 ## UTCToUT1
+C_TIMEDLL.UTCToUT1.restype = c.c_double
+C_TIMEDLL.UTCToUT1.argtypes = [c.c_double]
+def UTCToUT1(ds50UTC):
+	"""
+	python:function::UTCToUT1
+	"""
+	ds50UTC = c.c_double(ds50UTC)
+	ds50UT1 = C_TIMEDLL.UTCToUT1(ds50UTC)
+	return ds50UT1
+
 ## UTCToYrDays
+C_TIMEDLL.UTCToYrDays.argtypes = [c.c_double, c.POINTER(c.c_int), c.POINTER(c.c_double)]
+def UTCToYrDays(ds50UTC):
+	"""
+	python:function::UTCToYrDays
+	"""
+	ds50UTC = c.c_double(ds50UTC)
+	year = c.c_int()
+	dayOfYear = c.c_double()
+	C_TIMEDLL.UTCToYrDays(ds50UTC, c.byref(year), c.byref(dayOfYear))
+	year = year.value
+	dayOfYear = dayOfYear.value
+	return (year, dayOfYear)
+
 ## YrDaysToUTC
+C_TIMEDLL.YrDaysToUTC.restype = c.c_double
+C_TIMEDLL.YrDaysToUTC.argtypes = [c.c_int, c.c_double]
+def YrDaysToUTC(year, dayOfYear):
+	"""
+	python:function::YrDaysToUTC
+	"""
+	year = c.c_int(year)
+	dayOfYear = c.c_double(dayOfYear)
+	ds50UTC = C_TIMEDLL.YrDaysToUTC(year, dayOfYear)
+	return ds50UTC
