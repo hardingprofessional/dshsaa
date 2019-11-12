@@ -21,3 +21,6 @@ build/
 
 # output log files from debugging
 **.log
+
+# core dumps from segmentation faults
+**/core
