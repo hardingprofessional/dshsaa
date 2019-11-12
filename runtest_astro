@@ -1,1 +1,2 @@
-python -m unittest -v test.raw.test_astrodll
+#! /bin/bash
+python3 -m unittest -v test.raw.test_astrodll

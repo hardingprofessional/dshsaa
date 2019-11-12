@@ -275,39 +275,31 @@ class TestTimeDLL(unittest.TestCase):
 	def test_UTCToTimeComps1(self):
 		ds50UTC = 18751.12792065972
 		(year, dayOfYear, hh, mm, sss) = timedll.UTCToTimeComps1(ds50UTC)
-		print("%i %i %i:%i:%f" % (year, dayOfYear, hh, mm, sss))
 	
 	## UTCToTimeComps2
 	def test_UTCToTimeComps2(self):
 		ds50UTC = 18751.12792065972
 		(year, month, dayOfMonth, hh, mm, sss) = timedll.UTCToTimeComps2(ds50UTC)
-		print("%i-%i-%i %i:%i:%f" % (year, month, dayOfMonth, hh, mm, sss))
 		
 	## UTCToUT1
 	def test_UTCToUT1(self):
 		ds50UTC = 18751.12792065972
 		ds50UT1 = timedll.UTCToUT1(ds50UTC)
-		print("ds50UT1 = %f" % (ds50UT1))
 		self.assertEqual(ds50UTC, ds50UT1)
 	
 	## UTCToYrDays
 	def test_UTCToYrDays(self):
 		ds50UTC = 18751.12792065972
 		(year, dayOfYear) = timedll.UTCToYrDays(ds50UTC)
-		print("year %i, day %f" % (year, dayOfYear))
 	
 	## YrDaysToUTC
 	def test_YrDaysToUTC(self):
 		year = 2001
 		dayOfYear = 123.12792065972
 		ds50UTC = timedll.YrDaysToUTC(year, dayOfYear)
-		print("ds50UTC = %f" % (ds50UTC))
 
 	def tearDown(self):
 		return None
-
-
-
-
+	
 if __name__ == '__main__':
 	unittest.main()

@@ -17,28 +17,19 @@ class TestEnvDLL(unittest.TestCase):
 	## EnvGetEarthShape
 	def test_EnvGetEarthShape(self):
 		earth_shape = envdll.EnvGetEarthShape()
-		if earth_shape == 0:
-			print("earth shape: spherical")
-		elif earth_shape == 1:
-			print("earth shape: oblate")
-		else:
-			print("earth shape undetermined code: %i" % (earth_shape))
 			
 	## EnvGetFkConst
 	def test_EnvGetFkConst(self):
 		for (val, xf_FkCon) in zip(['C1', 'C1_dot', 'THGR70'],[1, 2, 3]):
 			fkcon = envdll.EnvGetFkConst(xf_FkCon)
-			print("%s: %f" % (val, fkcon))
 
 	## EnvGetFkIdx
 	def test_EnvGetFkIdx(self):
 		fk_setting = envdll.EnvGetFkIdx()
-		print("fk setting: %i" % (fk_setting))
 		
 	## EnvGetFkPtr
 	def test_EnvGetFkPtr(self):
 		fk_ptr = envdll.EnvGetFkPtr()
-		print("fk_ptr = %i" % (fk_ptr.value))
 		
 	## EnvGetGeoConst
 	def test_EnvGetGeoConst(self):
@@ -56,26 +47,22 @@ class TestEnvDLL(unittest.TestCase):
 				'THDOT (rad/m)']
 		for (code, descriptor) in zip(codes, descriptors):
 			value = envdll.EnvGetGeoConst(code)
-			print("%s: %f" % (descriptor, value))
 	
 	## EnvGetGeoIdx
 	def test_EnvGetGeoIdx(self):
 		valid_codes = [84, 96, 72, 2, 68, 5, 9]
 		geo_idx = envdll.EnvGetGeoIdx()
-		print("geo_idx = %i" % (geo_idx))
 		self.assertTrue(geo_idx in valid_codes)
 	
 	## EnvGetGeoStr
 	def test_EnvGetGeoStr(self):
 		valid_strings = ['WGS-84', 'EGM-96', 'WGS-72', 'JGM2', 'SEM68R', 'GEM5', 'GEM9']
 		geo_str = envdll.EnvGetGeoStr()
-		print("geo_str = %s" % (geo_str))
 		self.assertTrue(geo_str in valid_strings)
 
 	## EnvGetInfo
 	def test_EnvGetInfo(self):
 		info = envdll.EnvGetInfo()
-		print("info: %s" % (info))
 
 	## EnvInit
 	def test_EnvInit(self):
@@ -86,7 +73,6 @@ class TestEnvDLL(unittest.TestCase):
 	def test_EnvLoadFile(self):
 		envConstFile = './test/raw/test_EnvLoadFile'
 		retcode = envdll.EnvLoadFile(envConstFile)
-		print("retcode = %i" % (retcode))
 		self.assertTrue(retcode == 0)
 
 	## EnvSaveFile
@@ -95,7 +81,6 @@ class TestEnvDLL(unittest.TestCase):
 		saveMode = 0
 		saveForm = 0
 		retcode = envdll.EnvSaveFile(envConstFile, saveMode, saveForm)
-		print("retcode = %i" % (retcode))
 		self.assertTrue(retcode == 0)
 		os.remove(envConstFile)
 
