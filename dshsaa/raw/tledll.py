@@ -357,7 +357,43 @@ def TleAddSatFrLines(line1, line2):
 	return satKey
 
 ##TleAddSatFrLinesML
+C_TLEDLL.TleAddSatFrLinesML.restype = settings.stay_int64
+C_TLEDLL.TleAddSatFrLinesML.argtypes = [c.c_char_p, c.c_char_p]
+def TleAddSatFrLinesML(line1, line2):
+	"""
+	python:function::TleAddSatFrArray
+	Adds a TLE (satellite), using its directly specified first and second lines.This function is similar to TleAddSatFrLines but designed to be used in Matlab. Matlab doesn't correctly return the 19-digit satellite key using TleAddSatFrLines. This method is an alternative way to return the satKey output. 
+	Note: Adding two sets of TLEs which are exactly the same will cause the second initialization to fail. Make them distinct by modifying the satellite ID.
+	:param str line1: The first line of a two line element set. (string[512])
+	:param str line2: The second line of a two line element set (string[512])
+	:param settings.stay_int64 satKey: The satKey of the newly added TLE on success, a negative value on error.
+	"""
+	line1 = settings.str_to_c_char_p(line1, fixed_width=None, limit=None, terminator=None)
+	line2 = settings.str_to_c_char_p(line2, fixed_width=None, limit=None, terminator=None)
+	satKey = C_TLEDLL.TleAddSatFrLinesML(line1, line2)
+	return satKey
+
 ##TleDataToArray
+C_TLEDLL.TleDataToArray.restype = c.c_int
+C_TLEDLL.TleDataToArray.argtypes = [settings.stay_int64, settings.double64, c.c_char_p]
+def TleDataToArray(satKey):
+	"""
+	python:function::TleDataToArray
+	Retrieves TLE data and stored it in the passing parameters 
+	:param settings.stay_int64 satKey: The satellite's unique key
+	:return int retcode: 0 if all values are retrieved successfully, non-0 if there is an error
+	:return float[64] xa_tle: Array containing TLE's numerical fields, see XA_TLE_? for array arrangement (double[64])
+	:return str xs_tle: Output string that contains all TLE's text fields, see XS_TLE_? for column arrangement (byte[512])
+	"""
+	if not isinstance(satKey, settings.stay_int64):
+		raise TypeError("satKey is type %s, should be type %s" % (type(satKey), settings.stay_int64))
+	xa_tle = settings.settings.double64()
+	xs_tle = c.c_char_p(bytes(512))
+	retcode = C_TLEDLL.TleDataToArray(satKey, xa_tle, xs_tle)
+	xa_tle = settings.array_to_list(xa_tle)
+	xs_tle = settings.byte_to_str(xs_tle)
+	return (retcode	, xa_tle, xs_tle)
+	
 ##TleFieldsToSatKey
 ##TleFieldsToSatKeyML
 ##TleGetAllFieldsGP

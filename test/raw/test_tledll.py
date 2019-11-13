@@ -197,7 +197,19 @@ class TestTleDll(unittest.TestCase):
 		self.assertTrue(satKey.value > 0)
 	
 	##TleAddSatFrLinesML
+	@unittest.skip("Segmentation fault, matlab")
+	def test_TleAddSatFrLinesML(self):
+		line1 = '1 23455U 94089A   97320.90946019  .00000140  00000-0  10191-3 0  2621'
+		line2 = '2 23455  99.0090 272.6745 0008546 223.1686 136.8816 14.11711747148495'
+		satKey = tledll.TleAddSatFrLinesML(line1, line2)
+		self.assertTrue(satKey.value > 0)
+		
 	##TleDataToArray
+	def test_TleDataToArray(self):
+		satKey = self.generic_satKey
+		(retcode, xa_tle, xs_tle) = tledll.TleDataToArray(satKey)
+		pdb.set_trace()
+	
 	##TleFieldsToSatKey
 	##TleFieldsToSatKeyML
 	##TleGetAllFieldsGP
