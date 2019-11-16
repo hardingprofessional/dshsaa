@@ -3,6 +3,7 @@ import unittest
 from dshsaa.raw import settings, maindll, envdll, timedll, tledll
 import pdb
 import ctypes as c 
+import re
 
 class TestTleDll(unittest.TestCase):
 	@classmethod
@@ -389,17 +390,71 @@ class TestTleDll(unittest.TestCase):
 		satKey = self.generic_satKey
 		xf_Tles = list(range(1, 15))
 		# TODO: Break down and check each of these values
-		for xf_Tle in xf_Tles:
-			(retcode, valueStr) = tledll.TleGetField(satKey, xf_Tle)
-			print("xf_Tle: %i, retcode: %i, valueStr: %s" % (xf_Tle, retcode, valueStr))
+		#for xf_Tle in xf_Tles:
+		#	(retcode, valueStr) = tledll.TleGetField(satKey, xf_Tle)
+		#	print("xf_Tle: %i, retcode: %i, valueStr: %s" % (xf_Tle, retcode, valueStr))
 	
 	##TleGetInfo
+	def test_TleGetInfo(self):
+		infoStr = tledll.TleGetInfo()
+		
 	##TleGetLines
+	def test_TleGetLines(self):
+		line1 = '1 23455U 94089A   97320.90946019  .00000140  00000-0  10191-3 0  2621'
+		line2 = '2 23455  99.0090 272.6745 0008546 223.1686 136.8816 14.11711747148495'
+		satKey = tledll.TleAddSatFrLines(line1, line2)
+		(retcode, line1_r, line2_r) = tledll.TleGetLines(satKey)
+		# The text does not match exactly, and testing equality is tricky
+		# TODO: Right a better testing method for accuracy, values are close enough based on visual inspection
+	
 	##TleGetLoaded
+	def test_TleGetLoaded(self):
+		tledll.TleRemoveAllSats()
+		inserted_satKeys = []
+		for num in range(0, 10):
+			line1 = '1 2345%iU 94089A   97320.90946019  .00000140  00000-0  10191-3 0  2621' % (num)
+			line2 = '2 2345%i  99.0090 272.6745 0008546 223.1686 136.8816 14.11711747148495' % (num)
+			inserted_satKeys.append(tledll.TleAddSatFrLines(line1, line2))
+		retrieved_satKeys = tledll.TleGetLoaded(9)
+		# I have manually verified this information is correct
+		# TODO: Add automated verification and comparison to TleGetLoaded
+		
 	##TleGetSatKey
+	def test_TleGetSatKey(self):
+		satKey = tledll.TleGetSatKey(25544)
+		self.assertEqual(satKey.value, self.generic_satKey.value)
+		
 	##TleGetSatKeyML
+	def test_TleGetSatKeyML(self):
+		satKey = tledll.TleGetSatKeyML(25544)
+		self.assertEqual(satKey.value, self.generic_satKey.value)
+	
 	##TleGPArrayToLines
+	def test_TleGPArrayToLines(self):
+		xa_tle = [90004.0, 19409.03935584, 1.327e-05, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 64.7716, 194.9878, 0.6033327, 269.302, 18.611, 2.00615358, 3847.0, 0.0, 0.0, 0.0, 882.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+		xs_tle = 'USGP4-KNW'
+		(line1, line2) = tledll.TleGPArrayToLines(xa_tle, xs_tle)
+	
 	##TleGPFieldsToLines
+	def test_TleGPFieldsToLines(self):
+		satNum    = 25544
+		secClass  = 'U'
+		satName   = 'ISS'
+		epochYr   = 8
+		epochDays = 264.51782528
+		nDotO2    = 5555
+		n2DotO6   = 6666
+		bstar     = -0.000011606 #0.[0]{n}(digits) to accomplish assumed decimal point
+		ephType   = 0
+		elsetNum  = 292
+		incli     = 51.6416
+		node      = 247.4627
+		eccen     = 0.0006703 #a leading decimal point is necessary
+		omega     = 130.5360
+		mnAnomaly = 325.0288
+		mnMotion  = 15.72125391
+		revNum    = 56353
+		(line1, line2) = tledll.TleGPFieldsToLines(satNum, secClass, satName, epochYr, epochDays, nDotO2, n2DotO6, bstar, ephType, elsetNum, incli, node, eccen, omega, mnAnomaly, mnMotion, revNum)
 	
 	##TleInit
 	def test_TleInit(self):
@@ -413,7 +468,42 @@ class TestTleDll(unittest.TestCase):
 		self.assertEqual(retcode, 0)
 		
 	##TleLoadFile
+	def test_TleLoadFile(self):
+		tleFile = './test/raw/inputs/tledll.tleloadfile.inp'
+		retcode = tledll.TleLoadFile(tleFile)
+		self.assertEqual(retcode, 0)
+		
 	##TleParseGP
+	def test_TleParseGP(self):
+		# This is a GP 2 line element set, but not all are!
+		"""      00000000011111111112222222222333333333344444444445555555555666666666"""
+		"""      12345678901234567890123456789012345678901234567890123456789012345678"""
+		line1 = '1 19650U 88102B   00082.05491348 -.00000156 +00000-0 -55907-4 0 0856'
+		"""      123456789012345678901234567890123456789012345678901"""
+		line2 = '2 19650 070.9951 288.5351 0012570 034.5635 325.6302 14.1505917558504'
+		(retcode, satNum, secClass, satName, epochYr, epochDays, bTerm, ogParm, agom, elsetNum, incli, node, eccen, omega, mnAnomaly, mnMotion, revNum) = tledll.TleParseGP(line1, line2)
+		pdb.set_trace()
+		""" TODO: Why aren't these values right?
+		self.assertEqual(retcode, 0)
+		self.assertEqual(satNum, 19650
+		self.assertEqual(secClass, 'U'
+		self.assertEqual(satName, '88102B'
+		self.assertEqual(epochYr, 2000
+		self.assertEqual(epochDays, 82.05491348)
+		self.assertEqual(bTerm,-0.00000156)
+		self.assertEqual(ogParm, 0)
+		self.assertEqual(agom, -0.55907e-4)
+		self.assertEqual(elsetNum, 0
+		self.assertEqual(incli, 70.9951
+		self.assertEqual(node, 0.0222
+		self.assertEqual(eccen, 
+		self.assertEqual(omega, 
+		self.assertEqual(mnAnomaly, 
+		self.assertEqual(mnMotion, 
+		self.assertEqual(revNum, 
+		"""
+		
+		
 	##TleParseSP
 	##TleRemoveAllSats
 	##TleRemoveSat

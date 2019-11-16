@@ -787,19 +787,202 @@ def TleGetField(satKey, xf_Tle):
 	valueStr = settings.byte_to_str(valueStr)
 	return (retcode, valueStr)
 
-
-
-
-
-
-
 ##TleGetInfo
+C_TLEDLL.TleGetInfo.argtypes = [c.c_char_p]
+def TleGetInfo():
+	"""
+	python:function::TleGetInfo
+	Returns the information about the Tle DLL. The returned string provides information about the version number, build date, and the platform of the Tle DLL. 
+	:return str infoStr: A string to hold the information about the Tle DLL. (byte[128])
+	"""
+	infoStr = c.c_char_p(bytes(128))
+	C_TLEDLL.TleGetInfo(infoStr)
+	infoStr = settings.byte_to_str(infoStr)
+	return infoStr
+
 ##TleGetLines
+C_TLEDLL.TleGetLines.restype = c.c_int32
+C_TLEDLL.TleGetLines.argtypes = [settings.stay_int64, c.c_char_p, c.c_char_p]
+def TleGetLines(satKey):
+	"""
+	python:function::TleGetLines
+	Returns the first and second lines representation of a TLE of a satellite. 
+	:param settings.stay_int64 satKey: 
+	:return int retcode: 0 if successful, non-0 on error.
+	:return str line1: A string to hold the first line of the TLE. (byte[512])
+	:return str line2: A string to hold the second line of the TLE (if available, line3 can be extracted from line2's 101-180th columns). (byte[512])
+	"""
+	if not isinstance(satKey, settings.stay_int64):
+		raise TypeError("satKey is type %s, should be type %s" % (type(satKey), settings.stay_int64))
+	line1 = c.c_char_p(bytes(512))
+	line2 = c.c_char_p(bytes(512))
+	retcode = C_TLEDLL.TleGetLines(satKey, line1, line2)
+	line1 = settings.byte_to_str(line1)
+	line2 = settings.byte_to_str(line2)
+	return (retcode, line1, line2)
+
 ##TleGetLoaded
+# argtypes are set within the function due to a dynamically allocated array
+def TleGetLoaded(order):
+	"""
+	python:function::TleGetLoaded
+	Retrieves all of the currently loaded satKeys. These satKeys can be used to access the internal data for the TLE's. 
+	:param int order: Specifies the order in which the satKeys should be returned. 0 = sort in ascending order of satKeys, 1 = sort in descending order of satKeys, 2 = sort in the order in which the satKeys were loaded in memory, 9 = Quickest: sort in the order in which the satKeys were stored in the tree
+	:return settings.stay_int64[?] satKeys: An array of satKey objects
+	"""
+	# convert data type
+	order = c.c_int32(order)
+	# establish the number of satKeys in the tree
+	numSatKeys = TleGetCount()
+	# initialize dynamically allocated array
+	satKeys_data_type = settings.stay_int64 * numSatKeys
+	satKeys = satKeys_data_type()
+	# interface with DLL to retrieve satKeys
+	C_TLEDLL.TleGetLoaded.argtypes = [c.c_int32, satKeys_data_type]
+	C_TLEDLL.TleGetLoaded(order, satKeys)
+	# convert array of stay_int64 data types to a list of stay_int64 ctype objects
+	satKeys = settings.array_to_list(satKeys)
+	return satKeys
+
 ##TleGetSatKey
+C_TLEDLL.TleGetSatKey.restype = settings.stay_int64
+C_TLEDLL.TleGetSatKey.argtypes = [c.c_int32]
+def TleGetSatKey(satNum):
+	"""
+	python:function::TleGetSatKey
+	Returns the first satKey from the currently loaded set of TLEs that contains the specified satellite number. This function is useful when Tle.dll is used in applications that require only one record (one TLE entry) for one satellite, and which refer to that TLE by its satellite number. This function can be used to retrieve a satKey in that situation, which is useful since the Standardized Astrodynamic Algorithms library works only with satKeys. 
+	A negative value will be returned if there is an error. 
+	:param int satNum: Satellite number
+	:return settings.stay_int64 satKey: The satellite's unique key
+	"""
+	satNum = c.c_int32(satNum)
+	satKey = C_TLEDLL.TleGetSatKey(satNum)
+	return satKey
+
 ##TleGetSatKeyML
+C_TLEDLL.TleGetSatKeyML.restype = settings.stay_int64
+C_TLEDLL.TleGetSatKeyML.argtypes = [c.c_int32]
+def TleGetSatKeyML(satNum):
+	"""
+	python:function::TleGetSatKeyML
+	Returns the first satKey from the currently loaded set of TLEs that contains the specified satellite number. This function is useful when Tle.dll is used in applications that require only one record (one TLE entry) for one satellite, and which refer to that TLE by its satellite number. This function can be used to retrieve a satKey in that situation, which is useful since the Standardized Astrodynamic Algorithms library works only with satKeys. 
+	A negative value will be returned if there is an error. 
+	This function is similar to TleGetSatKey but designed to be used in Matlab. 
+	Matlab doesn't correctly return the 19-digit satellite key using TleGetSatKey. This method is an alternative way to return the satKey output. 
+	:param int satNum: Satellite number
+	:return settings.stay_int64 satKey: The satellite's unique key
+	"""
+	satNum = c.c_int32(satNum)
+	satKey = C_TLEDLL.TleGetSatKey(satNum)
+	return satKey
+
 ##TleGPArrayToLines
+C_TLEDLL.TleGPArrayToLines.argtypes = [settings.double64] + [c.c_char_p] * 3
+def TleGPArrayToLines(xa_tle, xs_tle):
+	"""
+	python:function::TleGPArrayToLines
+	Constructs a TLE from GP data stored in the input parameters. 
+	:param float[64] xa_tle: Array containing TLE's numerical fields, see XA_TLE_? for array arrangement (double[64])
+	:param str xs_tle: Input string that contains all TLE's text fields, see XS_TLE_? for column arrangement (string[512])
+	:return str line1: Returned first line of a TLE. (byte[512])
+	:return str line2: Returned second line of a TLE (if available, line3 can be extracted from line2's 101-180th columns). (byte[512])
+	"""
+	xa_tle = settings.list_to_array(xa_tle)
+	xs_tle = settings.str_to_byte(xs_tle, fixed_width=512)
+	line1 = c.c_char_p(bytes(512))
+	line2 = c.c_char_p(bytes(512))
+	C_TLEDLL.TleGPArrayToLines(xa_tle, xs_tle, line1, line2)
+	line1 = settings.byte_to_str(line1)
+	line2 = settings.byte_to_str(line2)
+	return (line1, line2)
+
 ##TleGPFieldsToLines
+C_TLEDLL.TleGPFieldsToLines.argtypes = [c.c_int32,
+										c.c_char,
+										c.c_char_p,
+										c.c_int32,
+										c.c_double,
+										c.c_double,
+										c.c_double,
+										c.c_double,
+										c.c_int32, 
+										c.c_int32,
+										c.c_double,
+										c.c_double,
+										c.c_double,
+										c.c_double,
+										c.c_double,
+										c.c_double,
+										c.c_int32, 
+										c.c_char_p,
+										c.c_char_p]
+def TleGPFieldsToLines(satNum, secClass, satName, epochYr, epochDays, nDotO2, n2DotO6, bstar, ephType, elsetNum, incli, node, eccen, omega, mnAnomaly, mnMotion, revNum):
+	"""
+	python:function::TleGPFieldsToLines
+	Constructs a TLE from individually provided GP data fields. 
+	This function only parses data from the input fields but DOES NOT load/add the TLE to memory. 
+	Returned line1 and line2 will be empty if the function fails to construct the lines as requested. 
+	:param int satNum: Satellite number
+	:param str secClass: Security classification
+	:param str satName: Satellite international designator (string[8])
+	:param int epochYr: Element epoch time - year, [YY]YY
+	:param float epochDays: Element epoch time - day of year, DDD.DDDDDDDD
+	:param float nDotO2: N Dot/2 (rev/day /2)
+	:param float n2DotO6: N Double Dot/6 (rev/day**2 /6)
+	:param float bstar: B* drag term (1/er)
+	:param int ephType: Satellite ephemeris type (0: SGP, 2: SGP4)
+	:param int elsetNum: Element set number
+	:param float incli: Orbit inclination (degrees)
+	:param float node: Right ascension of ascending node (degrees)
+	:param float eccen: Eccentricity
+	:param float omega: Argument of perigee (degrees)
+	:param float mnAnomaly: Mean anomaly (degrees)
+	:param float mnMotion: Mean motion (rev/day) (ephType = 0: Kozai mean motion, ephType = 2: Brouwer mean motion)
+	:param int revNum: Revolution number at epoch
+	:return str line1: Returned first line of a TLE. (byte[512])
+	:return str line2: Returned second line of a TLE. (byte[512])
+	"""
+	satNum    = c.c_int32(satNum)
+	secClass  = settings.str_to_byte(secClass, fixed_width=1)
+	satName   = settings.str_to_byte(satName, fixed_width=8)
+	epochYr   = c.c_int32(epochYr)
+	epochDays = c.c_double(epochDays)
+	nDotO2    = c.c_double(nDotO2)
+	bstar     = c.c_double(bstar)
+	ephType   = c.c_int32(ephType)
+	elsetNum  = c.c_int32(elsetNum)
+	incli     = c.c_double(incli)
+	node      = c.c_double(node)
+	eccen     = c.c_double(eccen)
+	omega     = c.c_double(omega)
+	mnAnomaly = c.c_double(mnAnomaly)
+	mnMotion  = c.c_double(mnMotion)
+	revNum    = c.c_int32(revNum)
+	line1     = c.c_char_p(bytes(512))
+	line2     = c.c_char_p(bytes(512))
+	C_TLEDLL.TleGPFieldsToLines(
+		satNum, 
+		secClass, 
+		satName, 
+		epochYr, 
+		epochDays, 
+		nDotO2, 
+		n2DotO6, 
+		bstar, 
+		ephType, 
+		elsetNum, 
+		incli, 
+		node, 
+		eccen, 
+		omega, 
+		mnAnomaly, 
+		mnMotion, 
+		revNum, 
+		line1, 
+		line2)
+	line1 = settings.byte_to_str(line1)
+	line2 = settings.byte_to_str(line2)
+	return (line1, line2)
 
 ##TleInit
 C_TLEDLL.TleInit.restype = c.c_int64
@@ -840,7 +1023,131 @@ def TleLinesToArray(line1, line2):
 
 
 ##TleLoadFile
+C_TLEDLL.TleLoadFile.restype = c.c_int
+C_TLEDLL.TleLoadFile.argtypes = [c.c_char_p]
+def TleLoadFile(tleFile):
+	"""
+	python:function::TleLoadFile
+	Loads TLEs (satellites) contained in a text file into the TLE DLL's binary tree. 
+	You may use this function repeatedly to load TLEs from different input files. However, only unique satKeys are loaded. Duplicated TLEs won't be stored. 
+	TLEs can be included directly in the specified file, or they can be read from a separate file identified with "ELTFIL=[path\filename]" or "VECFIL=[path\filename]". 
+	The input file is read in two passes. The function first looks for "ELTFIL=" and "VECFIL=" lines, then it looks for TLEs which were included directly. The result of this is that data entered using both methods will be processed, but the "ELTFIL=" and "VECFIL=" data will be processed first. 
+	:param str tleFile: The name of the file containing two line element sets to be loaded. (string[512])
+	:return int retcode: 0 if the two line element sets in the file are successfully loaded, non-0 if there is an error.
+	"""
+	tleFile = settings.str_to_byte(tleFile)
+	retcode = C_TLEDLL.TleLoadFile(tleFile)
+	return retcode
+
 ##TleParseGP
+C_TLEDLL.TleParseGP.restype = c.c_int
+C_TLEDLL.TleParseGP.argtypes = [c.c_char_p,
+								c.c_char_p,
+								c.POINTER(c.c_int32),
+								c.POINTER(c.c_char),
+								c.c_char_p,
+								c.POINTER(c.c_int32),
+								c.POINTER(c.c_double),
+								c.POINTER(c.c_double),
+								c.POINTER(c.c_double),
+								c.POINTER(c.c_double),
+								c.POINTER(c.c_int32),
+								c.POINTER(c.c_int32),
+								c.POINTER(c.c_double),
+								c.POINTER(c.c_double),
+								c.POINTER(c.c_double),
+								c.POINTER(c.c_double),
+								c.POINTER(c.c_double),
+								c.POINTER(c.c_double),
+								c.POINTER(c.c_int32)]
+def TleParseGP(line1, line2):
+	"""
+	python:function::TleParseGP
+	Parses GP data from the input first and second lines of a two line element set. 
+	This function only parses data from the input TLE but DOES NOT load/add the input TLE to memory. 
+	:param str line1: The first line of the two line element set. (string[512])
+	:param str line2: The second line of the two line element set. (string[512])
+	:return int retcode: 0 if the TLE is parsed successfully, non-0 if there is an error.
+	:return int satNum: Satellite number
+	:param str secClass: Security classification
+	:param str satName: Satellite international designator (byte[8])
+	:param int epochYr: Element epoch time - year, [YY]YY
+	:param float epochDays: Element epoch time - day of year, DDD.DDDDDDDD
+	:param float nDotO2: n-dot/2 (for SGP, ephType = 0)
+	:param float n2DotO6: n-double-dot/6 (for SGP, ephType = 0)
+	:param float bstar: B* drag term (1/er)
+	:param int ephType: Satellite ephemeris type (0: SGP, 2: SGP4, 6: SP)
+	:param int elsetNum: Element set number
+	:param float incli: Orbit inclination (degrees)
+	:param float node: Right ascension of ascending node (degrees).
+	:param float eccen: Eccentricity
+	:param float omega: Argument of perigee (degrees)
+	:param float mnAnomaly: Mean anomaly (degrees)
+	:param float mnMotion: Mean motion (rev/day) (ephType = 0: Kozai mean motion, ephType = 2: Brouwer mean motion)
+	:param int revNum: Revolution number at epoch
+	"""
+	line1     = settings.str_to_byte(line1)
+	line2     = settings.str_to_byte(line2)
+	satNum    = c.c_int32()
+	secClass  = c.c_char()
+	satName   = c.c_char_p(bytes(8))
+	epochYr   = c.c_int32()
+	epochDays = c.c_double()
+	nDotO2    = c.c_double()
+	n2DotO6   = c.c_double()
+	bstar     = c.c_double()
+	ephType   = c.c_int32()
+	elsetNum  = c.c_int32()
+	incli     = c.c_double()
+	node      = c.c_double()
+	eccen     = c.c_double()
+	omega     = c.c_double()
+	mnAnomaly = c.c_double()
+	mnMotion  = c.c_double()
+	revNum    = c.c_int32()
+	retcode   = C_TLEDLL.TleParseGP(
+		line1,
+		line2,
+		c.byref(satNum),
+		c.byref(secClass),
+		satName,
+		c.byref(epochYr),
+		c.byref(epochDays),
+		c.byref(nDotO2),
+		c.byref(n2DotO6),
+		c.byref(bstar),
+		c.byref(ephType),
+		c.byref(elsetNum),
+		c.byref(incli),
+		c.byref(node),
+		c.byref(eccen),
+		c.byref(omega),
+		c.byref(mnAnomaly),
+		c.byref(mnMotion),
+		c.byref(revNum))
+	satNum    = satNum.value
+	secClass  = settings.byte_to_str(secClass)
+	satName   = settings.byte_to_str(satName)
+	epochYr   = epochYr.value
+	epochDays = epochDays.value
+	nDotO2    = nDotO2.value
+	n2DotO6   = n2DotO6.value
+	bstar     = bstar.value
+	ephType   = ephType.value
+	elsetNum  = elsetNum.value
+	incli     = incli.value
+	node      = node.value
+	eccen     = eccen.value
+	omega     = omega.value
+	mnAnomaly = mnAnomaly.value
+	revNum    = revNum.value
+	return(retcode, satNum, secClass, satName, epochYr, epochDays, nDotO2, n2DotO6, bstar, ephType, elsetNum, incli, node, eccen, omega, mnAnomaly, revNum)
+	
+	
+	
+	
+	
+	
 ##TleParseSP
 ##TleRemoveAllSats
 C_TLEDLL.TleRemoveAllSats.restype = c.c_int

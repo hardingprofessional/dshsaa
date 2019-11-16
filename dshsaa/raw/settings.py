@@ -74,7 +74,6 @@ def str_to_c_char_p(s, fixed_width=None, limit=None, terminator=None):
 def array_to_list(vector_obj):
 	# converts c.c_int[] and c.c_double[] arrays into lists
 	# does NOT work for any other data types!
-	vector_length = len(vector_obj)
 	new_list = []
 	for item in vector_obj:
 		new_list.append(item)
