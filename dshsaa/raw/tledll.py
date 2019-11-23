@@ -392,7 +392,7 @@ def TleDataToArray(satKey):
 	retcode = C_TLEDLL.TleDataToArray(satKey, xa_tle, xs_tle)
 	xa_tle = settings.array_to_list(xa_tle)
 	xs_tle = settings.byte_to_str(xs_tle)
-	return (retcode	, xa_tle, xs_tle)
+	return (retcode, xa_tle, xs_tle)
 	
 ##TleFieldsToSatKey
 C_TLEDLL.TleFieldsToSatKey.restype = settings.stay_int64
@@ -1140,15 +1140,113 @@ def TleParseGP(line1, line2):
 	eccen     = eccen.value
 	omega     = omega.value
 	mnAnomaly = mnAnomaly.value
+	mnMotion  = mnMotion.value
 	revNum    = revNum.value
-	return(retcode, satNum, secClass, satName, epochYr, epochDays, nDotO2, n2DotO6, bstar, ephType, elsetNum, incli, node, eccen, omega, mnAnomaly, revNum)
-	
-	
-	
-	
-	
+	return(retcode, satNum, secClass, satName, epochYr, epochDays, nDotO2, n2DotO6, bstar, ephType, elsetNum, incli, node, eccen, omega, mnAnomaly, mnMotion, revNum)
 	
 ##TleParseSP
+C_TLEDLL.TleParseSP.restype = c.c_int
+C_TLEDLL.TleParseSP.argtypes = [c.c_char_p,
+								c.c_char_p,
+								c.POINTER(c.c_int32),
+								c.POINTER(c.c_char),
+								c.c_char_p,
+								c.POINTER(c.c_int),
+								c.POINTER(c.c_double),
+								c.POINTER(c.c_double),
+								c.POINTER(c.c_double),
+								c.POINTER(c.c_double),
+								c.POINTER(c.c_int),
+								c.POINTER(c.c_double),
+								c.POINTER(c.c_double),
+								c.POINTER(c.c_double),
+								c.POINTER(c.c_double),
+								c.POINTER(c.c_double),
+								c.POINTER(c.c_double),
+								c.POINTER(c.c_int)]
+def TleParseSP(line1, line2):
+	"""
+	python:function::TleParseSP
+	Parses SP data from the input first and second lines of a two line element set. 
+	Only applies to SP propagator. 
+	This function only parses data from the input TLE but DOES NOT load/add the input TLE to memory.
+	:param str line1: The first line of the two line element set. (string[512])
+	:param str line2: The second line of the two line element set. (string[512])
+	:return int retcode: 0 if the TLE is parsed successfully, non-0 if there is an error.
+	:return int satNum: Satellite number
+	:return str secClass: Security classification
+	:return str satName: Satellite international designator (byte[8])
+	:return int epochYr: Element epoch time - year, [YY]YY
+	:return float epochDays: Element epoch time - day of year, DDD.DDDDDDDD
+	:return float bTerm: Ballistic coefficient (m^2/kg).
+	:return float ogParm: Outgassing parameter/Thrust Acceleration (km/s^2)
+	:return float agom: Agom (m^2/kg)
+	:return int elsetNum: Element set number
+	:return float incli: Orbit inclination (degrees)
+	:return float node: Right ascension of ascending node (degrees)
+	:return float eccen: Eccentricity
+	:return float omega: Argument of perigee (degrees)
+	:return float mnAnomaly: Mean anomaly (degrees)
+	:return float mnMotion: Mean motion (rev/day)
+	:return int revNum: Revolution number at epoch
+	"""
+	line1     = settings.str_to_byte(line1, limit=512)
+	line2     = settings.str_to_byte(line2, limit=512)
+	satNum    = c.c_int32()
+	secClass  = c.c_char()
+	satName   = c.c_char_p(bytes(8))
+	epochYr   = c.c_int32()
+	epochDays = c.c_double()
+	bTerm     = c.c_double()
+	ogParm    = c.c_double()
+	agom      = c.c_double()
+	elsetNum  = c.c_int32()
+	incli     = c.c_double()
+	node      = c.c_double()
+	eccen     = c.c_double()
+	omega     = c.c_double()
+	mnAnomaly = c.c_double()
+	mnMotion  = c.c_double()
+	revNum    = c.c_int32()
+	retcode   = C_TLEDLL.TleParseSP(
+		line1, 
+		line2, 
+		c.byref(satNum), 
+		c.byref(secClass), 
+		satName, 
+		c.byref(epochYr),
+		c.byref(epochDays),
+		c.byref(bTerm),
+		c.byref(ogParm),
+		c.byref(agom),
+		c.byref(elsetNum),
+		c.byref(incli),
+		c.byref(node),
+		c.byref(eccen),
+		c.byref(omega), 
+		c.byref(mnAnomaly),
+		c.byref(mnMotion),
+		c.byref(revNum))
+	satNum    = satNum.value
+	secClass  = settings.byte_to_str(secClass)
+	satName   = settings.byte_to_str(satName)
+	epochYr   = epochYr.value
+	epochDays = epochDays.value
+	bTerm     = bTerm.value
+	ogParm    = ogParm.value
+	agom      = agom.value
+	elsetNum  = elsetNum.value
+	incli     = incli.value
+	node      = node.value
+	eccen     = eccen.value
+	omega     = omega.value
+	mnAnomaly = mnAnomaly.value
+	mnMotion  = mnMotion.value
+	revNum    = revNum.value
+	return (retcode, satNum, secClass, satName, epochYr, epochDays, bTerm, ogParm, agom, elsetNum, incli, node, eccen, omega, mnAnomaly, mnMotion, revNum)
+								
+
+
 ##TleRemoveAllSats
 C_TLEDLL.TleRemoveAllSats.restype = c.c_int
 def TleRemoveAllSats():
@@ -1161,10 +1259,169 @@ def TleRemoveAllSats():
 	return retcode
 
 ##TleRemoveSat
+C_TLEDLL.TleRemoveSat.restype = c.c_int
+C_TLEDLL.TleRemoveSat.argtypes = [settings.stay_int64]
+def TleRemoveSat(satKey):
+	"""
+	python:function::TleRemoveSat
+	Removes a TLE represented by the satKey from memory. 
+	If the users enter an invalid satKey (a non-existing satKey), the function will return a non-zero value indicating an error. 
+	:param settings.stay_int64 satKey: The unique key of the satellite to be removed.
+	:return int retcode: 0 if the TLE is removed successfully, non-0 if there is an error.
+	"""
+	if not isinstance(satKey, settings.stay_int64):
+		raise TypeError("satKey is type %s, should be type %s" % (type(satKey), settings.stay_int64))
+	retcode = C_TLEDLL.TleRemoveSat(satKey)
+	return retcode
+
 ##TleSaveFile
+C_TLEDLL.TleSaveFile.restype = c.c_int
+C_TLEDLL.TleSaveFile.argtypes = [c.c_char_p, c.c_int32, c.c_int32]
+def TleSaveFile(tleFile, saveMode, xf_tleForm = 0):
+	"""
+	python:function::TleSaveFile
+	Saves currently loaded TLEs to a file. In append mode, if the specified file does not exist it will be created. 
+	:param str tleFile: The name of the file in which to save the TLE's. (string[512])
+	:param int saveMode: Specifies whether to create a new file or append to an existing file. (0 = create new file, 1= append to existing file)
+	:param int xf_tleForm = 0: Specifies the format in which to save the file. (0 = two-line element set format, others = future implementation)
+	:return retcode: 0 if the data is successfully saved to the file, non-0 if there is an error.
+	"""
+	tleFile = settings.str_to_byte(tleFile, limit=512)
+	saveMode = c.c_int32(saveMode)
+	xf_tleForm = c.c_int32(xf_tleForm)
+	retcode = C_TLEDLL.TleSaveFile(tleFile, saveMode, xf_tleForm)
+	return retcode
+	
 ##TleSetField
+C_TLEDLL.TleSetField.restype = c.c_int
+C_TLEDLL.TleSetField.argtypes = [settings.stay_int64, c.c_int32, c.c_char_p]
+def TleSetField(satKey, xf_Tle, valueStr):
+	"""
+	python:function::TleSetField
+	Updates the value of a field of a TLE. This function can be used for both GP and SP satellites. 
+	The table below indicates which index values correspond to which fields. Make sure to use the appropriate field index for GP TLEs and SP TLEs. For indexes 5, 15 and 16, the interpretation depends on the ephemeris type of the TLE. 
+	Satnum (1), Epoch (4), and Ephemeris Type (5) cannot be altered. 
+	
+	index|index Interpretation
+	=====|====================
+	1    | Satellite number
+	2    | Security classification
+	3    | Satellite international designator
+	4    | Epoch
+	5    | Ephemeris type = 0,2: B* drag term (1/er) Ephemeris type = 6 : SP radiation pressure coefficient Agom (m2/kg)
+	6    | Ephemeris type
+	7    | Element set number
+	8    | Orbit inclination (degrees)
+	9    | Right ascension of ascending node (degrees)
+	10   | Eccentricity
+	11   | Argument of perigee (degrees)
+	12   | Mean anomaly (degrees)
+	13   | Mean motion (rev/day)
+	14   | Revolution number at epoch
+	15   | Ephemeris type = 0: SGP mean motion derivative (rev/day /2) or Ephemeris type = 6: SP ballistic coefficient (m2/kg)
+	16   | Ephemeris type = 0: SGP mean motion second derivative (rev/day**2 /6) or Ephemeris type = 6: SP Outgassing parameter/Thrust Acceleration (km/s2)
+
+	:param settings.stay_int64 satKey: The satellite's unique key.
+	:param int xf_Tle: Predefined number specifying which field to set.
+	:param str valueStr: The new value of the specified field, expressed as a string. (string[512])
+	:return int retcode: 0 if the TLE is successfully updated, non-0 if there is an error
+	"""
+	if not isinstance(satKey, settings.stay_int64):
+		raise TypeError("satKey is type %s, should be type %s" % (type(satKey), settings.stay_int64))
+	xf_Tle = c.c_int32(xf_Tle)
+	valueStr = settings.str_to_byte(valueStr)
+	retcode = C_TLEDLL.TleSetField(satKey, xf_Tle, valueStr)
+	return retcode
+	
 ##TleSPFieldsToLines
+C_TLEDLL.TleSPFieldsToLines.argtypes = [c.c_int32,
+										c.c_char,
+										c.c_char_p,
+										c.c_int32,
+										c.c_double,
+										c.c_double,
+										c.c_double,
+										c.c_double,
+										c.c_int32,
+										c.c_double,
+										c.c_double,
+										c.c_double,
+										c.c_double,
+										c.c_double,
+										c.c_double,
+										c.c_int32,
+										c.c_char_p,
+										c.c_char_p]
+def TleSPFieldsToLines(satNum, secClass, satName, epochYr, epochDays, bTerm, ogParm, agom, elsetNum, incli, node, eccen, omega, mnAnomaly, mnMotion, revNum):
+	"""
+	python:function::TleSPFieldsToLines
+	Constructs a TLE from individually provided SP data fields. Only applies to SP propagator. 
+	This function only parses data from the input fields but DOES NOT load/add the TLE to memory. 
+	Returned line1 and line2 will be empty if the function fails to construct the lines as requested.
+	:param int satNum: Satellite number
+	:param str secClass: Security classification
+	:param str satName: Satellite international designator (string[8])
+	:param int epochYr: Element epoch time - year, [YY]YY
+	:param float epochDays: Element epoch time - day of year, DDD.DDDDDDDD
+	:param float bTerm: Ballistic coefficient (m^2/kg)
+	:param float ogParm: Outgassing parameter/Thrust Acceleration (km/s^2)
+	:param float agom: Agom (m^2/kg)
+	:param int elsetNum: Element set number
+	:param float incli: Orbit inclination (degrees)
+	:param float node: Right ascension of ascending node (degrees)
+	:param float eccen: Eccentricity
+	:param float omega: Argument of perigee (degrees)
+	:param float mnAnomaly: Mean anomaly (degrees)
+	:param float mnMotion: Mean motion (rev/day)
+	:param int revNum: Revolution number at epoch
+	:return str line1: Returned first line of a TLE. (byte[512])
+	:return str line2: Returned second line of a TLE. (byte[512])
+	"""
+	satNum = c.c_int32(satNum)
+	secClass = c.c_char(secClass.encode('ascii', 'strict'))
+	satName = settings.str_to_c_char_p(satName, fixed_width=8)
+	epochYr = c.c_int32(epochYr)
+	epochDays = c.c_double(epochDays)
+	bTerm = c.c_double(bTerm)
+	ogParm = c.c_double(ogParm)
+	agom = c.c_double(agom)
+	elsetNum = c.c_int32(elsetNum)
+	incli = c.c_double(incli)
+	node = c.c_double(node)
+	eccen = c.c_double(eccen)
+	omega = c.c_double(omega)
+	mnAnomaly = c.c_double(mnAnomaly)
+	mnMotion = c.c_double(mnMotion)
+	revNum = c.c_int32(revNum)
+	line1 = c.c_char_p(bytes(512))
+	line2 = c.c_char_p(bytes(512))
+	C_TLEDLL.TleSPFieldsToLines(satNum, secClass, satName, epochYr, epochDays, bTerm, ogParm, agom, elsetNum, incli, node, eccen, omega, mnAnomaly, mnMotion, revNum, line1, line2)
+	line1 = settings.byte_to_str(line1)
+	line2 = settings.byte_to_str(line2)
+	return (line1, line2)
+	
+
 ##TleUpdateSatFrArray
+C_TLEDLL.TleUpdateSatFrArray.restype = c.c_int
+C_TLEDLL.TleUpdateSatFrArray.argtypes = [settings.stay_int64, settings.double64, c.c_char_p]
+def TleUpdateSatFrArray(satKey, xa_tle, xs_tle):
+	"""
+	python:function::TleUpdateSatFrArray
+	Updates existing TLE data with the provided new data stored in the input parameters 
+	:param settings.stay_int64 satKey: The satellite's unique key
+	:param float[64] xa_tle: Array containing TLE's numerical fields, see XA_TLE_? for array arrangement (double[64])
+	:param str xs_tle: Input string that contains all TLE's text fields, see XS_TLE_? for column arrangement (string[512])
+	:return int retcode: 0 if the TLE is successfully updated, non-0 if there is an error.
+	xa_tle = settings.list_to_array(xa_tle)
+	xs_tle = settings.str_to_c_char_p(xs_tle, fixed_width=512)
+	"""
+	if not isinstance(satKey, settings.stay_int64):
+		raise TypeError("satKey is type %s, should be type %s" % (type(satKey), settings.stay_int64))
+	xa_tle = settings.list_to_array(xa_tle)
+	xs_tle = settings.str_to_c_char_p(xs_tle, fixed_width=512)
+	retcode = C_TLEDLL.TleUpdateSatFrArray(satKey, xa_tle, xs_tle)
+	return retcode
+	
 ##TleUpdateSatFrFieldsGP
 ##TleUpdateSatFrFieldsGP2
 ##TleUpdateSatFrFieldsSP

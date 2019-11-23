@@ -476,41 +476,146 @@ class TestTleDll(unittest.TestCase):
 	##TleParseGP
 	def test_TleParseGP(self):
 		# This is a GP 2 line element set, but not all are!
+		x = 'don\'t print these docstrings'
 		"""      00000000011111111112222222222333333333344444444445555555555666666666"""
 		"""      12345678901234567890123456789012345678901234567890123456789012345678"""
 		line1 = '1 19650U 88102B   00082.05491348 -.00000156 +00000-0 -55907-4 0 0856'
-		"""      123456789012345678901234567890123456789012345678901"""
+		"""      00000000011111111112222222222333333333344444444445555555555666666666"""
+		"""      12345678901234567890123456789012345678901234567890123456789012345678901"""
 		line2 = '2 19650 070.9951 288.5351 0012570 034.5635 325.6302 14.1505917558504'
-		(retcode, satNum, secClass, satName, epochYr, epochDays, bTerm, ogParm, agom, elsetNum, incli, node, eccen, omega, mnAnomaly, mnMotion, revNum) = tledll.TleParseGP(line1, line2)
-		pdb.set_trace()
-		""" TODO: Why aren't these values right?
+		(retcode, satNum, secClass, satName, epochYr, epochDays, nDotO2, n2DotO6, bstar, ephType, elsetNum, incli, node, eccen, omega, mnAnomaly, mnMotion, revNum) = tledll.TleParseGP(line1, line2)
 		self.assertEqual(retcode, 0)
-		self.assertEqual(satNum, 19650
-		self.assertEqual(secClass, 'U'
-		self.assertEqual(satName, '88102B'
-		self.assertEqual(epochYr, 2000
+		self.assertEqual(satNum, 19650)
+		self.assertEqual(secClass, 'U')
+		self.assertEqual(satName, '88102B')
+		self.assertEqual(epochYr, 2000)
 		self.assertEqual(epochDays, 82.05491348)
-		self.assertEqual(bTerm,-0.00000156)
-		self.assertEqual(ogParm, 0)
-		self.assertEqual(agom, -0.55907e-4)
-		self.assertEqual(elsetNum, 0
-		self.assertEqual(incli, 70.9951
-		self.assertEqual(node, 0.0222
-		self.assertEqual(eccen, 
-		self.assertEqual(omega, 
-		self.assertEqual(mnAnomaly, 
-		self.assertEqual(mnMotion, 
-		self.assertEqual(revNum, 
-		"""
+		self.assertEqual(nDotO2, -0.00000156)
+		self.assertEqual(n2DotO6, 0.0)
+		self.assertEqual(bstar, -0.55907e-4)
+		self.assertEqual(elsetNum, 856)
+		self.assertEqual(incli, 70.9951)
+		self.assertEqual(node, 288.5351)
+		self.assertEqual(eccen, 0.0012570)
+		self.assertEqual(omega, 34.5635)
+		self.assertEqual(mnAnomaly, 325.6302)
+		self.assertEqual(mnMotion, 14.15059175)
+		self.assertEqual(revNum, 58504)
 		
 		
 	##TleParseSP
+	def test_TleParseSP(self):
+		line1 = '1 90021U RELEAS14 00 51.47568104  .00000184      0 0  00000-4   814  '
+		line2 = '2 90021   0.0222 182.4923 0000720  45.6036 131.8822  1.00271328 1199 '
+		(retcode, satNum, secClass, satName, epochYr, epochDays, bTerm, ogParm, agom, elsetNum, incli, node, eccen, omega, mnAnomaly, mnMotion, revNum) = tledll.TleParseSP(line1, line2)
+		self.assertEqual(retcode, 0)
+		self.assertEqual(satNum, 90021)
+		self.assertEqual(secClass, 'U')
+		self.assertEqual(satName, 'RELEAS14')
+		self.assertEqual(epochYr, 2000)
+		self.assertEqual(epochDays, 51.47568104)
+		self.assertEqual(bTerm, 0.00000184)
+		self.assertEqual(ogParm, 0)
+		self.assertEqual(agom, 0)
+		self.assertEqual(elsetNum, 814)
+		self.assertEqual(incli, 0.0222)
+		self.assertEqual(node, 182.4923)
+		self.assertEqual(eccen, 0.0000720)
+		self.assertEqual(omega, 45.6036)
+		self.assertEqual(mnAnomaly, 131.8822)
+		self.assertEqual(mnMotion, 1.00271328)
+		self.assertEqual(revNum, 1199)		
+		
 	##TleRemoveAllSats
+	def test_TleRemoveAllSats(self):
+		tledll.TleRemoveAllSats()
+		self.assertEqual(0, tledll.TleGetCount())
+		line1 = '1 23455U 94089A   97320.90946019  .00000140  00000-0  10191-3 0  2621'
+		line2 = '2 23455  99.0090 272.6745 0008546 223.1686 136.8816 14.11711747148495'
+		satKey = tledll.TleAddSatFrLines(line1, line2)
+		self.assertTrue(satKey.value > 0)
+		self.assertEqual(1, tledll.TleGetCount())
+		tledll.TleRemoveAllSats()
+		self.assertEqual(0, tledll.TleGetCount())
+		
 	##TleRemoveSat
+	def test_TleRemoveSat(self):
+		tledll.TleRemoveAllSats()
+		self.assertEqual(0, tledll.TleGetCount())
+		line1 = '1 23455U 94089A   97320.90946019  .00000140  00000-0  10191-3 0  2621'
+		line2 = '2 23455  99.0090 272.6745 0008546 223.1686 136.8816 14.11711747148495'
+		satKey = tledll.TleAddSatFrLines(line1, line2)
+		self.assertTrue(satKey.value > 0)
+		self.assertEqual(1, tledll.TleGetCount())
+		retcode = tledll.TleRemoveSat(satKey)
+		self.assertEqual(retcode, 0)
+		self.assertEqual(0, tledll.TleGetCount())
+		
 	##TleSaveFile
+	def test_TleSaveFile(self):
+		tleFile = './test/raw/inputs/tledll.tleSaveFile.out' #set the output filename
+		retcode = tledll.TleSaveFile(tleFile, 0, 0) #save the current model
+		self.assertEqual(retcode, 0) 
+		tledll.TleRemoveAllSats() # purge current model
+		retcode = tledll.TleLoadFile(tleFile) #load saved model
+		self.assertEqual(retcode, 0)
+		satKey = tledll.TleGetSatKey(25544) #verify model contains our satellite
+		self.assertTrue(satKey.value > 0)
+		
 	##TleSetField
+	def test_TleSetField(self):
+		retcode = tledll.TleSetField(self.generic_satKey, 2, 'C')
+		self.assertEqual(retcode, 0)
+		(retcode, valueStr) = tledll.TleGetField(self.generic_satKey, 2)
+		self.assertEqual(valueStr, 'C')
+		
 	##TleSPFieldsToLines
+	def test_TleSPFieldsToLines(self):
+		"""
+		https://www.sat.dundee.ac.uk/fle.html
+		"""
+		satNum    = 21263
+		secClass  = 'U'
+		satName   = 'Dundee'
+		epochYr   = 94
+		epochDays = 264.51782528
+		bTerm     = 0.06822045
+		ogParm    = 0.001
+		agom      = .0000500000
+		elsetNum  = 292
+		incli     = 51.6416
+		node      = 247.4627
+		eccen     = 0.0006703
+		omega     = 130.5360
+		mnAnomaly = 325.0288
+		mnMotion  = 15.72125391
+		revNum    = 15390
+		(line1, line2) = tledll.TleSPFieldsToLines(satNum, secClass, satName, epochYr, epochDays, bTerm, ogParm, agom, elsetNum, incli, node, eccen, omega, mnAnomaly, mnMotion, revNum)
+		self.assertNotEqual(line1, '')
+		self.assertNotEqual(line2, '')
+	
 	##TleUpdateSatFrArray
+	def test_TleUpdateSatFrArray(self):
+		# Initialize an SP type TLE from array
+		xa_tle_1 = [90004.0, 19409.03935584, 1.327e-05, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 64.7716, 194.9878, 0.6033327, 269.302, 18.611, 2.00615358, 3847.0, 0.0, 0.0, 0.0, 882.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+		xs_tle_1 = 'USGP4-KNW'
+		satKey = tledll.TleAddSatFrArray(xa_tle_1, xs_tle_1)
+		self.assertTrue(satKey.value > 0)
+		# Update that array with different values (some cannot be changed due to satKey definition: satNum, epoch, and Ephemeris Type)
+		# Some fields can be changed, others can't. Your mileage may vary. Failure mode is no alarms, the value just doesn't change in the model.
+		xa_tle_2 = [90004.0, 19409.03935584, 1.326e-05, 0.1, 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 64.7716, 194.9878, 0.6033327, 269.302, 18.611, 2.00615358, 3847.0, 0.0, 0.0, 0.0, 882.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+		xs_tle_2 = 'USGP5-KNW'
+		retcode = tledll.TleUpdateSatFrArray(satKey, xa_tle_2, xs_tle_2)
+		self.assertEqual(retcode, 0)
+		# Retrieve the new TLE arrays
+		(retcode, xa_tle_3, xs_tle_3) = tledll.TleDataToArray(satKey)
+		self.assertEqual(retcode, 0)
+		# verify the string part matches
+		self.assertEqual(xs_tle_2, xs_tle_3)
+		# verify the numeric part matches
+		for (a, b) in zip(xa_tle_2, xa_tle_3):
+			self.assertEqual(a, b)
+			
 	##TleUpdateSatFrFieldsGP
 	##TleUpdateSatFrFieldsGP2
 	##TleUpdateSatFrFieldsSP
