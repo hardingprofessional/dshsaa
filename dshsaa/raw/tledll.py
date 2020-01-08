@@ -42,18 +42,18 @@ C_TLEDLL.TleAddSatFrFieldsGP.restype = settings.stay_int64
 C_TLEDLL.TleAddSatFrFieldsGP.argtypes = [c.c_int32, 
 										 c.c_char, 
 										 c.c_char_p, 
-										 c.c_int,
+										 c.c_int32,
 										 c.c_double, 
 										 c.c_double, 
-										 c.c_int, 
-										 c.c_int, 
-										 c.c_double, 
-										 c.c_double, 
-										 c.c_double, 
+										 c.c_int32, 
+										 c.c_int32, 
 										 c.c_double, 
 										 c.c_double, 
 										 c.c_double, 
-										 c.c_int]
+										 c.c_double, 
+										 c.c_double, 
+										 c.c_double, 
+										 c.c_int32]
 def TleAddSatFrFieldsGP(satNum, secClass, satName, epochYr, epochDays, bstar, ephType, elsetNum, incli, node, eccen, omega, mnAnomaly, mnMotion, revNum):
 	"""
 	python:function::TleAddSatFrFieldsGP
@@ -75,22 +75,22 @@ def TleAddSatFrFieldsGP(satNum, secClass, satName, epochYr, epochDays, bstar, ep
 	:param int revNum: revolution number at epoch
 	:return satKey: The satKey of the newly added TLE on success, a negative value on error.
 	"""
-	satNum = c.c_int(satNum)
-	secClass = c.c_char(secClass.encode('ascii', 'strict'))
-	satName = settings.str_to_c_char_p(satName, fixed_width=8)
-	epochYr = c.c_int(epochYr)
+	satNum    = c.c_int32(satNum)
+	secClass  = c.c_char(secClass.encode('ascii', 'strict'))
+	satName   = settings.str_to_c_char_p(satName, fixed_width=8)
+	epochYr   = c.c_int32(epochYr)
 	epochDays = c.c_double(epochDays)
-	bstar = c.c_double(bstar)
-	ephType = c.c_int32(ephType)
-	elsetNum = c.c_int32(elsetNum)
-	incli = c.c_double(incli)
-	node = c.c_double(node)
-	eccen = c.c_double(eccen)
-	omega = c.c_double(omega)
+	bstar     = c.c_double(bstar)
+	ephType   = c.c_int32(ephType)
+	elsetNum  = c.c_int32(elsetNum)
+	incli     = c.c_double(incli)
+	node      = c.c_double(node)
+	eccen     = c.c_double(eccen)
+	omega     = c.c_double(omega)
 	mnAnomaly = c.c_double(mnAnomaly)
-	mnMotion = c.c_double(mnMotion)
-	revNum = c.c_int32(revNum)
-	satKey = C_TLEDLL.TleAddSatFrFieldsGP(satNum, secClass, satName, epochYr, epochDays, bstar, ephType, elsetNum, incli, node, eccen, omega, mnAnomaly, mnMotion, revNum)
+	mnMotion  = c.c_double(mnMotion)
+	revNum    = c.c_int32(revNum)
+	satKey    = C_TLEDLL.TleAddSatFrFieldsGP(satNum, secClass, satName, epochYr, epochDays, bstar, ephType, elsetNum, incli, node, eccen, omega, mnAnomaly, mnMotion, revNum)
 	return satKey
 
 ##TleAddSatFrFieldsGP2
@@ -98,18 +98,18 @@ C_TLEDLL.TleAddSatFrFieldsGP2.restype = settings.stay_int64
 C_TLEDLL.TleAddSatFrFieldsGP2.argtypes = [c.c_int32, 
 										 c.c_char, 
 										 c.c_char_p, 
-										 c.c_int,
+										 c.c_int32,
 										 c.c_double, 
 										 c.c_double, 
-										 c.c_int, 
-										 c.c_int, 
-										 c.c_double, 
-										 c.c_double, 
-										 c.c_double, 
+										 c.c_int32, 
+										 c.c_int32, 
 										 c.c_double, 
 										 c.c_double, 
 										 c.c_double, 
-										 c.c_int,
+										 c.c_double, 
+										 c.c_double, 
+										 c.c_double, 
+										 c.c_int32,
 										 c.c_double,
 										 c.c_double]
 def TleAddSatFrFieldsGP2(satNum, secClass, satName, epochYr, epochDays, bstar, ephType, elsetNum, incli, node, eccen, omega, mnAnomaly, mnMotion, revNum, nDotO2, n2DotO6):
@@ -135,24 +135,24 @@ def TleAddSatFrFieldsGP2(satNum, secClass, satName, epochYr, epochDays, bstar, e
 	:param float n2DotO6: Mean motion second derivative (rev/day**2 /6)
 	:return satKey: 
 	"""
-	satNum = c.c_int(satNum)
-	secClass = c.c_char(secClass.encode('ascii', 'strict'))
-	satName = settings.str_to_c_char_p(satName, fixed_width=8)
-	epochYr = c.c_int(epochYr)
+	satNum    = c.c_int(satNum)
+	secClass  = c.c_char(secClass.encode('ascii', 'strict'))
+	satName   = settings.str_to_c_char_p(satName, fixed_width=8)
+	epochYr   = c.c_int(epochYr)
 	epochDays = c.c_double(epochDays)
-	bstar = c.c_double(bstar)
-	ephType = c.c_int32(ephType)
-	elsetNum = c.c_int32(elsetNum)
-	incli = c.c_double(incli)
-	node = c.c_double(node)
-	eccen = c.c_double(eccen)
-	omega = c.c_double(omega)
+	bstar     = c.c_double(bstar)
+	ephType   = c.c_int32(ephType)
+	elsetNum  = c.c_int32(elsetNum)
+	incli     = c.c_double(incli)
+	node      = c.c_double(node)
+	eccen     = c.c_double(eccen)
+	omega     = c.c_double(omega)
 	mnAnomaly = c.c_double(mnAnomaly)
-	mnMotion = c.c_double(mnMotion)
-	revNum = c.c_int32(revNum)
-	nDotO2 = c.c_double(nDotO2)
-	n2DotO6 = c.c_double(n2DotO6)
-	satKey = C_TLEDLL.TleAddSatFrFieldsGP2(satNum, secClass, satName, epochYr, epochDays, bstar, ephType, elsetNum, incli, node, eccen, omega, mnAnomaly, mnMotion, revNum, nDotO2, n2DotO6)
+	mnMotion  = c.c_double(mnMotion)
+	revNum    = c.c_int32(revNum)
+	nDotO2    = c.c_double(nDotO2)
+	n2DotO6   = c.c_double(n2DotO6)
+	satKey    = C_TLEDLL.TleAddSatFrFieldsGP2(satNum, secClass, satName, epochYr, epochDays, bstar, ephType, elsetNum, incli, node, eccen, omega, mnAnomaly, mnMotion, revNum, nDotO2, n2DotO6)
 	return satKey
 	
 	
@@ -689,7 +689,7 @@ def TleGetAllFieldsSP(satKey):
 	epochDays = c.c_double()
 	bTerm     = c.c_double()
 	ogParm    = c.c_double()
-	agom     = c.c_double()
+	agom      = c.c_double()
 	elsetNum  = c.c_int32()
 	incli     = c.c_double()
 	node      = c.c_double()
