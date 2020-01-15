@@ -7,25 +7,6 @@ import re
 
 class TestTleDll(unittest.TestCase):
 
-	"""
-	@classmethod
-	def setUpClass(self):
-		# init maindll
-		self.maindll_handle = maindll.DllMainInit()
-		
-		# init timefunc and tle
-		def init_subdll(initer):
-			retcode = initer(self.maindll_handle)
-			if retcode != 0:
-				raise Exception("Failed to init %s with error code %i" % ('initer.__name__', retcode))
-		
-		init_subdll(timedll.TimeFuncInit)
-		init_subdll(tledll.TleInit)
-		
-		# Open a log file
-		maindll.OpenLogFile('tle.log')
-	"""
-
 	def setUp(self):
 		# init maindll
 		self.maindll_handle = maindll.DllMainInit()
@@ -644,7 +625,41 @@ class TestTleDll(unittest.TestCase):
 			self.assertEqual(a, b)
 			
 	##TleUpdateSatFrFieldsGP
+	def test_TleUpdateSatFrFieldsGP(self):
+		satKey = self.generic_satKey
+		secClass  = 'U'
+		satName   = 'ISS'
+		bstar     = -0.000011606 #0.[0]{n}(digits) to accomplish assumed decimal point
+		elsetNum  = 292
+		incli     = 51.6416
+		node      = 247.4627
+		eccen     = 0.0006703 #a leading decimal point is necessary
+		omega     = 130.5360
+		mnAnomaly = 325.0288
+		mnMotion  = 15.72125391
+		revNum    = 56353
+		retcode = tledll.TleUpdateSatFrFieldsGP(satKey, secClass, satName, bstar, elsetNum, incli, node, eccen, omega, mnAnomaly, mnMotion, revNum)
+		self.assertEqual(retcode, 0)
+        
 	##TleUpdateSatFrFieldsGP2
+	def test_TleUpdateSatFrFieldsGP2(self):
+		satKey = self.generic_satKey
+		secClass  = 'U'
+		satName   = 'ISS'
+		bstar     = -0.000011606 #0.[0]{n}(digits) to accomplish assumed decimal point
+		elsetNum  = 292
+		incli     = 51.6416
+		node      = 247.4627
+		eccen     = 0.0006703 #a leading decimal point is necessary
+		omega     = 130.5360
+		mnAnomaly = 325.0288
+		mnMotion  = 15.72125391
+		revNum    = 56353
+		nDot02    = 555 #value not used, but is stored for data integrity
+		n2Dot06   = 666 #value not used, but is stored for data integrity
+		retcode = tledll.TleUpdateSatFrFieldsGP2(satKey, secClass, satName, bstar, elsetNum, incli, node, eccen, omega, mnAnomaly, mnMotion, revNum, nDot02, n2Dot06)
+		self.assertEqual(retcode, 0)
+	
 	##TleUpdateSatFrFieldsSP
 	
 	def tearDown(self):

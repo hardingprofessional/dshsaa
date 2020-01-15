@@ -1423,5 +1423,107 @@ def TleUpdateSatFrArray(satKey, xa_tle, xs_tle):
 	return retcode
 	
 ##TleUpdateSatFrFieldsGP
+C_TLEDLL.TleUpdateSatFrFieldsGP.restype = c.c_int
+C_TLEDLL.TleUpdateSatFrFieldsGP.argtypes = [settings.stay_int64,
+                                            c.c_char,
+                                            c.c_char_p,
+                                            c.c_double,
+                                            c.c_int32,
+                                            c.c_double,
+                                            c.c_double,
+                                            c.c_double,
+                                            c.c_double,
+                                            c.c_double,
+                                            c.c_double,
+                                            c.c_int32]
+
+def TleUpdateSatFrFieldsGP(satKey, secClass, satName, bstar, elsetNum, incli, node, eccen, omega, mnAnomaly, mnMotion, revNum):
+	"""
+	python:function::TleUpdateSatFrFieldsGP
+	Updates a GP satellite's data in memory by providing its individual field values.
+	:param settings.stay_int64 satKey: The satellite's unique key
+	:param str secClass: Security classification 
+	:param str satName: Satellite international designator (string[8])
+	:param float bstar: B* drag term (1/er)
+	:param int elsetNum: Element set number
+	:param float incli: Orbit inclination (degrees)
+	:param float node: Right ascension of ascending node (degrees)
+	:param float eccen: Eccentricity
+	:param float omega: Argument of perigee (degrees)
+	:param float mnAnomaly: Mean anomaly (degrees)
+	:param float mnMotion: Mean motion (rev/day) (ephType = 0: Kozai mean motion, ephType = 2: Brouwer mean motion)
+	:param int revNum: Revolution number at epoch
+	:return int retcode: 0 if the TLE is successfully updated, non-0 if there is an error.
+	"""
+	if not isinstance(satKey, settings.stay_int64):
+		raise TypeError("satKey is type %s, should be type %s" % (type(satKey), settings.stay_int64))
+	secClass = c.c_char(secClass.encode('ascii', 'strict'))
+	satName = settings.str_to_c_char_p(satName, fixed_width=8)
+	bstar = c.c_double(bstar)
+	elsetNum = c.c_int32(elsetNum)
+	incli = c.c_double(incli)
+	node = c.c_double(node)
+	eccen = c.c_double(eccen)
+	omega = c.c_double(omega)
+	mnAnomaly = c.c_double(mnAnomaly)
+	mnMotion = c.c_double(mnMotion)
+	revNum = c.c_int32(revNum)
+	retcode = C_TLEDLL.TleUpdateSatFrFieldsGP(satKey, secClass, satName, bstar, elsetNum, incli, node, eccen, omega, mnAnomaly, mnMotion, revNum)
+	return retcode
+
 ##TleUpdateSatFrFieldsGP2
+C_TLEDLL.TleUpdateSatFrFieldsGP2.restype = c.c_int
+C_TLEDLL.TleUpdateSatFrFieldsGP2.argtypes = [settings.stay_int64,
+                                            c.c_char,
+                                            c.c_char_p,
+                                            c.c_double,
+                                            c.c_int32,
+                                            c.c_double,
+                                            c.c_double,
+                                            c.c_double,
+                                            c.c_double,
+                                            c.c_double,
+                                            c.c_double,
+                                            c.c_int32,
+                                            c.c_double,
+                                            c.c_double]
+
+def TleUpdateSatFrFieldsGP2(satKey, secClass, satName, bstar, elsetNum, incli, node, eccen, omega, mnAnomaly, mnMotion, revNum, nDot02, n2Dot06):
+	"""
+	python:function::TleUpdateSatFrFieldsGP2
+	This function is similar to TleUpdateSatFrFieldsGP but includes nDotO2 and n2DotO6. 
+	:param settings.stay_int64 satKey: The satellite's unique key
+	:param str secClass: Security classification 
+	:param str satName: Satellite international designator (string[8])
+	:param float bstar: B* drag term (1/er)
+	:param int elsetNum: Element set number
+	:param float incli: Orbit inclination (degrees)
+	:param float node: Right ascension of ascending node (degrees)
+	:param float eccen: Eccentricity
+	:param float omega: Argument of perigee (degrees)
+	:param float mnAnomaly: Mean anomaly (degrees)
+	:param float mnMotion: Mean motion (rev/day) (ephType = 0: Kozai mean motion, ephType = 2: Brouwer mean motion)
+	:param int revNum: Revolution number at epoch
+	:param float nDot02: Mean motion derivative (rev/day /2)
+	:param float n2Dot06: Mean motion second derivative (rev/day**2 /6)
+	:return int retcode: 0 if the TLE is successfully updated, non-0 if there is an error.
+	"""
+	if not isinstance(satKey, settings.stay_int64):
+		raise TypeError("satKey is type %s, should be type %s" % (type(satKey), settings.stay_int64))
+	secClass = c.c_char(secClass.encode('ascii', 'strict'))
+	satName = settings.str_to_c_char_p(satName, fixed_width=8)
+	bstar = c.c_double(bstar)
+	elsetNum = c.c_int32(elsetNum)
+	incli = c.c_double(incli)
+	node = c.c_double(node)
+	eccen = c.c_double(eccen)
+	omega = c.c_double(omega)
+	mnAnomaly = c.c_double(mnAnomaly)
+	mnMotion = c.c_double(mnMotion)
+	revNum = c.c_int32(revNum)
+	nDot02 = c.c_double(nDot02)
+	n2Dot06 = c.c_double(n2Dot06)
+	retcode = C_TLEDLL.TleUpdateSatFrFieldsGP2(satKey, secClass, satName, bstar, elsetNum, incli, node, eccen, omega, mnAnomaly, mnMotion, revNum, nDot02, n2Dot06)
+	return retcode
+
 ##TleUpdateSatFrFieldsSP
