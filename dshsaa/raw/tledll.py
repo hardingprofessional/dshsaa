@@ -1527,3 +1527,56 @@ def TleUpdateSatFrFieldsGP2(satKey, secClass, satName, bstar, elsetNum, incli, n
 	return retcode
 
 ##TleUpdateSatFrFieldsSP
+C_TLEDLL.TleUpdateSatFrFieldsSP.restype = c.c_int
+C_TLEDLL.TleUpdateSatFrFieldsSP.argtypes = [settings.stay_int64,
+											c.c_char,
+											c.c_char_p,
+											c.c_double,
+											c.c_double,
+											c.c_double,
+											c.c_int32,
+											c.c_double,
+											c.c_double,
+											c.c_double,
+											c.c_double,
+											c.c_double,
+											c.c_double,
+											c.c_int32]
+
+def TleUpdateSatFrFieldsSP(satKey, secClass, satName, bterm, ogParm, agom, elsetNum, incli, node, eccen, omega, mnAnomaly, mnMotion, revNum):
+	"""
+	python:function::TleUpdateSatFrFieldsSP
+	Updates an SP satellite's data in memory using its individually provided field values.
+	:param settings.stay_int64 satKey: The satellite's unique key
+	:param str secClass: Security classification
+	:param str satName: Satellite international designator (string[8])
+	:param float bterm: Ballistic coefficient (m^2/kg). Note: this is inconsistent with "bTerm" in TleAddSatFrFieldsSP. This inconsistency originates from the original documentation for the SAA DLLs. A decision was made to preserve this inconsistency to be consistent with the source material.
+	:param float ogParm: Outgassing parameter/Thrust Acceleration (km/s^2)
+	:param float agom: Agom (m^2/kg)
+	:param int elsetNum: Element set number
+	:param float incli: Orbit inclination (degrees)
+	:param float node: Right ascension of ascending node (degrees)
+	:param float eccen: Eccentricity
+	:param float omega: Argument of perigee (degrees)
+	:param float mnAnomaly: Mean anomaly (degrees)
+	:param float mnMotion: Mean motion (rev/day)
+	:param int revNum: Revolution number at epoch
+	:return int retcode: 0 if the TLE is successfully updated, non-0 if there is an error.
+	"""
+	if not isinstance(satKey, settings.stay_int64):
+		raise TypeError("satKey is type %s, should be type %s" % (type(satKey), settings.stay_int64))
+	secClass = c.c_char(secClass.encode('ascii', 'strict'))
+	satName = settings.str_to_c_char_p(satName, fixed_width=8)
+	bterm = c.c_double(bterm)
+	ogParm = c.c_double(ogParm)
+	agom = c.c_double(agom)
+	elsetNum = c.c_int32(elsetNum)
+	incli = c.c_double(incli)
+	node = c.c_double(node)
+	eccen = c.c_double(eccen)
+	omega = c.c_double(omega)
+	mnAnomaly = c.c_double(mnAnomaly)
+	mnMotion = c.c_double(mnMotion)
+	revNum = c.c_int32(revNum)
+	retcode = C_TLEDLL.TleUpdateSatFrFieldsSP(satKey, secClass, satName, bterm, ogParm, agom, elsetNum, incli, node, eccen, omega, mnAnomaly, mnMotion, revNum)
+	return retcode

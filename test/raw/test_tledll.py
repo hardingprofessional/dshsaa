@@ -1,9 +1,7 @@
 #! /usr/bin/env python3
 import unittest
 from dshsaa.raw import settings, maindll, envdll, timedll, tledll
-import pdb
-import ctypes as c 
-import re
+import ctypes as c
 
 class TestTleDll(unittest.TestCase):
 
@@ -661,6 +659,23 @@ class TestTleDll(unittest.TestCase):
 		self.assertEqual(retcode, 0)
 	
 	##TleUpdateSatFrFieldsSP
+	def test_TleUpdateSatFrFieldsSP(self):
+		satKey = self.generic_satKey
+		secClass  = 'U'
+		satName   = 'Dundee'
+		bterm     = 0.06822045
+		ogParm    = 0.001
+		agom      = .0000500000
+		elsetNum  = 292
+		incli     = 51.6416
+		node      = 247.4627
+		eccen     = 0.0006703
+		omega     = 130.5360
+		mnAnomaly = 325.0288
+		mnMotion  = 15.72125391
+		revNum    = 15390
+		retcode = tledll.TleUpdateSatFrFieldsSP(satKey, secClass, satName, bterm, ogParm, agom, elsetNum, incli, node, eccen, omega, mnAnomaly, mnMotion, revNum)
+		self.assertEqual(retcode, 0)
 	
 	def tearDown(self):
 		tledll.TleRemoveAllSats()
