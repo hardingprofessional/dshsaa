@@ -37,7 +37,8 @@ class TestTleDll(unittest.TestCase):
 		xs_tle = 'USGP4-KNW'
 		satKey = tledll.TleAddSatFrArray(xa_tle, xs_tle)
 		self.assertTrue(satKey.value > 0)
-		
+	
+	@unittest.skip("Segmentation fault, matlab")
 	##TleAddSatFrArrayML
 	def test_TleAddSatFrArrayML(self):
 		xa_tle = [90004.0, 19409.03935584, 1.327e-05, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 64.7716, 194.9878, 0.6033327, 269.302, 18.611, 2.00615358, 3847.0, 0.0, 0.0, 0.0, 882.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
@@ -403,6 +404,7 @@ class TestTleDll(unittest.TestCase):
 	##TleGetInfo
 	def test_TleGetInfo(self):
 		infoStr = tledll.TleGetInfo()
+		self.assertTrue(infoStr)
 		
 	##TleGetLines
 	def test_TleGetLines(self):

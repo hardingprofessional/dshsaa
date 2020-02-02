@@ -19,6 +19,7 @@ LIB_ASTRO_NAME = None
 LIB_SGP4_NAME = None
 
 ## Useful ctypes data objects
+double1 = c.c_double * 1
 double3 = c.c_double * 3
 double6 = c.c_double * 6
 double10 = c.c_double * 10
