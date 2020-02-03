@@ -58,14 +58,32 @@ class TestSgp4Dll(unittest.TestCase):
 		self.assertEqual(retcode, 0)
 		
 		# retrieve data
-		for xf_Sgp4Out in [2,3,4]:
+		for xf_Sgp4Out in [1,2,3,4]:
 			(retcode, destArr) = sgp4dll.Sgp4GetPropOut(satKey, xf_Sgp4Out)
-			print(destArr)
+		
+		#TODO: Add assertEquals for data
 	
 	
 	##Sgp4Init
-	##Sgp4InitSat 
-	##Sgp4PosVelToKep 
+	def test_Sgp4Init(self):
+		# if the setup is complete, this test is passed
+		1
+		
+	##Sgp4InitSat
+	def test_Sgp4InitSat(self):
+		# if the setup is complete, this test is passed
+		1
+		
+	##Sgp4PosVelToKep
+	def test_Sgp4PosVelToKep(self):
+		yr = 2020
+		day = 11.6
+		# grabbed some coords from https://spaceflight.nasa.gov/realdata/sightings/SSapplications/Post/JavaSSOP/orbit/ISS/SVPOST.html
+		pos = [x/1000 for x in [3779875.33, 3487522.78, 4441142.89]]
+		vel = [x/1000 for x in [-6114.409610, 2394.224646, 3312.814084]]
+		(retcode, posNew, velNew, sgp4MeanKep) = sgp4dll.Sgp4PosVelToKep(yr, day, pos, vel)
+		# TODO: Add real test data
+	
 	##Sgp4PropAll 
 	##Sgp4PropDs50UTC 
 	##Sgp4PropDs50UtcLLH 
@@ -76,7 +94,7 @@ class TestSgp4Dll(unittest.TestCase):
 		satKey = self.generic_satKey
 		mse = 3600
 		(retcode, ds50UTC, pos, vel, llh) = sgp4dll.Sgp4PropMse(satKey, mse)
-		# pdb.set_trace()
+		# TODO: Add assertEquals for data from test case on blog
 	
 	
 	

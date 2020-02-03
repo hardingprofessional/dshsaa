@@ -128,7 +128,43 @@ def Sgp4InitSat(satKey):
 	retcode = C_SGP4DLL.Sgp4InitSat(satKey)
 	return retcode
 
-##Sgp4PosVelToKep 
+##Sgp4PosVelToKep
+C_SGP4DLL.Sgp4PosVelToKep.restype = c.c_int
+C_SGP4DLL.Sgp4PosVelToKep.argtypes = [c.c_int32,
+									  c.c_double,
+									  settings.double3,
+									  settings.double3,
+									  settings.double3,
+									  settings.double3,
+									  settings.double6]
+
+def Sgp4PosVelToKep(yr, day, pos, vel):
+	"""
+	python:function::Sgp4PosVelToKep
+	Converts osculating position and velocity vectors to a set of mean Keplerian SGP4 elements.
+	The new position and velocity vectors are the results of using SGP4 propagator to propagate the computed sgp4MeanKep to the time specified in year and day of epoch time. They should be closely matched with the input osculating position and velocity vectors. 
+	The mean Keplerian elements are SGP4's Brouwer mean motion not SGP's Kozai mean motion. 
+	:param int yr: 2 or 4 digit year of the epoch time
+	:param float day: Day of year of the epoch time.
+	:param float[3] pos: Input osculating position vector (km). (double[3])
+	:param float[3] vel: Input osculating velocity vector (km/s). (double[3])
+	:return int retcode: 0 if the conversion is successful, non-0 if there is an error.
+	:return float[3] posNew: Resulting position vector (km) propagated from the sgp4MeanKep. (double[3])
+	:return float[3] velNew: Resulting velocity vector (km/s) propagated from the sgp4MeanKep. (double[3])
+	:return float[6] sgp4MeanKep: Resulting set of Sgp4 mean Keplerian elements. (double[6])
+	"""
+	yr = c.c_int32(yr)
+	day = c.c_double(day)
+	pos = settings.list_to_array(pos)
+	vel = settings.list_to_array(vel)
+	posNew = settings.double3()
+	velNew = settings.double3()
+	sgp4MeanKep = settings.double6()
+	retcode = C_SGP4DLL.Sgp4PosVelToKep(yr, day, pos, vel, posNew, velNew, sgp4MeanKep)
+	posNew = settings.array_to_list(posNew)
+	velNew = settings.array_to_list(velNew)
+	return (retcode, posNew, velNew, sgp4MeanKep)
+
 ##Sgp4PropAll 
 ##Sgp4PropDs50UTC 
 ##Sgp4PropDs50UtcLLH 
