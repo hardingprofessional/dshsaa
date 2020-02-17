@@ -17,3 +17,18 @@ If you only wish to implement the SGP4 satellite tracking algorithms, use the `p
 ## Who made this?
 
 David Harding built this driver to go with his blog at [blog.hardinglabs.com](https://blog.hardinglabs.com/python-ctypes-to-sgp4.html).
+
+
+## TODO (Non-Code)
+
+1. Implement a properly defined virtual environment spec so others can test
+2. Fix the Sphinx documentation component
+3. Test on Windows
+4. Test on MacOS (Catalina drops 32bit support, may not work)
+
+## TODO (Code, but not core functionality)
+1. Add a test environment validation script that verifies
+	a. dll path is known and populated
+	b. python version is accurate
+	c. ctypes version is acceptable
+	d. dependencies are available
