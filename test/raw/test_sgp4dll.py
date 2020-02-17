@@ -84,24 +84,78 @@ class TestSgp4Dll(unittest.TestCase):
 		(retcode, posNew, velNew, sgp4MeanKep) = sgp4dll.Sgp4PosVelToKep(yr, day, pos, vel)
 		# TODO: Add real test data
 	
-	##Sgp4PropAll 
+	##Sgp4PropAll
+	def test_Sgp4PropAll(self):
+		satKey = self.generic_satKey
+		timeType = 0
+		timeIn = 0
+		(retcode, xa_Sgp4Out) = sgp4dll.Sgp4PropAll(satKey, timeType, timeIn)
+		self.assertEqual(retcode, 0)
+		
+		satKey = self.generic_satKey
+		timeType = 0
+		timeIn = 3600
+		(retcode, xa_Sgp4Out) = sgp4dll.Sgp4PropAll(satKey, timeType, timeIn)
+		self.assertEqual(retcode, 0)
+		
+		satKey = self.generic_satKey
+		timeType = 1
+		timeIn = 25852.6
+		(retcode, xa_Sgp4Out) = sgp4dll.Sgp4PropAll(satKey, timeType, timeIn)
+		self.assertEqual(retcode, 0)
+		
+		# TODO: Add data driven test results
+		
 	##Sgp4PropDs50UTC 
+	def test_Sgp4PropDs50UTC(self):
+		satKey = self.generic_satKey
+		ds50UTC = 25852.6
+		(retcode, mse, pos, vel, llh) = sgp4dll.Sgp4PropDs50UTC(satKey, ds50UTC)
+		self.assertEqual(retcode, 0)
+		
 	##Sgp4PropDs50UtcLLH 
-	##Sgp4PropDs50UtcPos 
+	def test_Sgp4PropDs50UtcLLH(self):
+		satKey = self.generic_satKey
+		ds50UTC = 25852.6
+		(retcode, llh) = sgp4dll.Sgp4PropDs50UtcLLH(satKey, ds50UTC)
+		self.assertEqual(retcode, 0)
 	
+	
+	##Sgp4PropDs50UtcPos 
+	def test_Sgp4PropDs50UtcPos(self):
+		satKey = self.generic_satKey
+		ds50UTC = 25852.6
+		(retcode, pos) = sgp4dll.Sgp4PropDs50UtcPos(satKey, ds50UTC)
+		self.assertEqual(retcode, 0)
+		
 	##Sgp4PropMse
 	def test_Sgp4PropMse(self):
 		satKey = self.generic_satKey
 		mse = 3600
 		(retcode, ds50UTC, pos, vel, llh) = sgp4dll.Sgp4PropMse(satKey, mse)
+		self.assertEqual(retcode, 0)
 		# TODO: Add assertEquals for data from test case on blog
 	
+	##Sgp4ReepochTLE
+	def test_Sgp4ReepochTLE(self):
+		satKey = self.generic_satKey
+		reepochDs50UTC = 25852.6
+		(retcode, line1Out, line2Out) = sgp4dll.Sgp4ReepochTLE(satKey, reepochDs50UTC)
+		self.assertEqual(retcode, 0)
+		# TODO: need real data
 	
+	##Sgp4RemoveAllSats
+	def test_Sgp4RemoveAllSats(self):
+		retcode = sgp4dll.Sgp4RemoveAllSats()
+		self.assertEqual(retcode, 0)
+		
+	##Sgp4RemoveSat
+	def test_Sgp4RemoveSat(self):
+		satKey = self.generic_satKey
+		retcode = sgp4dll.Sgp4RemoveSat(satKey)
+		self.assertEqual(retcode, 0)
+		# TODO: verify satKey actually removed
 	
-	
-	##Sgp4ReepochTLE 
-	##Sgp4RemoveAllSats 
-	##Sgp4RemoveSat 
 	##Sgp4SetLicFilePath 
 
 

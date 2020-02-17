@@ -165,11 +165,141 @@ def Sgp4PosVelToKep(yr, day, pos, vel):
 	velNew = settings.array_to_list(velNew)
 	return (retcode, posNew, velNew, sgp4MeanKep)
 
-##Sgp4PropAll 
-##Sgp4PropDs50UTC 
-##Sgp4PropDs50UtcLLH 
-##Sgp4PropDs50UtcPos 
+##Sgp4PropAll
+C_SGP4DLL.Sgp4PropAll.restype = c.c_int
+C_SGP4DLL.Sgp4PropAll.argtypes = [settings.stay_int64,
+								  c.c_int32,
+								  c.c_double,
+								  settings.double64]
 
+def Sgp4PropAll(satKey, timeType, timeIn):
+	"""
+	python:function::Sgp4PropAll
+	Propagates a satellite, represented by the satKey, to the time expressed in either minutes since epoch or days since 1950, UTC. All propagation data is returned by this function. 
+	:param settings.stay_int64 satKey: The unique key of the satellite to propagate.
+	:param int timeType: The propagation time type: 0 = minutes since epoch, 1 = days since 1950, UTC
+	:param float timeIn: The time to propagate to, expressed in either minutes since epoch or days since 1950, UTC.
+	:return int retcode: 0 if the propagation is successful, non-0 if there is an error.
+	:return float[64] xa_Sgp4Out: The array that stores all Sgp4 propagation data, see XA_SGP4OUT_? for array arrangement (double[64]) TODO: Figure this out and document
+	"""
+	if not isinstance(satKey, settings.stay_int64):
+		raise TypeError("satKey is type %s, should be type %s" % (type(satKey), settings.stay_int64))
+	timeType = c.c_int32(timeType)
+	timeIn = c.c_double(timeIn)
+	xa_Sgp4Out = settings.double64()
+	retcode = C_SGP4DLL.Sgp4PropAll(satKey, timeType, timeIn, xa_Sgp4Out)
+	xa_Sgp4Out = settings.array_to_list(xa_Sgp4Out)
+	return (retcode, xa_Sgp4Out)
+
+##Sgp4PropDs50UTC
+C_SGP4DLL.Sgp4PropDs50UTC.restype = c.c_int
+C_SGP4DLL.Sgp4PropDs50UTC.argtypes = [settings.stay_int64,
+									  c.c_double,
+									  c.POINTER(c.c_double),
+									  settings.double3,
+									  settings.double3,
+									  settings.double3]
+
+def Sgp4PropDs50UTC(satKey, ds50UTC):
+	"""
+	python:function::Sgp4PropDs50UTC
+	Propagates a satellite, represented by the satKey, to the time expressed in days since 1950, UTC. The resulting data about the satellite is placed in the various reference parameters.
+	It is the users' responsibility to decide what to do with the returned value. For example, if the users want to check for decay or low altitude, they can put that logic into their own code. 
+	The following cases will result in an error: 
+	- Semi major axis A <= 0 or A >1.0D6
+	- Eccentricity E >= 1.0 or E < -1.0D-3
+	- Mean anomaly MA>=1.0D10
+	- Hyperbolic orbit E2>= 1.0
+	- satKey doesn't exist in the set of loaded satellites
+	- GEO model not set to WGS-72 and/or FK model not set to FK5
+	:param settings.stay_int64 satKey: The unique key of the satellite to propagate.
+	:param float ds50UTC: The time to propagate to, expressed in days since 1950, UTC.
+	:return int retcode: 0 if the propagation is successful, non-0 if there is an error.
+	:return float mse: Resulting time in minutes since the satellite's epoch time.
+	:return float[3] pos: Resulting ECI position vector (km) in True Equator and Mean Equinox of Epoch. (double[3])
+	:return float[3] vel: Resulting ECI velocity vector (km/s) in True Equator and Mean Equinox of Epoch. (double[3])
+	:return float[3] llh: Resulting geodetic latitude (deg), longitude(deg), and height (km). (double[3])
+	"""
+	if not isinstance(satKey, settings.stay_int64):
+		raise TypeError("satKey is type %s, should be type %s" % (type(satKey), settings.stay_int64))
+	ds50UTC = c.c_double(ds50UTC)
+	mse = c.c_double()
+	pos = settings.double3()
+	vel = settings.double3()
+	llh = settings.double3()
+	retcode = C_SGP4DLL.Sgp4PropDs50UTC(satKey, ds50UTC, c.byref(mse), pos, vel, llh)
+	mse = mse.value
+	pos = settings.array_to_list(pos)
+	vel = settings.array_to_list(vel)
+	llh = settings.array_to_list(llh)
+	return (retcode, mse, pos, vel, llh)
+	
+
+##Sgp4PropDs50UtcLLH
+C_SGP4DLL.Sgp4PropDs50UtcLLH.restype = c.c_int
+C_SGP4DLL.Sgp4PropDs50UtcLLH.argtypes = [settings.stay_int64,
+										 c.c_double,
+										 settings.double3]
+
+def Sgp4PropDs50UtcLLH(satKey, ds50UTC):
+	"""
+	python:function::Sgp4PropDs50UtcLLH
+	Propagates a satellite, represented by the satKey, to the time expressed in days since 1950, UTC. Only the geodetic information is returned by this function. 
+	It is the users' responsibility to decide what to do with the returned value. For example, if the users want to check for decay or low altitude, they can put that logic into their own code. 
+	This function is similar to Sgp4PropDs50UTC but returns only LLH. This function is designed especially for applications which plot ground traces. 
+	The following cases will result in an error: 
+	Semi major axis A <= 0 or A >1.0D6
+	Eccentricity E >= 1.0 or E < -1.0D-3
+	Mean anomaly MA>=1.0D10
+	Hyperbolic orbit E2>= 1.0
+	satKey doesn't exist in the set of loaded satellites
+	GEO model not set to WGS-72 and/or FK model not set to FK5
+	:param settings.stay_int64 satKey: The unique key of the satellite to propagate.
+	:param float ds50UTC: The time to propagate to, expressed in days since 1950, UTC.
+	:return int retcode: 0 if the propagation is successful, non-0 if there is an error.
+	:return float[3] llh: Resulting geodetic latitude (deg), longitude(deg), and height (km). (double[3])
+	"""
+	if not isinstance(satKey, settings.stay_int64):
+		raise TypeError("satKey is type %s, should be type %s" % (type(satKey), settings.stay_int64))
+	ds50UTC = c.c_double(ds50UTC)
+	llh = settings.double3()
+	retcode = C_SGP4DLL.Sgp4PropDs50UtcLLH(satKey, ds50UTC, llh)
+	llh = settings.array_to_list(llh)
+	return (retcode, llh)
+
+##Sgp4PropDs50UtcPos
+C_SGP4DLL.Sgp4PropDs50UtcPos.restype = c.c_int
+C_SGP4DLL.Sgp4PropDs50UtcPos.argtypes = [settings.stay_int64,
+										 c.c_double,
+										 settings.double3]
+
+def Sgp4PropDs50UtcPos(satKey, ds50UTC):
+	"""
+	python:function::Sgp4PropDs50UtcPos
+	Propagates a satellite, represented by the satKey, to the time expressed in days since 1950, UTC. Only the ECI position vector is returned by this function. 
+	It is the users' responsibility to decide what to do with the returned value. For example, if the users want to check for decay or low altitude, they can put that logic into their own code. 
+	This function is similar to Sgp4PropDs50UTC but returns only ECI position vector. This function is designed especially for applications which plot satellite position in 3D. 
+	The following cases will result in an error: 
+	* Semi major axis A <= 0 or A >1.0D6
+	* Eccentricity E >= 1.0 or E < -1.0D-3
+	* Mean anomaly MA>=1.0D10
+	* Hyperbolic orbit E2>= 1.0
+	* satKey doesn't exist in the set of loaded satellites
+	* GEO model not set to WGS-72 and/or FK model not set to FK5
+	:param settings.stay_int64 satKey: 
+	:param float ds50UTC: The unique key of the satellite to propagate.
+	:return int retcode: Resulting ECI position vector (km) in True Equator and Mean Equinox of Epoch. (double[3])
+	:return float[3] pos: The time to propagate to, expressed in days since 1950, UTC.
+	"""
+	if not isinstance(satKey, settings.stay_int64):
+		raise TypeError("satKey is type %s, should be type %s" % (type(satKey), settings.stay_int64))
+	ds50UTC = c.c_double(ds50UTC)
+	pos = settings.double3()
+	retcode = C_SGP4DLL.Sgp4PropDs50UtcPos(satKey, ds50UTC, pos)
+	pos = settings.array_to_list(pos)
+	return (retcode, pos)
+	
+	
 ##Sgp4PropMse 
 C_SGP4DLL.Sgp4PropMse.restype = c.c_int
 C_SGP4DLL.Sgp4PropMse.argtypes = [settings.stay_int64,
@@ -216,9 +346,65 @@ def Sgp4PropMse(satKey, mse):
 	llh = settings.array_to_list(llh)
 	return (retcode, ds50UTC, pos, vel, llh)
 	
-##Sgp4ReepochTLE 
-##Sgp4RemoveAllSats 
-##Sgp4RemoveSat 
+##Sgp4ReepochTLE
+C_SGP4DLL.Sgp4ReepochTLE.restype = c.c_int
+C_SGP4DLL.Sgp4ReepochTLE.argtypes = [settings.stay_int64,
+									 c.c_double,
+									 c.c_char_p,
+									 c.c_char_p]
+
+def Sgp4ReepochTLE(satKey, reepochDs50UTC):
+	"""
+	python:function::Sgp4ReepochTLE
+	Reepochs a loaded TLE, represented by the satKey, to a new epoch. 
+	:param settings.stay_int64 satKey: The unique key of the satellite to reepoch.
+	:param float reepochDs50UTC: The new epoch, express in days since 1950, UTC.
+	:return int retcode: 0 if the reepoch is successful, non-0 if there is an error.
+	:return str line1Out: A string to hold the first line of the reepoched TLE. (byte[512])
+	:return str line2Out: A string to hold the second line of the reepoched TLE. (byte[512])
+	"""
+	if not isinstance(satKey, settings.stay_int64):
+		raise TypeError("satKey is type %s, should be type %s" % (type(satKey), settings.stay_int64))
+	reepochDs50UTC = c.c_double(reepochDs50UTC)
+	line1Out = c.c_char_p(bytes(512))
+	line2Out = c.c_char_p(bytes(512))
+	retcode = C_SGP4DLL.Sgp4ReepochTLE(satKey, reepochDs50UTC, line1Out, line2Out)
+	line1Out = settings.byte_to_str(line1Out)
+	line2Out = settings.byte_to_str(line2Out)
+	return (retcode, line1Out, line2Out)
+
+
+##Sgp4RemoveAllSats
+C_SGP4DLL.Sgp4RemoveAllSats.restype = c.c_int
+
+def Sgp4RemoveAllSats():
+	"""
+	python:function::Sgp4RemoveAllSats
+	Removes all currently loaded satellites from memory. 
+	Calling this function removes all satellites from the set maintained by Sgp4Prop.dll. However, the TLE data loaded by Tle.dll is unaffected by this function. 
+	:return int retcode: 0 if all satellites are removed successfully from memory, non-0 if there is an error.
+	"""
+	retcode = C_SGP4DLL.Sgp4RemoveAllSats()
+	return retcode
+
+##Sgp4RemoveSat
+C_SGP4DLL.Sgp4RemoveSat.restype = c.c_int
+C_SGP4DLL.Sgp4RemoveSat.argtypes = [settings.stay_int64]
+
+def Sgp4RemoveSat(satKey):
+	"""
+	python:function::Sgp4RemoveSat
+	Removes a satellite, represented by the satKey, from the set of satellites. 
+	If the specified satKey is not currently loaded into the propagator, an error will be indicated. 
+	Removing a satellite from the propagator's set of satellites does not affect the corresponding TLE data loaded by calls to routines in Tle.dll. 
+	:param settings.stay_int64 satKey: The satellite's unique key.
+	:return int retcode: 0 if the satellite is removed successfully, non-0 if there is an error.
+	"""
+	if not isinstance(satKey, settings.stay_int64):
+		raise TypeError("satKey is type %s, should be type %s" % (type(satKey), settings.stay_int64))
+	retcode = C_SGP4DLL.Sgp4RemoveSat(satKey)
+	return retcode
+
 ##Sgp4SetLicFilePath
 C_SGP4DLL.Sgp4SetLicFilePath.argtypes = [c.c_char_p]
 
