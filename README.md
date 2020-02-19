@@ -1,6 +1,4 @@
-# dshsaa
-
-## WARNING: THIS CODE IS IN EARLY DEVELOPMENT, DO NOT USE IN PRODUCTION
+# `dshsaa`
 
 ## What Is it?
 
@@ -32,3 +30,42 @@ David Harding built this driver to go with his blog at [blog.hardinglabs.com](ht
 	b. python version is accurate
 	c. ctypes version is acceptable
 	d. dependencies are available
+
+## Installation
+
+_These instructions will change when the Virtual Environment is completed._
+
+## Linux
+
+### Get the SAA DLLs
+
+You must be a US citizen to lawfully download the SAA DLLs.
+
+Go to [space-track.org](https://www.space-track.org/), make an account, then go to the [sgp4 download page](https://www.space-track.org/documentation#/sgp4) and download the appropriate package for your operating system. For me, this is `SGP4_small_V7.9_LINUX64.tar.gz`. You should _also_ download the windows package, `SGP4_small_V7.9_WIN64.zip`, because it provides additional Python2 driver examples.
+
+### Verify Python3 Environment
+
+Check your Python3 version and make sure you are running at 3.7.5 or greater.
+
+```
+$ python3 -V
+Python 3.7.5
+```
+
+Check your ctypes version and make sure you are running 1.1.0 or greater.
+
+```
+python3 -c "import ctypes; print(ctypes.__version__)"
+1.1.0
+```
+
+### Clone the `dshsaa` repository
+
+Clone the `dshsaa` repository to your working environment. 
+
+```
+$ git clone https://github.com/hardingprofessional/dshsaa.git
+```
+
+You should now have a folder called `dshsaa` on your current path.
+

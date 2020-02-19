@@ -8,7 +8,8 @@
 *.so
 
 # libdll
-dshsaa/libdll/
+dshsaa/libdll/*
+!dshsaa/libdll/.so-dll-files-go-here
 
 # sphinx output
 build/
