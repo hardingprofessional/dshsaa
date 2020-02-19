@@ -16,7 +16,6 @@ If you only wish to implement the SGP4 satellite tracking algorithms, use the `p
 
 David Harding built this driver to go with his blog at [blog.hardinglabs.com](https://blog.hardinglabs.com/python-ctypes-to-sgp4.html).
 
-
 ## TODO (Non-Code)
 
 1. Implement a properly defined virtual environment spec so others can test
@@ -25,11 +24,14 @@ David Harding built this driver to go with his blog at [blog.hardinglabs.com](ht
 4. Test on MacOS (Catalina drops 32bit support, may not work)
 
 ## TODO (Code, but not core functionality)
-1. Add a test environment validation script that verifies
-	a. dll path is known and populated
-	b. python version is accurate
-	c. ctypes version is acceptable
-	d. dependencies are available
+<ol> <li> Add a test environment validation script that verifies </li> 
+	<ol type="a">
+		<li> dll path is known and populated </li>
+		<li> python version is accurate </li>
+		<li> ctypes version is acceptable </li>
+		<li> dependencies are available </li>
+	</ol>
+</ol>
 
 ## Installation
 
@@ -103,4 +105,6 @@ Ran 155 tests in 0.014s
 OK (skipped=14)
 ```
 
+# Starting Notes
 
+Run `dshsaa/example.py` to make sure it works. Use this code as a reference until the sphinx documentation is up.
