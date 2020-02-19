@@ -64,8 +64,43 @@ python3 -c "import ctypes; print(ctypes.__version__)"
 Clone the `dshsaa` repository to your working environment. 
 
 ```
+$ cd ~
 $ git clone https://github.com/hardingprofessional/dshsaa.git
 ```
 
 You should now have a folder called `dshsaa` on your current path.
+
+### Place the DLL/SO files in the libdll directory
+
+Untar your copy of `SGP4_small_V7.9_LINUX64.tar.gz`. Navigate to `SGP4_small_V7.9_LINUX64.tar.gz/Lib` and copy all of the contents to `~/dshsaa/dshsaa/libdll/`.
+
+### Set path and run tests
+
+Add the libdll to LD_LIBRARY_PATH.
+
+```
+$ cd ~/dshsaa
+$ source source_env
+```
+
+Run the full test battery
+
+```
+./runtest
+```
+
+The end of the output should look similar to this:
+
+```
+...
+test_TleUpdateSatFrFieldsSP (raw.test_tledll.TestTleDll) ... ok
+testl_TleFieldsToSatKey (raw.test_tledll.TestTleDll) ... ok
+testl_TleFieldsToSatKeyML (raw.test_tledll.TestTleDll) ... skipped 'Segmentation fault, matlab'
+
+----------------------------------------------------------------------
+Ran 155 tests in 0.014s
+
+OK (skipped=14)
+```
+
 
