@@ -26,7 +26,7 @@ class TestSgp4Dll(unittest.TestCase):
 		# open a log file
 		maindll.OpenLogFile('sgp4.log')
 		
-		# make a test satellite available for various testing functions
+		# Initialize a TLE
 		line1 = '1 25544U 98067A   19311.39056523  .00000757  00000-0  21099-4 0  9992'
 		line2 = '2 25544  51.6451  11.2360 0005828 238.9618 210.3569 15.50258526197470'
 		generic_satKey = tledll.TleAddSatFrLines(line1, line2)
@@ -35,7 +35,7 @@ class TestSgp4Dll(unittest.TestCase):
 		else:
 			self.generic_satKey = generic_satKey
 		
-		# Initialize that satellite in the TLE context
+		# Initialize that satellite in the SGP4 context
 		retcode = sgp4dll.Sgp4InitSat(generic_satKey)
 		if retcode != 0:
 			raise Exception("Failed to init tle with code %i" % (retcode))
