@@ -73,8 +73,8 @@ def AzElToLAD(az, el):
 C_ASTRODLL.AzElToRaDec.argtypes = [c.c_double] * 4 + [c.POINTER(c.c_double)] * 2
 def AzElToRaDec(thetaG, lat, lon, az, el):
 	"""
-	python:function::AzElToRaDec
 	Converts Azimuth/Elevation in local horizon reference frame to Right Ascension/Declination in topocentric reference frame. Requires some information about the ground site.
+	
 	:param float thataG: greenwhich mean sidereal time (rad)
 	:param float lat: station's astronomical latitude (deg, +N, -S)
 	:param float lon: station's astronomical longitude (deg, +E, -W)

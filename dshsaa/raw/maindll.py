@@ -27,7 +27,7 @@ def DllMainGetInfo():
 
 	Returns information about DllMain DLL
 
-	:returns: string info: a regular python string describing DllMain DLL
+	:return str info: a regular python string describing DllMain DLL
 	"""
 	info = c.c_char_p(bytes(512))
 	C_MAINDLL.DllMainGetInfo(info)
@@ -42,7 +42,7 @@ def DllMainInit():
 
 	Inits a DLLMain wrapper object in memory
 
-	:returns: ctypes.c_int64 maindll_handle: A 64 bit specialized integer used to help the other DLLs find the running instance of maindll
+	:returns settings.stay_int64 maindll_handle: A 64 bit specialized integer used to help the other DLLs find the running instance of maindll
 
 	"""
 	maindll_handle = C_MAINDLL.DllMainInit()
