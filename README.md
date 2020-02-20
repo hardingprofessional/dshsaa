@@ -108,3 +108,11 @@ OK (skipped=14)
 # Starting Notes
 
 Run `dshsaa/example.py` to make sure it works. Use this code as a reference until the sphinx documentation is up.
+
+# Documentation
+
+It is now possible to read the documentation using a browser. Clone the project and navigate your browser to `~/dshsaa/sphinx/_build/html/index.html`.
+
+To rebuild the documentation, navigate to `dshsaa/sphinx` and run `./rebuild`. This operation is path sensitive.
+
+I will be hosting the latest build of this documentation soon.
