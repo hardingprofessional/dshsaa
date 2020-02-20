@@ -192,12 +192,13 @@ C_TIMEDLL.TConLoadFile.restype = c.c_int
 C_TIMEDLL.TConLoadFile.argtypes = [c.c_char_p]
 def TConLoadFile(tconfile):
 	"""
-	python:function:: TConLoadFile
-	Loads timing constants data from an input file. 
-	Time constants can be included directly in the main input file or they can be read from a separate file identified with "TIMFIL=[pathname\filename]". 
-	The input file is read in two passes. The function first looks for "TIMFIL=" lines, then it looks for timing constant data which was included directly. The result of this is that data entered using both methods will be processed, but the "TIMFIL=" data will be processed first. 
-	The time constants are also read in from each VCM. However, only the most recent time constants among VCMs are stored in the memory, see VCM.dll documentation. 
-	See the "Time Constants Data Description" section in the accompanying TimeFunc documentation file for supported formats. 
+	.. py:function:: TConLoadFile
+	
+		Loads timing constants data from an input file. Time constants can be included directly in the main input file or they can be read from a separate file identified with "TIMFIL=[pathname/filename]". The input file is read in two passes. The function first looks for "TIMFIL=" lines, then it looks for timing constant data which was included directly. The result of this is that data entered using both methods will be processed, but the "TIMFIL=" data will be processed first. The time constants are also read in from each VCM. However, only the most recent time constants among VCMs are stored in the memory, see VCM.dll documentation. See the "Time Constants Data Description" section in the accompanying TimeFunc documentation file for supported formats.
+		
+		:param str tconfile: The name of the time constant file to load
+		:return int retcode: 0 if file successfully loaded, nonzero if file not successfully loaded
+		
 	"""
 	tconfile = tconfile.encode('ascii')
 	tconfile = settings.enforce_limit(tconfile, 512)
@@ -378,8 +379,8 @@ C_TIMEDLL.TimeFuncLoadFile.restype = c.c_int
 C_TIMEDLL.TimeFuncLoadFile.argtypes = [c.c_char_p]
 def TimeFuncLoadFile(tconfile):
 	"""
-	python:function:: TimeFuncLoadFile
-	Loads timing constants data and prediction control (6P-card) from an input file. Time constants can be included directly in the main input file or they can be read from a separate file identified with "TIMFIL=[pathname\filename]". The input file is read in two passes. The function first looks for "TIMFIL=" lines, then it looks for timing constant data which was included directly. The result of this is that data entered using both methods will be processed, but the "TIMFIL=" data will be processed first. The time constants are also read in from each VCM. However, only the most recent time constants among VCMs are stored in the memory, see VCM.dll documentation.
+	Loads timing constants data and prediction control (6P-card) from an input file. Time constants can be included directly in the main input file or they can be read from a separate file identified with "TIMFIL=[pathname/filename]". The input file is read in two passes. The function first looks for "TIMFIL=" lines, then it looks for timing constant data which was included directly. The result of this is that data entered using both methods will be processed, but the "TIMFIL=" data will be processed first. The time constants are also read in from each VCM. However, only the most recent time constants among VCMs are stored in the memory, see VCM.dll documentation.
+	
 	:param str tconfile: the location of the timing constants and prediction control file
 	:return int retcode: 0 if input file loaded successfully, !0 otherwise
 	"""

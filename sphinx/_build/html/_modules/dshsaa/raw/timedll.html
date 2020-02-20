@@ -233,12 +233,13 @@
 <span class="n">C_TIMEDLL</span><span class="o">.</span><span class="n">TConLoadFile</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">]</span>
 <div class="viewcode-block" id="TConLoadFile"><a class="viewcode-back" href="../../../dshsaa.raw.html#dshsaa.raw.timedll.TConLoadFile">[docs]</a><span class="k">def</span> <span class="nf">TConLoadFile</span><span class="p">(</span><span class="n">tconfile</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">	python:function:: TConLoadFile</span>
-<span class="sd">	Loads timing constants data from an input file. </span>
-<span class="sd">	Time constants can be included directly in the main input file or they can be read from a separate file identified with &quot;TIMFIL=[pathname\filename]&quot;. </span>
-<span class="sd">	The input file is read in two passes. The function first looks for &quot;TIMFIL=&quot; lines, then it looks for timing constant data which was included directly. The result of this is that data entered using both methods will be processed, but the &quot;TIMFIL=&quot; data will be processed first. </span>
-<span class="sd">	The time constants are also read in from each VCM. However, only the most recent time constants among VCMs are stored in the memory, see VCM.dll documentation. </span>
-<span class="sd">	See the &quot;Time Constants Data Description&quot; section in the accompanying TimeFunc documentation file for supported formats. </span>
+<span class="sd">	.. py:function:: TConLoadFile</span>
+<span class="sd">	</span>
+<span class="sd">		Loads timing constants data from an input file. Time constants can be included directly in the main input file or they can be read from a separate file identified with &quot;TIMFIL=[pathname/filename]&quot;. The input file is read in two passes. The function first looks for &quot;TIMFIL=&quot; lines, then it looks for timing constant data which was included directly. The result of this is that data entered using both methods will be processed, but the &quot;TIMFIL=&quot; data will be processed first. The time constants are also read in from each VCM. However, only the most recent time constants among VCMs are stored in the memory, see VCM.dll documentation. See the &quot;Time Constants Data Description&quot; section in the accompanying TimeFunc documentation file for supported formats.</span>
+<span class="sd">		</span>
+<span class="sd">		:param str tconfile: The name of the time constant file to load</span>
+<span class="sd">		:return int retcode: 0 if file successfully loaded, nonzero if file not successfully loaded</span>
+<span class="sd">		</span>
 <span class="sd">	&quot;&quot;&quot;</span>
 	<span class="n">tconfile</span> <span class="o">=</span> <span class="n">tconfile</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">)</span>
 	<span class="n">tconfile</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">enforce_limit</span><span class="p">(</span><span class="n">tconfile</span><span class="p">,</span> <span class="mi">512</span><span class="p">)</span>
@@ -419,8 +420,8 @@
 <span class="n">C_TIMEDLL</span><span class="o">.</span><span class="n">TimeFuncLoadFile</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">]</span>
 <div class="viewcode-block" id="TimeFuncLoadFile"><a class="viewcode-back" href="../../../dshsaa.raw.html#dshsaa.raw.timedll.TimeFuncLoadFile">[docs]</a><span class="k">def</span> <span class="nf">TimeFuncLoadFile</span><span class="p">(</span><span class="n">tconfile</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">	python:function:: TimeFuncLoadFile</span>
-<span class="sd">	Loads timing constants data and prediction control (6P-card) from an input file. Time constants can be included directly in the main input file or they can be read from a separate file identified with &quot;TIMFIL=[pathname\filename]&quot;. The input file is read in two passes. The function first looks for &quot;TIMFIL=&quot; lines, then it looks for timing constant data which was included directly. The result of this is that data entered using both methods will be processed, but the &quot;TIMFIL=&quot; data will be processed first. The time constants are also read in from each VCM. However, only the most recent time constants among VCMs are stored in the memory, see VCM.dll documentation.</span>
+<span class="sd">	Loads timing constants data and prediction control (6P-card) from an input file. Time constants can be included directly in the main input file or they can be read from a separate file identified with &quot;TIMFIL=[pathname/filename]&quot;. The input file is read in two passes. The function first looks for &quot;TIMFIL=&quot; lines, then it looks for timing constant data which was included directly. The result of this is that data entered using both methods will be processed, but the &quot;TIMFIL=&quot; data will be processed first. The time constants are also read in from each VCM. However, only the most recent time constants among VCMs are stored in the memory, see VCM.dll documentation.</span>
+<span class="sd">	</span>
 <span class="sd">	:param str tconfile: the location of the timing constants and prediction control file</span>
 <span class="sd">	:return int retcode: 0 if input file loaded successfully, !0 otherwise</span>
 <span class="sd">	&quot;&quot;&quot;</span>

@@ -25,13 +25,16 @@ C_ENVDLL.EnvGetFkConst.restype = c.c_double
 C_ENVDLL.EnvGetFkConst.argtypes = [c.c_int32]
 def EnvGetFkConst(xf_FkCon):
 	"""
-	python:function::EnvGetFkConst
-	Retrieves the value of one of the constants from the current fundamental catalogue (FK) model. 
+	Retrieves the value of one of the constants from the current fundamental catalogue (FK) model.
+	
+	========= ==========================================================
 	xf_FkCon  Value
 	1         C1: Earth rotation rate w.r.t. moving equinox (rad/day)
 	2         C1DOT: Earth rotation acceleration (rad/day2)
 	3         THGR70: Greenwich angle (1970; rad)
-	:param int xf_FkCon: An index specifying the constant you wish to retrieve, , see XF_FKCON_? for field specification
+	========= ==========================================================
+	
+	:param int xf_FkCon: An index specifying the constant you wish to retrieve. See XF_FKCON_? for field specification.
 	:return float fkcon: a floating point representation of the requested value	
 	"""
 	xf_FkCon = c.c_int32(xf_FkCon)

@@ -1068,11 +1068,11 @@
 <span class="n">C_TLEDLL</span><span class="o">.</span><span class="n">TleLoadFile</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">]</span>
 <div class="viewcode-block" id="TleLoadFile"><a class="viewcode-back" href="../../../dshsaa.raw.html#dshsaa.raw.tledll.TleLoadFile">[docs]</a><span class="k">def</span> <span class="nf">TleLoadFile</span><span class="p">(</span><span class="n">tleFile</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">	python:function::TleLoadFile</span>
 <span class="sd">	Loads TLEs (satellites) contained in a text file into the TLE DLL&#39;s binary tree. </span>
 <span class="sd">	You may use this function repeatedly to load TLEs from different input files. However, only unique satKeys are loaded. Duplicated TLEs won&#39;t be stored. </span>
-<span class="sd">	TLEs can be included directly in the specified file, or they can be read from a separate file identified with &quot;ELTFIL=[path\filename]&quot; or &quot;VECFIL=[path\filename]&quot;. </span>
+<span class="sd">	TLEs can be included directly in the specified file, or they can be read from a separate file identified with &quot;ELTFIL=[path/filename]&quot; or &quot;VECFIL=[path/filename]&quot;. </span>
 <span class="sd">	The input file is read in two passes. The function first looks for &quot;ELTFIL=&quot; and &quot;VECFIL=&quot; lines, then it looks for TLEs which were included directly. The result of this is that data entered using both methods will be processed, but the &quot;ELTFIL=&quot; and &quot;VECFIL=&quot; data will be processed first. </span>
+<span class="sd">	</span>
 <span class="sd">	:param str tleFile: The name of the file containing two line element sets to be loaded. (string[512])</span>
 <span class="sd">	:return int retcode: 0 if the two line element sets in the file are successfully loaded, non-0 if there is an error.</span>
 <span class="sd">	&quot;&quot;&quot;</span>

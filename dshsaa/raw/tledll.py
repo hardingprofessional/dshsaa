@@ -1027,11 +1027,11 @@ C_TLEDLL.TleLoadFile.restype = c.c_int
 C_TLEDLL.TleLoadFile.argtypes = [c.c_char_p]
 def TleLoadFile(tleFile):
 	"""
-	python:function::TleLoadFile
 	Loads TLEs (satellites) contained in a text file into the TLE DLL's binary tree. 
 	You may use this function repeatedly to load TLEs from different input files. However, only unique satKeys are loaded. Duplicated TLEs won't be stored. 
-	TLEs can be included directly in the specified file, or they can be read from a separate file identified with "ELTFIL=[path\filename]" or "VECFIL=[path\filename]". 
+	TLEs can be included directly in the specified file, or they can be read from a separate file identified with "ELTFIL=[path/filename]" or "VECFIL=[path/filename]". 
 	The input file is read in two passes. The function first looks for "ELTFIL=" and "VECFIL=" lines, then it looks for TLEs which were included directly. The result of this is that data entered using both methods will be processed, but the "ELTFIL=" and "VECFIL=" data will be processed first. 
+	
 	:param str tleFile: The name of the file containing two line element sets to be loaded. (string[512])
 	:return int retcode: 0 if the two line element sets in the file are successfully loaded, non-0 if there is an error.
 	"""

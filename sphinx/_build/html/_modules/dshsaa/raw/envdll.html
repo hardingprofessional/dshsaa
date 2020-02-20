@@ -66,13 +66,16 @@
 <span class="n">C_ENVDLL</span><span class="o">.</span><span class="n">EnvGetFkConst</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">c_int32</span><span class="p">]</span>
 <div class="viewcode-block" id="EnvGetFkConst"><a class="viewcode-back" href="../../../dshsaa.raw.html#dshsaa.raw.envdll.EnvGetFkConst">[docs]</a><span class="k">def</span> <span class="nf">EnvGetFkConst</span><span class="p">(</span><span class="n">xf_FkCon</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">	python:function::EnvGetFkConst</span>
-<span class="sd">	Retrieves the value of one of the constants from the current fundamental catalogue (FK) model. </span>
+<span class="sd">	Retrieves the value of one of the constants from the current fundamental catalogue (FK) model.</span>
+<span class="sd">	</span>
+<span class="sd">	========= ==========================================================</span>
 <span class="sd">	xf_FkCon  Value</span>
 <span class="sd">	1         C1: Earth rotation rate w.r.t. moving equinox (rad/day)</span>
 <span class="sd">	2         C1DOT: Earth rotation acceleration (rad/day2)</span>
 <span class="sd">	3         THGR70: Greenwich angle (1970; rad)</span>
-<span class="sd">	:param int xf_FkCon: An index specifying the constant you wish to retrieve, , see XF_FKCON_? for field specification</span>
+<span class="sd">	========= ==========================================================</span>
+<span class="sd">	</span>
+<span class="sd">	:param int xf_FkCon: An index specifying the constant you wish to retrieve. See XF_FKCON_? for field specification.</span>
 <span class="sd">	:return float fkcon: a floating point representation of the requested value	</span>
 <span class="sd">	&quot;&quot;&quot;</span>
 	<span class="n">xf_FkCon</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">c_int32</span><span class="p">(</span><span class="n">xf_FkCon</span><span class="p">)</span>

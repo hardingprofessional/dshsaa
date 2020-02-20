@@ -553,14 +553,38 @@ Converts an ECI position vector XYZ to geodetic latitude, longitude, and height.
 <dl class="function">
 <dt id="dshsaa.raw.envdll.EnvGetFkConst">
 <code class="descclassname">dshsaa.raw.envdll.</code><code class="descname">EnvGetFkConst</code><span class="sig-paren">(</span><em>xf_FkCon</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dshsaa/raw/envdll.html#EnvGetFkConst"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dshsaa.raw.envdll.EnvGetFkConst" title="Permalink to this definition">¶</a></dt>
-<dd><p>python:function::EnvGetFkConst
-Retrieves the value of one of the constants from the current fundamental catalogue (FK) model. 
-xf_FkCon  Value
-1         C1: Earth rotation rate w.r.t. moving equinox (rad/day)
-2         C1DOT: Earth rotation acceleration (rad/day2)
-3         THGR70: Greenwich angle (1970; rad)
-:param int xf_FkCon: An index specifying the constant you wish to retrieve, , see <a href="#id1"><span class="problematic" id="id2">XF_FKCON_</span></a>? for field specification
-:return float fkcon: a floating point representation of the requested value</p>
+<dd><p>Retrieves the value of one of the constants from the current fundamental catalogue (FK) model.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="13%" />
+<col width="87%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>xf_FkCon</td>
+<td>Value</td>
+</tr>
+<tr class="row-even"><td>1</td>
+<td>C1: Earth rotation rate w.r.t. moving equinox (rad/day)</td>
+</tr>
+<tr class="row-odd"><td>2</td>
+<td>C1DOT: Earth rotation acceleration (rad/day2)</td>
+</tr>
+<tr class="row-even"><td>3</td>
+<td>THGR70: Greenwich angle (1970; rad)</td>
+</tr>
+</tbody>
+</table>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>xf_FkCon</strong> (<em>int</em>) – An index specifying the constant you wish to retrieve. See <a href="#id1"><span class="problematic" id="id2">XF_FKCON_</span></a>? for field specification.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Return float fkcon:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">a floating point representation of the requested value</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -1324,16 +1348,23 @@ Adds one timing constant record to memory. This API can be used to avoid TConLoa
 <dl class="function">
 <dt id="dshsaa.raw.timedll.TConLoadFile">
 <code class="descclassname">dshsaa.raw.timedll.</code><code class="descname">TConLoadFile</code><span class="sig-paren">(</span><em>tconfile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dshsaa/raw/timedll.html#TConLoadFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dshsaa.raw.timedll.TConLoadFile" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div>python:function:: TConLoadFile
-Loads timing constants data from an input file. 
-Time constants can be included directly in the main input file or they can be read from a separate file identified with “TIMFIL=[pathname</div></blockquote>
-<dl class="docutils">
-<dt>ilename]”. </dt>
-<dd>The input file is read in two passes. The function first looks for “TIMFIL=” lines, then it looks for timing constant data which was included directly. The result of this is that data entered using both methods will be processed, but the “TIMFIL=” data will be processed first. 
-The time constants are also read in from each VCM. However, only the most recent time constants among VCMs are stored in the memory, see VCM.dll documentation. 
-See the “Time Constants Data Description” section in the accompanying TimeFunc documentation file for supported formats.</dd>
-</dl>
+<dd><dl class="function">
+<dt>
+<code class="descclassname">dshsaa.raw.timedll.</code><code class="descname">TConLoadFile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/dshsaa/raw/timedll.html#TConLoadFile"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Loads timing constants data from an input file. Time constants can be included directly in the main input file or they can be read from a separate file identified with “TIMFIL=[pathname/filename]”. The input file is read in two passes. The function first looks for “TIMFIL=” lines, then it looks for timing constant data which was included directly. The result of this is that data entered using both methods will be processed, but the “TIMFIL=” data will be processed first. The time constants are also read in from each VCM. However, only the most recent time constants among VCMs are stored in the memory, see VCM.dll documentation. See the “Time Constants Data Description” section in the accompanying TimeFunc documentation file for supported formats.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>tconfile</strong> (<em>str</em>) – The name of the time constant file to load</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Return int retcode:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">0 if file successfully loaded, nonzero if file not successfully loaded</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="function">
@@ -1441,25 +1472,18 @@ Initializes a TimeFuncDLL object attached to the MainDLL object specified by mai
 <dl class="function">
 <dt id="dshsaa.raw.timedll.TimeFuncLoadFile">
 <code class="descclassname">dshsaa.raw.timedll.</code><code class="descname">TimeFuncLoadFile</code><span class="sig-paren">(</span><em>tconfile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dshsaa/raw/timedll.html#TimeFuncLoadFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dshsaa.raw.timedll.TimeFuncLoadFile" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div>python:function:: TimeFuncLoadFile
-Loads timing constants data and prediction control (6P-card) from an input file. Time constants can be included directly in the main input file or they can be read from a separate file identified with “TIMFIL=[pathname</div></blockquote>
-<dl class="docutils">
-<dt>ilename]”. The input file is read in two passes. The function first looks for “TIMFIL=” lines, then it looks for timing constant data which was included directly. The result of this is that data entered using both methods will be processed, but the “TIMFIL=” data will be processed first. The time constants are also read in from each VCM. However, only the most recent time constants among VCMs are stored in the memory, see VCM.dll documentation.</dt>
-<dd><table class="first last docutils field-list" frame="void" rules="none">
+<dd><p>Loads timing constants data and prediction control (6P-card) from an input file. Time constants can be included directly in the main input file or they can be read from a separate file identified with “TIMFIL=[pathname/filename]”. The input file is read in two passes. The function first looks for “TIMFIL=” lines, then it looks for timing constant data which was included directly. The result of this is that data entered using both methods will be processed, but the “TIMFIL=” data will be processed first. The time constants are also read in from each VCM. However, only the most recent time constants among VCMs are stored in the memory, see VCM.dll documentation.</p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param str tconfile:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">the location of the timing constants and prediction control file</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>tconfile</strong> (<em>str</em>) – the location of the timing constants and prediction control file</td>
 </tr>
-<tr class="field-even field"><th class="field-name" colspan="2">return int retcode:</th></tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Return int retcode:</th></tr>
 <tr class="field-even field"><td>&#160;</td><td class="field-body">0 if input file loaded successfully, !0 otherwise</td>
 </tr>
 </tbody>
 </table>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="function">
@@ -2001,17 +2025,21 @@ This function only parses data from the input TLE but DOES NOT load/add the inpu
 <dl class="function">
 <dt id="dshsaa.raw.tledll.TleLoadFile">
 <code class="descclassname">dshsaa.raw.tledll.</code><code class="descname">TleLoadFile</code><span class="sig-paren">(</span><em>tleFile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dshsaa/raw/tledll.html#TleLoadFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dshsaa.raw.tledll.TleLoadFile" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div>python:function::TleLoadFile
-Loads TLEs (satellites) contained in a text file into the TLE DLL’s binary tree. 
+<dd><p>Loads TLEs (satellites) contained in a text file into the TLE DLL’s binary tree. 
 You may use this function repeatedly to load TLEs from different input files. However, only unique satKeys are loaded. Duplicated TLEs won’t be stored. 
-TLEs can be included directly in the specified file, or they can be read from a separate file identified with “ELTFIL=[path</div></blockquote>
-<p>ilename]” or “VECFIL=[path
-ilename]”.</p>
-<blockquote>
-<div>The input file is read in two passes. The function first looks for “ELTFIL=” and “VECFIL=” lines, then it looks for TLEs which were included directly. The result of this is that data entered using both methods will be processed, but the “ELTFIL=” and “VECFIL=” data will be processed first. 
-:param str tleFile: The name of the file containing two line element sets to be loaded. (string[512])
-:return int retcode: 0 if the two line element sets in the file are successfully loaded, non-0 if there is an error.</div></blockquote>
+TLEs can be included directly in the specified file, or they can be read from a separate file identified with “ELTFIL=[path/filename]” or “VECFIL=[path/filename]”. 
+The input file is read in two passes. The function first looks for “ELTFIL=” and “VECFIL=” lines, then it looks for TLEs which were included directly. The result of this is that data entered using both methods will be processed, but the “ELTFIL=” and “VECFIL=” data will be processed first.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>tleFile</strong> (<em>str</em>) – The name of the file containing two line element sets to be loaded. (string[512])</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Return int retcode:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">0 if the two line element sets in the file are successfully loaded, non-0 if there is an error.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
