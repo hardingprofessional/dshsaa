@@ -25,3 +25,7 @@ build/
 
 # core dumps from segmentation faults
 **/core
+
+
+# sphinx build products
+sphinx/_build/doctrees/*
