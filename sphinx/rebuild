@@ -1,0 +1,13 @@
+#! /usr/bin/env bash
+
+# override LD_LIBRARYPATH
+export LD_LIBRARY_PATH=$(pwd)'/../dshsaa/libdll'
+
+# destroy old build product
+rm -r _build
+
+# re-generate apidoc stuff
+sphinx-apidoc -o . ../dshsaa
+
+# re-generate html stuff
+make html

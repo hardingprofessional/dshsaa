@@ -10,9 +10,12 @@ C_SGP4DLL.Sgp4GetInfo.argtypes = [c.c_char_p]
 
 def Sgp4GetInfo():
 	"""
-	python:function::Sgp4GetInfo
+	.. python:function::Sgp4GetInfo
+	
 	Returns information about the current version of Sgp4Prop.dll.
+	
 	:retrun str infoStr: A string containing information about Sgp4
+	
 	"""
 	infoStr = c.c_char_p(bytes(128))
 	C_SGP4DLL.Sgp4GetInfo(infoStr)
@@ -38,7 +41,8 @@ C_SGP4DLL.Sgp4GetPropOut.restype = c.c_int
 # argument types defined within the function
 def Sgp4GetPropOut(satKey, xf_Sgp4Out):
 	"""
-	python:function::Sgp4GetPropOut
+	.. python:function::Sgp4GetPropOut
+	
 	Retrieves propagator's precomputed results. This function can be used to obtain results from a propagation which are not made available through calls to the propagation functions themselves. 
 	
 	This function should be called immediately after a successful call to Sgp4PropMse() or Sgp4PropDs50UTC() to retrieve the desired values. 
@@ -50,19 +54,26 @@ def Sgp4GetPropOut(satKey, xf_Sgp4Out):
 	Note: This function is not thread safe, please use Sgp4PropAll() instead 
 
 	The table below shows the values for the xf_Sgp4Out parameter:
-	index | index Interpretation          | destArray size | destArray Arrangement
-	======================================================================
-	1     | Revolution number             | 1              | 1. Revolution number (based on the Osculating Keplerian Elements)
-	2     | Nodal Apogee Perigee          | 3              | 1. nodal period (minutes)
-	      |                               |                | 2. apogee (km)
-	      |                               |                | 3. perigee (km)
-	3     | Mean Keplerian Elements       | 6              | 1. semi-major axis (km)
-	      |                               |                | 2. eccentricity (unitless)
-	      |                               |                | 3. inclination (degree)
-	      |                               |                | 4. mean anomaly (degree)
-	      |                               |                | 5. right ascension of the ascending node (degree)
-	      |                               |                | 6. argument of perigee (degree)
-	4     | Osculating Keplerian Elements | 6              | Same as Mean Keplerian Elements
+	
+	+-------+-------------------------------+----------------+-------------------------------------------------------------------+
+	| Index | Index Interpretation          | destArray size | destArray Arrangement                                             |
+	+-------+-------------------------------+----------------+-------------------------------------------------------------------+
+	| 1     | Revolution number             | 1              | 1. Revolution number (based on the Osculating Keplerian Elements) |
+	+-------+-------------------------------+----------------+-------------------------------------------------------------------+
+	| 2     | Nodal Apogee Perigee          | 3              |                                                                   |
+	|       |                               |                | 1. nodal period (minutes)                                         |
+	|       |                               |                | 2. apogee (km)                                                    |
+	|       |                               |                | 3. perigee (km)                                                   |
+	+-------+-------------------------------+----------------+-------------------------------------------------------------------+
+	| 3     | Mean Keplerian Elements       | 6              | 1. semi-major axis (km)                                           |
+	|       |                               |                | 2. eccentricity (unitless)                                        |
+	|       |                               |                | 3. inclination (degree)                                           |
+	|       |                               |                | 4. mean anomaly (degree)                                          |
+	|       |                               |                | 5. right ascension of the ascending node (degree)                 |
+	|       |                               |                | 6. argument of perigee (degree)                                   |
+	+-------+-------------------------------+----------------+-------------------------------------------------------------------+
+	| 4     | Osculating Keplerian Elements | 6              | Same as Mean Keplerian Elements                                   |
+	+-------+-------------------------------+----------------+-------------------------------------------------------------------+
 
 	:param settings.stay_int64 satKey: The unique key of the satellite for which to retrieve results.
 	:param xf_SgpOut: Specifies which propagator outputs to retrieve. See table above.

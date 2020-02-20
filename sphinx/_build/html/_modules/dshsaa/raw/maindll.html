@@ -1,0 +1,184 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>dshsaa.raw.maindll &#8212; dshsaa 1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for dshsaa.raw.maindll</h1><div class="highlight"><pre>
+<span></span><span class="ch">#! /usr/bin/env python3</span>
+
+<span class="kn">import</span> <span class="nn">dshsaa.raw.settings</span> <span class="k">as</span> <span class="nn">settings</span>
+<span class="kn">import</span> <span class="nn">ctypes</span> <span class="k">as</span> <span class="nn">c</span>
+<span class="kn">import</span> <span class="nn">pdb</span>
+
+<span class="n">C_MAINDLL</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">CDLL</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">LIB_MAIN_NAME</span><span class="p">)</span>
+
+<span class="c1"># The pattern for the rest of this file will be:</span>
+<span class="c1"># 1. Set parameter types</span>
+<span class="c1"># 2. Set return types</span>
+<span class="c1"># 3. Define a python-friendly function</span>
+
+<span class="c1">## CloseLogFile</span>
+<div class="viewcode-block" id="CloseLogFile"><a class="viewcode-back" href="../../../dshsaa.raw.html#dshsaa.raw.maindll.CloseLogFile">[docs]</a><span class="k">def</span> <span class="nf">CloseLogFile</span><span class="p">():</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Closes the log file last opened by this process.</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="n">C_MAINDLL</span><span class="o">.</span><span class="n">CloseLogFile</span><span class="p">()</span></div>
+	<span class="c1"># function is void, no return statement</span>
+
+<span class="c1">## DllMainGetInfo</span>
+<span class="n">C_MAINDLL</span><span class="o">.</span><span class="n">DllMainGetInfo</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">]</span>
+<div class="viewcode-block" id="DllMainGetInfo"><a class="viewcode-back" href="../../../dshsaa.raw.html#dshsaa.raw.maindll.DllMainGetInfo">[docs]</a><span class="k">def</span> <span class="nf">DllMainGetInfo</span><span class="p">():</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	python:function::DllMainGetInfo</span>
+
+<span class="sd">	Returns information about DllMain DLL</span>
+
+<span class="sd">	:returns: string info: a regular python string describing DllMain DLL</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="n">info</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="mi">512</span><span class="p">))</span>
+	<span class="n">C_MAINDLL</span><span class="o">.</span><span class="n">DllMainGetInfo</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+	<span class="n">info</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">byte_to_str</span><span class="p">(</span><span class="n">info</span><span class="p">)</span> 
+	<span class="k">return</span> <span class="n">info</span></div>
+
+<span class="c1">## DllMainInit</span>
+<span class="n">C_MAINDLL</span><span class="o">.</span><span class="n">DllMainInit</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">stay_int64</span>
+<div class="viewcode-block" id="DllMainInit"><a class="viewcode-back" href="../../../dshsaa.raw.html#dshsaa.raw.maindll.DllMainInit">[docs]</a><span class="k">def</span> <span class="nf">DllMainInit</span><span class="p">():</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	python:function:: DllMainInit()</span>
+
+<span class="sd">	Inits a DLLMain wrapper object in memory</span>
+
+<span class="sd">	:returns: ctypes.c_int64 maindll_handle: A 64 bit specialized integer used to help the other DLLs find the running instance of maindll</span>
+
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="n">maindll_handle</span> <span class="o">=</span> <span class="n">C_MAINDLL</span><span class="o">.</span><span class="n">DllMainInit</span><span class="p">()</span>
+	<span class="k">return</span> <span class="n">maindll_handle</span></div>
+
+<span class="c1">## GetInitDllNames</span>
+<span class="n">C_MAINDLL</span><span class="o">.</span><span class="n">GetInitDllNames</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">]</span>
+<div class="viewcode-block" id="GetInitDllNames"><a class="viewcode-back" href="../../../dshsaa.raw.html#dshsaa.raw.maindll.GetInitDllNames">[docs]</a><span class="k">def</span> <span class="nf">GetInitDllNames</span><span class="p">():</span>
+	<span class="n">initdllnames</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="mi">512</span><span class="p">))</span>
+	<span class="n">C_MAINDLL</span><span class="o">.</span><span class="n">GetInitDllNames</span><span class="p">(</span><span class="n">initdllnames</span><span class="p">)</span>
+	<span class="n">initdllnames</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">byte_to_str</span><span class="p">(</span><span class="n">initdllnames</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">initdllnames</span></div>
+
+<span class="c1">## GetLastErrMsg</span>
+<span class="n">C_MAINDLL</span><span class="o">.</span><span class="n">GetLastErrMsg</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">]</span>
+<div class="viewcode-block" id="GetLastErrMsg"><a class="viewcode-back" href="../../../dshsaa.raw.html#dshsaa.raw.maindll.GetLastErrMsg">[docs]</a><span class="k">def</span> <span class="nf">GetLastErrMsg</span><span class="p">():</span>
+	<span class="n">lastErrMsg</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="mi">128</span><span class="p">))</span>
+	<span class="n">C_MAINDLL</span><span class="o">.</span><span class="n">GetLastErrMsg</span><span class="p">(</span><span class="n">lastErrMsg</span><span class="p">)</span>
+	<span class="n">lastErrMsg</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">byte_to_str</span><span class="p">(</span><span class="n">lastErrMsg</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">lastErrMsg</span></div>
+
+<span class="c1">## GetLastInfoMsg</span>
+<span class="n">C_MAINDLL</span><span class="o">.</span><span class="n">GetLastInfoMsg</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">]</span>
+<div class="viewcode-block" id="GetLastInfoMsg"><a class="viewcode-back" href="../../../dshsaa.raw.html#dshsaa.raw.maindll.GetLastInfoMsg">[docs]</a><span class="k">def</span> <span class="nf">GetLastInfoMsg</span><span class="p">():</span>
+	<span class="n">lastInfoMsg</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="mi">128</span><span class="p">))</span>
+	<span class="n">C_MAINDLL</span><span class="o">.</span><span class="n">GetLastInfoMsg</span><span class="p">(</span><span class="n">lastInfoMsg</span><span class="p">)</span>
+	<span class="n">lastInfoMsg</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">byte_to_str</span><span class="p">(</span><span class="n">lastInfoMsg</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">lastInfoMsg</span></div>
+
+<span class="c1">## LogMessage</span>
+<span class="n">C_MAINDLL</span><span class="o">.</span><span class="n">LogMessage</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">]</span>
+<div class="viewcode-block" id="LogMessage"><a class="viewcode-back" href="../../../dshsaa.raw.html#dshsaa.raw.maindll.LogMessage">[docs]</a><span class="k">def</span> <span class="nf">LogMessage</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
+	<span class="n">message</span> <span class="o">=</span> <span class="n">message</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">)</span>
+	<span class="n">message</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">enforce_limit</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="mi">128</span><span class="p">)</span>
+	<span class="n">message</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+	<span class="n">C_MAINDLL</span><span class="o">.</span><span class="n">LogMessage</span><span class="p">(</span><span class="n">message</span><span class="p">)</span></div>
+
+<span class="c1">## OpenLogile</span>
+<span class="n">C_MAINDLL</span><span class="o">.</span><span class="n">OpenLogFile</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">c_int</span>
+<span class="n">C_MAINDLL</span><span class="o">.</span><span class="n">OpenLogFile</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">]</span>
+<div class="viewcode-block" id="OpenLogFile"><a class="viewcode-back" href="../../../dshsaa.raw.html#dshsaa.raw.maindll.OpenLogFile">[docs]</a><span class="k">def</span> <span class="nf">OpenLogFile</span><span class="p">(</span><span class="n">logfile</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	python:function:: OpenLogFile</span>
+
+<span class="sd">	Opens a log file that all objects connected to maindll will write to.</span>
+<span class="sd">	:param str logfile: name of the file to write to</span>
+<span class="sd">	:return ctypes.c_int retcode: the return status of the linked function, 0 on success, &lt;0 on various failures</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="n">logfile</span> <span class="o">=</span> <span class="n">logfile</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">)</span>
+	<span class="n">logfile</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">enforce_limit</span><span class="p">(</span><span class="n">logfile</span><span class="p">,</span> <span class="mi">128</span><span class="p">)</span>
+	<span class="n">logfile</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">(</span><span class="n">logfile</span><span class="p">)</span>
+	<span class="n">retcode</span> <span class="o">=</span> <span class="n">C_MAINDLL</span><span class="o">.</span><span class="n">OpenLogFile</span><span class="p">(</span><span class="n">logfile</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">retcode</span></div>
+
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019-07-01, David Harding.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.7</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -14,8 +14,6 @@ C_MAINDLL = c.CDLL(settings.LIB_MAIN_NAME)
 ## CloseLogFile
 def CloseLogFile():
 	"""
-	python:function:: CloseLogFile
-
 	Closes the log file last opened by this process.
 	"""
 	C_MAINDLL.CloseLogFile()
