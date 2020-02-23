@@ -2,13 +2,13 @@
 
 ## What Is it?
 
-Airforce Space Command (AFSPC) distributes a copy of the code they use that implements the Standard Astrodynamic Algorithms (SAA) in Dynamic Link Library (DLL) form. To exactly replicate AFSPCs simulation results, one must use these DLLs to propogate orbits.
+Airforce Space Command (AFSPC) distributes a copy of the binaries they use to compute the Standard Astrodynamic Algorithms (SAA) in Dynamic Link Library (DLL) form. To exactly replicate AFSPCs simulation results, one must use these DLLs to propogate orbits.
 
 `dshsaa` is a python3 driver which allows the user to interface with the SAA DLLs using simple python3 code.
 
 ## Who should use this?
 
-If you need to coordinate with AFSPC and want to get _exactly the same results_ AFSPC is getting, use `dshsaa` and the SAA DLLs to propogate your orbits.
+If you need to coordinate with AFSPC and want to get _exactly the same results_ AFSPC gets, use `dshsaa` and the SAA DLLs to propogate your orbits.
 
 If you only wish to implement the SGP4 satellite tracking algorithms, use the `python-sgp4` package developed by Brandon Rhodes which is located [here](https://github.com/brandon-rhodes/python-sgp4). The deviation between Brandon's implementation and AFPSC's implementation is relatively small.
 
@@ -18,10 +18,8 @@ David Harding built this driver to go with his blog at [blog.hardinglabs.com](ht
 
 ## TODO (Non-Code)
 
-1. Implement a properly defined virtual environment spec so others can test
-2. Fix the Sphinx documentation component
-3. Test on Windows
-4. Test on MacOS (Catalina drops 32bit support, may not work)
+1. Test on Windows
+2. Test on MacOS (Catalina drops 32bit support, may not work)
 
 ## TODO (Code, but not core functionality)
 <ol> <li> Add a test environment validation script that verifies </li> 
@@ -35,7 +33,7 @@ David Harding built this driver to go with his blog at [blog.hardinglabs.com](ht
 
 ## Installation
 
-_These instructions will change when the Virtual Environment is completed._
+Installation on Linux is fully tested on Ubuntu 16.04 and 18.04. Installation on Windows and MacOS is still in development.
 
 ## Linux
 
@@ -43,7 +41,7 @@ _These instructions will change when the Virtual Environment is completed._
 
 You must be a US citizen to lawfully download the SAA DLLs.
 
-Go to [space-track.org](https://www.space-track.org/), make an account, then go to the [sgp4 download page](https://www.space-track.org/documentation#/sgp4) and download the appropriate package for your operating system. For me, this is `SGP4_small_V7.9_LINUX64.tar.gz`. You should _also_ download the windows package, `SGP4_small_V7.9_WIN64.zip`, because it provides additional Python2 driver examples.
+Go to [space-track.org](https://www.space-track.org/), make an account, then go to the [sgp4 download page](https://www.space-track.org/documentation#/sgp4) and download the appropriate package for your operating system. For me, this is `SGP4_small_V7.9_LINUX64.tar.gz`. You should _also_ download the windows package, `SGP4_small_V7.9_WIN64.zip`, because the Windows package provides driver examples not present in the Linux version.
 
 ### Verify Python3 Environment
 
@@ -76,9 +74,35 @@ You should now have a folder called `dshsaa` on your current path.
 
 Untar your copy of `SGP4_small_V7.9_LINUX64.tar.gz`. Navigate to `SGP4_small_V7.9_LINUX64.tar.gz/Lib` and copy all of the contents to `~/dshsaa/dshsaa/libdll/`.
 
+### Install dependencies with `pip3`
+
+If you don't have pip installed, install it.
+
+```
+$ sudo apt update
+$ sudo apt install python3-pip
+```
+
+Establish a virtual environment.
+
+```
+$ cd ~/dshsaa
+$ python3 -m venv virtenv
+```
+
+You should now have a folder at ~/dshsaa/virtenv. Next, activate the virtual environment and install dependencies.
+
+```
+$ source virtenv/bin/activate
+$ pip3 install --upgrade pip
+$ pip3 install -r requirements.txt
+```
+
+> Sourcing `virtenv/bin/activate` fundamentally alters the python environment in the shell, and those changes will persist until the user executes the shell function `deactivate`. Your `$PS1` shell prompt should indicate this by prepending `(virtenv)` to itself.
+
 ### Set path and run tests
 
-Add the libdll to LD_LIBRARY_PATH.
+Add the libdll to `LD_LIBRARY_PATH`. This must be done any time the `dshsaa` module is used.
 
 ```
 $ cd ~/dshsaa
@@ -88,7 +112,7 @@ $ source source_env
 Run the full test battery
 
 ```
-./runtest
+$ ./runtest
 ```
 
 The end of the output should look similar to this:
@@ -105,23 +129,25 @@ Ran 155 tests in 0.014s
 OK (skipped=14)
 ```
 
+# Test ability to build the documentation
+
+Build the documentation with sphinx.
+
+```
+$ cd ~/dshsaa/sphinx
+$ ./rebuild
+```
+
+Open the documentation by pointing your browser at `~/dshsaa/sphinx/_build/html/index.html`.
+
 # Starting Notes
 
-Run `dshsaa/example.py` to make sure it works. Use this code as a reference until the sphinx documentation is up.
+Any time you run the module, you should do so from `~/dshsaa` and you must `source source_env`. 
 
-# Documentation
+Any time you build the docs, you must do so from `~/dshsaa/sphinx` using the `./rebuild` script. 
 
-It is now possible to read the documentation using a browser. Clone the project and navigate your browser to `~/dshsaa/sphinx/_build/html/index.html`.
+I am investigating ways to fix this.
 
-To rebuild the documentation, you must meet the build requirements.
+Run `dshsaa/example.py` to make sure it works. Use this code as a reference until the sphinx documentation is improved.
 
-```
-sudo apt-get install python3-sphinx
-pip3 install sphinx_rtd_theme
-```
 
-In the future these components will be added to the virtualenv.
-
-To rebuild the documentation, navigate to `dshsaa/sphinx` and run `./rebuild`. This operation is path sensitive.
-
-I will be hosting the latest build of this documentation soon.
