@@ -12,7 +12,8 @@ dshsaa/libdll/*
 !dshsaa/libdll/.so-dll-files-go-here
 
 # sphinx output
-build/
+sphinx/_build/*
+!sphinx/_build/.keep
 
 # kate swap files
 **.kate-swp
