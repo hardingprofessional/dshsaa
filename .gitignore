@@ -15,6 +15,9 @@ dshsaa/libdll/*
 sphinx/_build/*
 !sphinx/_build/.keep
 
+# virtual environment
+virtenv/*
+
 # kate swap files
 **.kate-swp
 
