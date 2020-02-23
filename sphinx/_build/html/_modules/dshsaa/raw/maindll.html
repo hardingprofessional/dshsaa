@@ -1,148 +1,34 @@
 
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>dshsaa.raw.maindll &mdash; dshsaa 1 documentation</title>
-  
 
-  
-  
-  
-  
-
-  
-  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
-    
-
-  
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>dshsaa.raw.maindll &#8212; dshsaa 1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../search.html" /> 
-</head>
-
-<body class="wy-body-for-nav">
-
+    <link rel="search" title="Search" href="../../../search.html" />
    
-  <div class="wy-grid-for-nav">
-    
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-          
-
-          
-            <a href="../../../index.html" class="icon icon-home"> dshsaa
-          
-
-          
-          </a>
-
-          
-            
-            
-              <div class="version">
-                1.0
-              </div>
-            
-          
-
-          
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <!-- Local TOC -->
-              <div class="local-toc"></div>
-            
-          
-        </div>
-      </div>
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../index.html">dshsaa</a>
-        
-      </nav>
-
-
-      <div class="wy-nav-content">
-        
-        <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
-  <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../../index.html">Docs</a> &raquo;</li>
-        
-          <li><a href="../../index.html">Module code</a> &raquo;</li>
-        
-      <li>dshsaa.raw.maindll</li>
-    
-    
-      <li class="wy-breadcrumbs-aside">
-        
-      </li>
-    
-  </ul>
-
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
   
-  <hr/>
-</div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
             
   <h1>Source code for dshsaa.raw.maindll</h1><div class="highlight"><pre>
 <span></span><span class="ch">#! /usr/bin/env python3</span>
@@ -170,8 +56,6 @@
 <span class="n">C_MAINDLL</span><span class="o">.</span><span class="n">DllMainGetInfo</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">]</span>
 <div class="viewcode-block" id="DllMainGetInfo"><a class="viewcode-back" href="../../../dshsaa.raw.html#dshsaa.raw.maindll.DllMainGetInfo">[docs]</a><span class="k">def</span> <span class="nf">DllMainGetInfo</span><span class="p">():</span>
 	<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">	python:function::DllMainGetInfo</span>
-
 <span class="sd">	Returns information about DllMain DLL</span>
 
 <span class="sd">	:return str info: a regular python string describing DllMain DLL</span>
@@ -185,12 +69,9 @@
 <span class="n">C_MAINDLL</span><span class="o">.</span><span class="n">DllMainInit</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">stay_int64</span>
 <div class="viewcode-block" id="DllMainInit"><a class="viewcode-back" href="../../../dshsaa.raw.html#dshsaa.raw.maindll.DllMainInit">[docs]</a><span class="k">def</span> <span class="nf">DllMainInit</span><span class="p">():</span>
 	<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">	python:function:: DllMainInit()</span>
-
 <span class="sd">	Inits a DLLMain wrapper object in memory</span>
 
 <span class="sd">	:returns settings.stay_int64 maindll_handle: A 64 bit specialized integer used to help the other DLLs find the running instance of maindll</span>
-
 <span class="sd">	&quot;&quot;&quot;</span>
 	<span class="n">maindll_handle</span> <span class="o">=</span> <span class="n">C_MAINDLL</span><span class="o">.</span><span class="n">DllMainInit</span><span class="p">()</span>
 	<span class="k">return</span> <span class="n">maindll_handle</span></div>
@@ -198,6 +79,11 @@
 <span class="c1">## GetInitDllNames</span>
 <span class="n">C_MAINDLL</span><span class="o">.</span><span class="n">GetInitDllNames</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">]</span>
 <div class="viewcode-block" id="GetInitDllNames"><a class="viewcode-back" href="../../../dshsaa.raw.html#dshsaa.raw.maindll.GetInitDllNames">[docs]</a><span class="k">def</span> <span class="nf">GetInitDllNames</span><span class="p">():</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Returns a list of names of the Standardized Astrodynamic Algorithms DLLs that were initialized successfully. </span>
+
+<span class="sd">	This function provides a quick way to check whether all of the prerequisite DLLs have been loaded and initialized correctly. Improper initialization of the Standardized Astrodynamic Algorithms DLLs is one of the most common causes of program crashes. </span>
+<span class="sd">	&quot;&quot;&quot;</span>
 	<span class="n">initdllnames</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="mi">512</span><span class="p">))</span>
 	<span class="n">C_MAINDLL</span><span class="o">.</span><span class="n">GetInitDllNames</span><span class="p">(</span><span class="n">initdllnames</span><span class="p">)</span>
 	<span class="n">initdllnames</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">byte_to_str</span><span class="p">(</span><span class="n">initdllnames</span><span class="p">)</span>
@@ -206,6 +92,14 @@
 <span class="c1">## GetLastErrMsg</span>
 <span class="n">C_MAINDLL</span><span class="o">.</span><span class="n">GetLastErrMsg</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">]</span>
 <div class="viewcode-block" id="GetLastErrMsg"><a class="viewcode-back" href="../../../dshsaa.raw.html#dshsaa.raw.maindll.GetLastErrMsg">[docs]</a><span class="k">def</span> <span class="nf">GetLastErrMsg</span><span class="p">():</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Returns a character string describing the last error that occurred. </span>
+
+<span class="sd">	As a common practice, this function is called to retrieve the error message when an error occurs. </span>
+<span class="sd">	This function works with or without an opened log file. </span>
+
+<span class="sd">	If you call this function before you have called DllMainInit(), the function will return an invalid string. This could result in undefined behavior. </span>
+<span class="sd">	&quot;&quot;&quot;</span>
 	<span class="n">lastErrMsg</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="mi">128</span><span class="p">))</span>
 	<span class="n">C_MAINDLL</span><span class="o">.</span><span class="n">GetLastErrMsg</span><span class="p">(</span><span class="n">lastErrMsg</span><span class="p">)</span>
 	<span class="n">lastErrMsg</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">byte_to_str</span><span class="p">(</span><span class="n">lastErrMsg</span><span class="p">)</span>
@@ -214,6 +108,15 @@
 <span class="c1">## GetLastInfoMsg</span>
 <span class="n">C_MAINDLL</span><span class="o">.</span><span class="n">GetLastInfoMsg</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">]</span>
 <div class="viewcode-block" id="GetLastInfoMsg"><a class="viewcode-back" href="../../../dshsaa.raw.html#dshsaa.raw.maindll.GetLastInfoMsg">[docs]</a><span class="k">def</span> <span class="nf">GetLastInfoMsg</span><span class="p">():</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Returns a character string describing the last informational message that was recorded. </span>
+
+<span class="sd">	This function is usually called right after space objects (TLEs, VCMs, sensors, observations, etc.) in an input text file were loaded. It gives information about how many records were successfully loaded, how many were bad, and how many were duplicated. </span>
+
+<span class="sd">	This function works with or without an opened log file. </span>
+
+<span class="sd">	If you call this function before you have called DllMainInit(), the function will return an invalid string. This could result in undefined behavior. </span>
+<span class="sd">	&quot;&quot;&quot;</span>
 	<span class="n">lastInfoMsg</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="mi">128</span><span class="p">))</span>
 	<span class="n">C_MAINDLL</span><span class="o">.</span><span class="n">GetLastInfoMsg</span><span class="p">(</span><span class="n">lastInfoMsg</span><span class="p">)</span>
 	<span class="n">lastInfoMsg</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">byte_to_str</span><span class="p">(</span><span class="n">lastInfoMsg</span><span class="p">)</span>
@@ -222,6 +125,17 @@
 <span class="c1">## LogMessage</span>
 <span class="n">C_MAINDLL</span><span class="o">.</span><span class="n">LogMessage</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">]</span>
 <div class="viewcode-block" id="LogMessage"><a class="viewcode-back" href="../../../dshsaa.raw.html#dshsaa.raw.maindll.LogMessage">[docs]</a><span class="k">def</span> <span class="nf">LogMessage</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Writes a message into the log file. </span>
+<span class="sd">	</span>
+<span class="sd">	Make sure the log file is open by calling OpenLogFile before using this function. </span>
+<span class="sd">	</span>
+<span class="sd">	The message is limited to 128 characters. If the message is longer than this, it will be truncated. </span>
+
+<span class="sd">	:return: retcode - 0 on success</span>
+<span class="sd">	:rtype: int</span>
+
+<span class="sd">	&quot;&quot;&quot;</span>
 	<span class="n">message</span> <span class="o">=</span> <span class="n">message</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">)</span>
 	<span class="n">message</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">enforce_limit</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="mi">128</span><span class="p">)</span>
 	<span class="n">message</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
@@ -232,11 +146,12 @@
 <span class="n">C_MAINDLL</span><span class="o">.</span><span class="n">OpenLogFile</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">]</span>
 <div class="viewcode-block" id="OpenLogFile"><a class="viewcode-back" href="../../../dshsaa.raw.html#dshsaa.raw.maindll.OpenLogFile">[docs]</a><span class="k">def</span> <span class="nf">OpenLogFile</span><span class="p">(</span><span class="n">logfile</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">	python:function:: OpenLogFile</span>
-
 <span class="sd">	Opens a log file that all objects connected to maindll will write to.</span>
+<span class="sd">	</span>
 <span class="sd">	:param str logfile: name of the file to write to</span>
-<span class="sd">	:return ctypes.c_int retcode: the return status of the linked function, 0 on success, &lt;0 on various failures</span>
+<span class="sd">	</span>
+<span class="sd">	:returns: (retcode) the return status of the linked function, 0 on success, &lt;0 on various failures</span>
+<span class="sd">	:rtype: ctypes.c_int</span>
 <span class="sd">	&quot;&quot;&quot;</span>
 	<span class="n">logfile</span> <span class="o">=</span> <span class="n">logfile</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">)</span>
 	<span class="n">logfile</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">enforce_limit</span><span class="p">(</span><span class="n">logfile</span><span class="p">,</span> <span class="mi">128</span><span class="p">)</span>
@@ -247,43 +162,45 @@
 
 </pre></div>
 
-           </div>
-           
           </div>
-          <footer>
-  
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p>
-        &copy; Copyright 2019-07-01, David Harding
-
-    </p>
-  </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
-
-</footer>
-
+          
         </div>
       </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019-07-01, David Harding.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
 
-    </section>
-
-  </div>
-  
-
-
-  <script type="text/javascript">
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script>
-
-  
-  
     
-   
 
-</body>
+    
+  </body>
 </html>
