@@ -12,11 +12,16 @@ C_ASTRODLL.AstroConvFrTo.argtypes = [c.c_int, settings.double128, settings.doubl
 def AstroConvFrTo(xf_Conv, frArr):
 	"""
 	This function is intended for future use. No information is currently available.
+
 	Because the purpose of frArr and toArr is unclear, each array is automatically set to the maximum length permitted in the C_ASTRODLL spec.
+
 	:param int xf_Conv: The purpose of this parameter is not yet known
-	:param float[] frArr: The purpose of this parameter is not yet known
-	:return: toArr: The purpose of this paramter is not yet known
-	:rtype: float[]
+
+	:param float[<=128] frArr: The purpose of this parameter is not yet known
+
+	:return: 
+
+		- **toArr** (*float[128]*) - The output array of data
 	"""
 	xf_Conv = c.c_int(xf_Conv)
 	frArr_compatible = settings.double128()
@@ -30,8 +35,11 @@ def AstroConvFrTo(xf_Conv, frArr):
 C_ASTRODLL.AstroFuncGetInfo.argtypes = [c.c_char_p]
 def AstroFuncGetInfo():
 	"""
-	Retrieves information about the current version of AstroFunc.dll. The information is placed in the string parameter you pass in. 
+	Retrieves information about the current version of AstroFunc.dll.
 
+	:return:
+		
+		- **infoStr** (*str*) - A string describing version number, build date, and platform
 	"""
 	infoStr = c.c_char_p(bytes(128))
 	C_ASTRODLL.AstroFuncGetInfo(infoStr)
@@ -43,8 +51,18 @@ C_ASTRODLL.AstroFuncInit.restype = c.c_int
 C_ASTRODLL.AstroFuncInit.argtypes = [settings.stay_int64]
 def AstroFuncInit(maindll_handle):
 	"""
-	python:function::AstroFuncInit
-	"""
+	Initializes AstroFunc DLL for use in the program.
+
+	If this function returns an error, it is recommended that you stop the program immediately. 
+
+	An error will occur if you forget to load and initialize all the prerequisite DLLs, as listed in the DLL Prerequisites section of the accompanying documentation, before using this DLL. 
+
+	:param settings.stay_int64 maindll_handle: The handle that was reaturned by maindll.DllMainInit()
+
+	:return:
+
+		- **retcode** (*int*) - 0 if AstroFunc.dll is initialized successfully, non-0 if there is an error.
+"""
 	retcode = C_ASTRODLL.AstroFuncInit(maindll_handle)
 	return retcode
 
@@ -53,7 +71,12 @@ C_ASTRODLL.AToN.restype = c.c_double
 C_ASTRODLL.AToN.argtypes = [c.c_double]
 def AToN(a):
 	"""
-	python:function::AToN
+	Converts semi-major axis A to mean motion N. 
+
+	:param float a: Semi-major axis A (km).
+
+	:return: 
+		- **N** (*float*) - The mean motion N (revs/day).
 	"""
 	a = c.c_double(a)
 	N = C_ASTRODLL.AToN(a)
@@ -63,8 +86,15 @@ def AToN(a):
 C_ASTRODLL.AzElToLAD.argtypes = [c.c_double, c.c_double, settings.double3, settings.double3, settings.double3]
 def AzElToLAD(az, el):
 	"""
-	python:function::AzElToLAD
-	"""
+	Converts azimuth and elevation to vector triad LAD in topocentric horizontal coordinate system. 
+
+	:param float az: Input azimuth (deg).
+	:param float el: Input elevation angle (deg).
+	:return:
+		- **Lh** (*float[3]*) - The resulting unit vector from the station to the satellite (referred to the horizon coordinate system axis). (double[3])
+		- **Ah** (*float[3]*) - The resulting unit vector perpendicular to the hour circle passing through the satellite, in the direction of increasing Az. (double[3])
+		- **Dh** (*float[3]*) - The resulting unit vector perpendicular to L and is directed toward the zenith, in the plane of the hour circle. (double[3])
+"""
 	az = c.c_double(az)
 	el = c.c_double(el)
 	Lh = settings.double3()
@@ -87,8 +117,9 @@ def AzElToRaDec(thetaG, lat, lon, az, el):
 	:param float lon: station's astronomical longitude (deg, +E, -W)
 	:param float az: station's azimuth (deg)
 	:param float el: station's elevation (deg)
-	:return float RA: station's right ascension (deg)
-	:return float dec: station's declination (deg)
+	:return:
+		- **RA** (*float*) - station's right ascension (deg)
+		- **dec** (*float*) - station's declination (deg)
 	"""
 	thetaG = c.c_double(thetaG)
 	lat = c.c_double(lat)
@@ -105,7 +136,13 @@ C_ASTRODLL.BrouwerToKozai.restype = c.c_double
 C_ASTRODLL.BrouwerToKozai.argtypes = [c.c_double] * 3
 def BrouwerToKozai(eccen, incli, nBrouwer):
 	"""
-	python:function::BrouwerToKozai 
+	Converts Brouwer mean motion to Kozai mean motion. 
+
+	:param float eccen: eccentricity
+	:param float incli: inclination (degrees)
+	:param float nBrouwer: Brouwer mean motion (revs/day).
+	:return:
+		- **kozai** (*float*) - Kozai mean motion (revs/day).
 	"""
 	eccen = c.c_double(eccen)
 	incli = c.c_double(incli)
@@ -117,7 +154,11 @@ def BrouwerToKozai(eccen, incli, nBrouwer):
 C_ASTRODLL.ClassToEqnx.argtypes = [settings.double6] * 2
 def ClassToEqnx(metricClass):
 	"""
-	python:function::ClassToEqnx
+	Converts a set of classical elements to a set of equinoctial elements. 
+
+	:param float[6] metricClass: The set of classical elements to be converted. (double[6])
+	:return: 
+		- **metricEqnx** (*float[6]*) - The resulting set of equinoctial elements. (double[6])
 	"""
 	metricClass_compatible = settings.double6()
 	metricEqnx_compatible = settings.double6()
@@ -130,7 +171,12 @@ def ClassToEqnx(metricClass):
 C_ASTRODLL.CompMoonPos.argtypes = [c.c_double, settings.double3, c.POINTER(c.c_double)]
 def CompMoonPos(ds50ET):
 	"""
-	python:function::CompMoonPos
+	Computes the Moon position at the specified time. 
+
+	:param float ds50ET: The number of days since 1950, ET for which to compute the moon position.
+	:return:
+		- **uvecMoon** (*float[3]*) - The resulting moon position unit vector. (double[3])
+		- **moonVecMag** (*float*) - The resulting magnitude of the moon position vector (km).
 	"""
 	ds50ET = c.c_double(ds50ET)
 	uvecMoon = settings.double3()
@@ -144,7 +190,14 @@ def CompMoonPos(ds50ET):
 C_ASTRODLL.CompSunMoonPos.argtypes = [c.c_double, settings.double3, c.POINTER(c.c_double), settings.double3, c.POINTER(c.c_double)]
 def CompSunMoonPos(ds50ET):
 	"""
-	python:function::CompSunMoonPos
+	Computes the Sun and Moon position at the specified time. 
+	
+	:param float ds50ET: The number of days since 1950, ET for which to compute the sun and moon position.
+	:return:
+		- **uvecSun** (*float[3]*) - The resulting sun position unit vector. (double[3])
+		- **sunVecMag** (*float*) - The resulting magnitude of the sun position vector (km).
+		- **uvecMoon** (*float[3]*) - The resulting moon position unit vector. (double[3])
+		- **moonVecMag** (*float*) - The resulting magnitude of the moon position vector (km).
 	"""
 	ds50ET = c.c_double(ds50ET)
 	uvecSun = settings.double3()
@@ -162,7 +215,12 @@ def CompSunMoonPos(ds50ET):
 C_ASTRODLL.CompSunPos.argtypes = [c.c_double, settings.double3, c.POINTER(c.c_double)]
 def CompSunPos(ds50ET):
 	"""
-	python:function::CompSunPos
+	Computes the Sun position at the specified time. 
+	
+	:param float ds50ET: The number of days since 1950, ET for which to compute the sun position.
+	:return:
+		- **uvecSun** (*float[3]*) - The resulting sun position unit vector. (double[3])
+		- **sunVecMag** (*float*) - The resulting magnitude of the sun position vector (km).
 	"""
 	ds50ET = c.c_double(ds50ET)
 	uvecSun = settings.double3()
@@ -177,7 +235,11 @@ C_ASTRODLL.CompTrueAnomaly.restype = c.c_double
 C_ASTRODLL.CompTrueAnomaly.argtypes = [settings.double6]
 def CompTrueAnomaly(metricKep):
 	"""
-	python:function::CompTrueAnomaly
+	Computes true anomaly from a set of Keplerian elements. 
+
+	:param float[6] metricKep: The set of Keplerian elements for which to compute true anomaly. (double[6])
+	:return:
+		- **true_anomaly** (*float*) - The true anomaly in degrees.
 	"""
 	metricKep = settings.list_to_array(metricKep)
 	true_anomaly = C_ASTRODLL.CompTrueAnomaly(metricKep)
@@ -187,12 +249,13 @@ def CompTrueAnomaly(metricKep):
 C_ASTRODLL.CovMtxPTWToUVW.argtypes = [settings.double3, settings.double3, settings.double6x6, settings.double6x6]
 def CovMtxPTWToUVW(pos, vel, ptwCovMtx):
 	"""
-	python:function::CovMtxPTWToUVW
 	Converts covariance matrix PTW to UVW. 
+	
 	:param float[3] pos: The input position vector (km). (double[3])
 	:param float[3] vel: The input velocity vector (km/s). (double[3])
-	:param float[6,6] ptwCovMtx: The PTW covariance matrix to be converted. (double[6,6])
-	:return float[6,6] uvwCovMtx: The resulting UVW covariance matrix. (double[6,6])
+	:param float[6][6] ptwCovMtx: The PTW covariance matrix to be converted. (double[6,6])
+	:return:
+		- **uvwCovMtx** (*float[6][6]*) - The resulting UVW covariance matrix. (double[6,6])
 	"""
 	# initialize ctypes
 	pos_compatible = settings.double3()
@@ -213,12 +276,13 @@ def CovMtxPTWToUVW(pos, vel, ptwCovMtx):
 C_ASTRODLL.CovMtxUVWToPTW.argtypes = [settings.double3, settings.double3, settings.double6x6, settings.double6x6]
 def CovMtxUVWToPTW(pos, vel, uvwCovMtx):
 	"""
-	python:function::CovMtxUVWToPTW
 	Converts covariance matrix UVW to PTW
+
 	:param float[3] pos: the input position vector (km) (double[3])
 	:param float[3] vel: the input velocity vector (km/s) (double[3])
-	:parm float[6,6] uvwCovMtx: the UVW covariance matrix to be converted. (double[6,6])
-	:return float[6,6] ptwCovMtx: The resulting PTW covariance matrix (double[6,6])
+	:parm float[6][6] uvwCovMtx: the UVW covariance matrix to be converted. (double[6,6])
+	:return:
+		- **ptwCovMtx** (*float[6][6]*) - The resulting PTW covariance matrix (double[6,6])
 	"""
 	# initialize ctypes
 	# initialize ctypes
@@ -240,14 +304,15 @@ def CovMtxUVWToPTW(pos, vel, uvwCovMtx):
 C_ASTRODLL.EarthObstructionAngles.argtypes = [c.c_double, settings.double3, settings.double3, c.POINTER(c.c_double), c.POINTER(c.c_double), c.POINTER(c.c_double)]
 def EarthObstructionAngles(earthLimb, satECI, senECI):
 	"""
-	python:function::EarthObstructionAngles
 	Computes Earth/Sensor/Earth Limb and Earth/Sensor/Satellite angles.
+	
 	:param float earthLimb: Earth limb distance (km).
 	:param float[3] satECI: Satellite position in ECI (km). (double[3])
 	:param float[3] senECI: Sensor position in ECI (km). (double[3])
-	:return float earthSenLimb: The resulting earth/sensor/limb angle (deg).
-	:return float earthSenSat: The resulting earth/sensor/sat angle (deg).
-	:return float satEarthSen: The resulting sat/earth/sensor angle (deg).
+	:return:
+		- **earthSenLimb** (*float*) - The resulting earth/sensor/limb angle (deg).
+		- **earthSenSat** (*float*) - The resulting earth/sensor/sat angle (deg).
+		- **satEarthSen** (*float*) - The resulting sat/earth/sensor angle (deg).
 	"""
 	earthLimb = c.c_double(earthLimb)
 	satECI_compatible = settings.double3()
@@ -268,13 +333,14 @@ def EarthObstructionAngles(earthLimb, satECI, senECI):
 C_ASTRODLL.ECIToEFG.argtypes = [c.c_double] + [settings.double3] * 4
 def ECIToEFG(thetaG, posECI, velECI):
 	"""
-	function:python::ECIToEFG
 	Converts ECI position and velocity vectors to EFG position and velocity vectors. 
+	
 	:param float thetaG: Theta - Greenwich mean sidereal time (rad).
 	:param float[3] posECI: The ECI (TEME of Date) position vector (km) to be converted. (double[3])
 	:param float[3] velECI: The ECI (TEME of Date) velocity vector (km/s) to be converted. (double[3])
-	:return float[3] posEFG: The resulting EFG position vector (km). (double[3])
-	:return float[3] velEFG: The resulting EFG velocity vector (km/s). (double[3])
+	:return:
+		- **posEFG** (*float[3]*) - The resulting EFG position vector (km). (double[3])
+		- **velEFG** (*float[3]*) - The resulting EFG velocity vector (km/s). (double[3])
 	"""
 	thetaG = c.c_double(thetaG)
 	posECI = settings.list_to_array(posECI)
@@ -290,26 +356,26 @@ def ECIToEFG(thetaG, posECI, velECI):
 C_ASTRODLL.ECIToTopoComps.argtypes = [c.c_double] * 2 + [settings.double3] * 3 + [settings.double10]
 def ECIToTopoComps(theta, lat, senPos, satPos, satVel):
 	"""
-	python:function::ECIToTopoComps
 	Converts satellite ECI position/velocity vectors and sensor location to topocentric components.
-	The returned list of floats (xa_topo) is filled with the following information:
-	The xa_topo array has the following structure: 
-	[0]: Resulting right ascension (RA) (deg) 
-	[1]: Declination (deg) 
-	[2]: Azimuth (deg) 
-	[3]: Elevation (deg) 
-	[4]: Range (km) 
-	[5]: RAdot (first derivative of right ascension) (deg/s) 
-	[6]: DecDot (first derivative of declination) (deg/s) 
-	[7]: AzDot (first derivative of azimuth) (deg/s) 
-	[8]: ElDot (first derivative of elevation) (deg/s) 
-	[9]: RangeDot (first derivative of range) (km/s) 
+	
 	:param float theta: Theta - local sidereal time(rad).
 	:param float lat: Station's astronomical latitude (deg). (+N) (-S)
 	:param float[3] senPos: Sensor position in ECI (km). (double[3])
 	:param float[3] satPos: Satellite position in ECI (km). (double[3])
 	:param float[3] satVel: Satellite velocity in ECI (km/s). (double[3])
-	:return float[10] xa_topo: An array that stores the resulting topocentric components. (double[10])
+	:return:
+		- **xa_topo** (*float[10]*) - An array that stores the resulting topocentric components. (double[10])
+
+			- [0]: Resulting right ascension (RA) (deg) 
+			- [1]: Declination (deg) 
+			- [2]: Azimuth (deg) 
+			- [3]: Elevation (deg) 
+			- [4]: Range (km) 
+			- [5]: RAdot (first derivative of right ascension) (deg/s) 
+			- [6]: DecDot (first derivative of declination) (deg/s) 
+			- [7]: AzDot (first derivative of azimuth) (deg/s) 
+			- [8]: ElDot (first derivative of elevation) (deg/s) 
+			- [9]: RangeDot (first derivative of range) (km/s) 
 	"""
 	theta = c.c_double(theta)
 	lat = c.c_double(lat)
@@ -325,14 +391,15 @@ def ECIToTopoComps(theta, lat, senPos, satPos, satVel):
 C_ASTRODLL.ECRToEFG.argtypes = [c.c_double] * 2 + [settings.double3] * 4
 def ECRToEFG(polarX, polarY, posECR, velECR):
 	"""
-	python:function::ECRToEFG
 	Converts ECR position and velocity vectors to EFG position and velocity vectors.
+
 	:param float polarX: Polar motion X (arc-sec).
 	:param float polarY: Polar motion Y (arc-sec).
 	:param float[3] posECR: The ECR position vector (km) to be converted. (double[3])
 	:param float[3] velECR: The ECR velocity vector (km/s) to be converted. (double[3])
-	:return float[3] posEFG: The resulting EFG position vector (km). (double[3])
-	:return float[3] velEFG: The resulting EFG velocity vector (km/s). (double[3])
+	:return:
+		- **posEFG** (*float[3]*) - The resulting EFG position vector (km). (double[3])
+		- **velEFG** (*float[3]*) -	The resulting EFG velocity vector (km/s). (double[3])
 	"""
 	polarX = c.c_double(polarX)
 	polarY = c.c_double(polarY)
@@ -349,10 +416,11 @@ def ECRToEFG(polarX, polarY, posECR, velECR):
 C_ASTRODLL.EFGPosToLLH.argtypes = [settings.double3] * 2
 def EFGPosToLLH(posEFG):
 	"""
-	python:function::EFGPosToLLH
 	Converts an EFG position vector to geodetic latitude, longitude, and height. 
+	
 	:param float[3] posEFG: The EFG position vector (km) to be converted. (double[3])
-	:param float[3] metricLLH: The resulting geodetic north latitude (degree), east longitude (degree), and height (km). (double[3])
+	:return:
+		- **metricLLH** (*float[3]*) - The resulting geodetic north latitude (degree), east longitude (degree), and height (km). (double[3])
 	"""
 	posEFG = settings.list_to_array(posEFG)
 	metricLLH = settings.double3()
@@ -364,13 +432,14 @@ def EFGPosToLLH(posEFG):
 C_ASTRODLL.EFGToECI.argtypes = [c.c_double] + [settings.double3] * 3
 def EFGToECI(thetaG, posEFG, velEFG):
 	"""
-	python:function::EFGToECI
 	Converts EFG position and velocity vectors to ECI position and velocity vectors. 
+	
 	:param float thetaG: Theta - Greenwich mean sidereal time (rad).
 	:param float[3] posEFG: The EFG position vector (km) to be converted. (double[3])
 	:param float[3] velEFG: The EFG velocity vector (km/s) to be converted. (double[3])
-	:return float[3] posECI: The resulting ECI (TEME of Date) position vector (km). (double[3])
-	:return float[3] velECI: The resulting ECI (TEME of Date) velocity vector (km/s). (double[3])
+	:return:
+		- **posECI** (*float[3]*) - The resulting ECI (TEME of Date) position vector (km). (double[3])
+		- **velECI** (*float[3]*) - The resulting ECI (TEME of Date) velocity vector (km/s). (double[3])
 	"""
 	thetaG = c.c_double(thetaG)
 	posEFG = settings.list_to_array(posEFG)
@@ -386,14 +455,15 @@ def EFGToECI(thetaG, posEFG, velEFG):
 C_ASTRODLL.EFGToECR.argtypes = [c.c_double] * 2 + [settings.double3] * 4
 def EFGToECR(polarX, polarY, posEFG, velEFG):
 	"""
-	python:function::EFGToECR
 	Converts EFG position and velocity vectors to ECR position and velocity vectors.
+
 	:param float polarX: Polar motion X (arc-sec).
 	:param float polarY: Polar motion Y (arc-sec).
 	:param float[3] posEFG: The EFG position vector (km) to be converted. (double[3])
 	:param float[3] velEFG: The EFG velocity vector (km/s) to be converted. (double[3])
-	:return float[3] posECR: The resulting ECR position vector (km). (double[3])
-	:return float[3] velECR: The resulting ECR velocity vector (km/s). (double[3])
+	:return:
+		- **posECR** (*float[3]*) - The resulting ECR position vector (km). (double[3])
+		- **velECR** (*float[3]*) - The resulting ECR velocity vector (km/s). (double[3])
 	"""
 	polarX = c.c_double(polarX)
 	polarY = c.c_double(polarY)
