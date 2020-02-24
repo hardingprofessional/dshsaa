@@ -21,8 +21,8 @@ class TestAstroDLL(unittest.TestCase):
 	def test_AstroConvFrTo(self):
 		xf_Conv = 0
 		frArr = [0.0]
-		toArr = [1.0]
-		astrodll.AstroConvFrTo(xf_Conv, frArr, toArr)
+		toArr = astrodll.AstroConvFrTo(xf_Conv, frArr)
+		pdb.set_trace()
 		
 	##AstroFuncGetInfo
 	def test_AstroFuncGetInfo(self):

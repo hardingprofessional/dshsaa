@@ -9,22 +9,29 @@ C_ASTRODLL = c.CDLL(settings.LIB_ASTRO_NAME)
 
 ##AstroConvFrTo 
 C_ASTRODLL.AstroConvFrTo.argtypes = [c.c_int, settings.double128, settings.double128]
-def AstroConvFrTo(xf_Conv, frArr, toArr):
+def AstroConvFrTo(xf_Conv, frArr):
 	"""
-	python:function::AstroConvFrTo
+	This function is intended for future use. No information is currently available.
+	Because the purpose of frArr and toArr is unclear, each array is automatically set to the maximum length permitted in the C_ASTRODLL spec.
+	:param int xf_Conv: The purpose of this parameter is not yet known
+	:param float[] frArr: The purpose of this parameter is not yet known
+	:return: toArr: The purpose of this paramter is not yet known
+	:rtype: float[]
 	"""
 	xf_Conv = c.c_int(xf_Conv)
 	frArr_compatible = settings.double128()
 	toArr_compatible = settings.double128()
 	frArr_compatible = settings.feed_list_into_array(frArr, frArr_compatible)
-	toArr_compatible = settings.feed_list_into_array(toArr, toArr_compatible)
 	C_ASTRODLL.AstroConvFrTo(xf_Conv, frArr_compatible, toArr_compatible)
+	toArr = settings.array_to_list(toArr_compatible)
+	return toArr
 
 ##AstroFuncGetInfo 
 C_ASTRODLL.AstroFuncGetInfo.argtypes = [c.c_char_p]
 def AstroFuncGetInfo():
 	"""
-	python:function::AstroFuncGetInfo
+	Retrieves information about the current version of AstroFunc.dll. The information is placed in the string parameter you pass in. 
+
 	"""
 	infoStr = c.c_char_p(bytes(128))
 	C_ASTRODLL.AstroFuncGetInfo(infoStr)

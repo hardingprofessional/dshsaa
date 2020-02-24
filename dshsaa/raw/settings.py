@@ -96,13 +96,13 @@ def array2d_to_list(ar):
 			li[i][j] = li[i][j].value
 	return li
 
-def list_to_array(li, ct = c.c_double):
+def list_to_array(li, ct=c.c_double):
 	"""
-	python:function::list_to_array
 	converts a python list of ints or floats into a ctypes array
 	:param list li: a list of ints or floats to convert into a ctypes array
 	:param ctype ct: a ctype type to cast the elements of li (defaults to c.c_double)
-	:return ?[?] ar: a ctypes array
+	:return ar: a ctypes array
+	:rtype: a ctypes array equivalent to ``ct * len(li)``
 	"""
 	art = ct * len(li)
 	ar = art()
