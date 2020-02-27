@@ -172,11 +172,15 @@ def array2d_to_list(ar):
 
 def list_to_array(li, ct=c.c_double):
 	"""
-	converts a python list of ints or floats into a ctypes array
-	:param list li: a list of ints or floats to convert into a ctypes array
-	:param ctype ct: a ctype type to cast the elements of li (defaults to c.c_double)
-	:return ar: a ctypes array
-	:rtype: a ctypes array equivalent to ``ct * len(li)``
+	Converts a python list of ints or floats into a ctypes array.
+
+	:param float[?] li: A list of ints or floats to convert into a ctypes array.
+
+	:param ct: A ctype type to cast the elements of li (defaults to ctypes.c_double, but ctypes.c_int is known to work.)
+	:type ct: ctypes type constructor, ctypes.c_double, ctypes.c_int
+
+	:return:
+		**ar** (*see parameter ct*) - A ctypes array representation of the input list ``li`` with each element being type-cast to ``ct``.
 	"""
 	art = ct * len(li)
 	ar = art()
@@ -186,12 +190,12 @@ def list_to_array(li, ct=c.c_double):
 
 def feed_list_into_array(li, ar):
 	"""
-	python:function:: feed_list_into_array
-	feeds the contents of a python list into a ctypes array
-	assums python list is of equal or lesser length than the ctypes array
-	:param list li: a list of python elements 
-	:param ctypes_array ar: a fully initialized ctype array
-	:return ar: returns the fully initialized ctype array with the python list contents in it
+	Takes each element of a list ``li``, casts them to the type of array ``ar``, then copies them into each index of ``ar``.	
+	
+	:param list li: A list of python elements.
+	:param ctypes_array ar: A fully initialized ctype array. Usually the array is ctypes.c_double[], ctypes.c_int[], or ctypes.c_char_p[].
+	:return:
+		**ar** (*ctypes.sometype*) - Returns the ctype array with the python list contents in it.
 	"""
 	if len(li) > len(ar):
 		raise Exception("feeding a list of greater length into a ctypes array of lesser length will result in a memory buffer overflow event")
@@ -201,15 +205,16 @@ def feed_list_into_array(li, ar):
 
 def feed_2d_list_into_array(li, ar):
 	"""
-	python:function:: feed_2d_list_into_array
-	copies the contents of a 2D python list into a 2D ctypes array
-	Assumes both list and array are rectangular and of equal dimension
-	If arrays are _not_ rectangular, a memory leak could occur!
-	Only tested to work with integers and floats mapped to c.c_double[m][n]
-	Will throw exception if list is different size from the array
+	Copies the contents of a 2D python list into a 2D ctypes array. Assumes both list and array are rectangular and of equal dimension. If arrays are _not_ rectangular, a memory leak could occur!
+
+	Only tested to work with integers and floats mapped to c.c_double[m][n].
+
+	Will throw exception if list is different size from the array.
+
 	:param list li: the list of data to feed into the array
 	:param ctype[][] ar: the array to feed data into
-	:return ctype[][] ar: the array that has been filled with data from li
+	:return:
+		**ar** (*ctype[][]*) - The array that has been filled with data from ``li``.
 	"""
 	# first, determine the size of the list
 	li_len_d1 = len(li)
@@ -233,11 +238,13 @@ def feed_2d_list_into_array(li, ar):
 ## 
 def enforce_limit(byte_obj, length, terminator=True):
 	"""
-	python:function:: enforce_limit
 	When sending byte strings to DLL, this function will trim any byte strings in excess of a specified limit and ensure they end in a proper terminator
+
 	:param bytes byte_obj: The byte string we wish to limit in length
 	:param terminator: if true, enforce last byte is \0, else leave last byte as is
-	:return bytes byte_obj: The byte string trimmed to the appropriate length with the final address guaranteed to be \0
+	:type terminator: optional, bool
+	:return:
+		**byte_obj** (*bytes*) - The byte string trimmed to the appropriate length with the final address guaranteed to be ``\0``.
 	"""
 	if terminator:
 		if len(byte_obj) >= length:

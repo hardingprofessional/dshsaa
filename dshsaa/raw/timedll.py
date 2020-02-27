@@ -16,18 +16,19 @@ C_TIMEDLL.DTGToUTC.restype = c.c_double
 C_TIMEDLL.DTGToUTC.argtypes = [c.c_char_p]
 def DTGToUTC(dtg):
 	"""
-	python:function:: DTGToUTC
-
 	Converts a time in one of the DTG formats to a time in ds50UTC. DTG15, DTG17, DTG19, and DTG20 formats are accepted. 
 
-	REMARKS:
-	See "UTCToDTG20" for an example. 
+	..Note:: See "UTCToDTG20" for an example. 
+
 	During the conversion, this function processes only numbers and the '.' character. This means that you can format dtgStr in a format that makes sense. You can use spaces and the '/' character for example if you wish. 
+
 	The function can process dates from 1950 to 2049. Any input outside this range will yield "0.0". 
+
 	This function supports DTG19 inputs in both "YY DDD HH MM SS.SSS" and "YYYYMonDDHHMMSS.SSS" formats. 
 
 	:param str dtg: A string representation of time in DTG format
-	:return double ds50utc: Time represented as a numeric python double
+	:return:
+		**ds50utc** (*float*) - Time as a python float, value in DTG20 format
 	"""
 	# Note: No maximum string size was specified by the chm docs, but based on DTG20 we know that limit is 22 characters
 	# TODO: Add strict limit of 22 characters to dtg
@@ -45,15 +46,14 @@ def DTGToUTC(dtg):
 C_TIMEDLL.Get6P.argtypes = [c.POINTER(c.c_int), c.POINTER(c.c_int), c.POINTER(c.c_double), c.POINTER(c.c_double), c.POINTER(c.c_double)]
 def Get6P():
 	"""
-	python::function: Get6P
-
 	Returns prediction control parameters.
 
-	:return int startFrEpoch: Indicates whether startTime is expressed in minutes or days since Epoch. If startFrEpoch == 1, then startTime is in minutes since epoch. If startFrEpoch == 0, then startTime is in days since 1950, UTC.
-	:return int stopFrEpoch: Indicates whether stopTime is expressed in minutes or days since Epoch. If stopFrEpoch == 1, then stopTime is in minutes since epoch. If stopFrEpoch == 0, then stopTime is in days since 1950, UTC.
-	:return double startTime: The start time
-	:return double stopTime: The stop time
-	:return double interval: the step size (min)
+	:return:
+		- **startFrEpoch** (*int*) - Indicates whether startTime is expressed in minutes or days since Epoch. If startFrEpoch == 1, then startTime is in minutes since epoch. If startFrEpoch == 0, then startTime is in days since 1950, UTC.
+		- **stopFrEpoch** (*int*) - Indicates whether stopTime is expressed in minutes or days since Epoch. If stopFrEpoch == 1, then stopTime is in minutes since epoch. If stopFrEpoch == 0, then stopTime is in days since 1950, UTC.
+		- **startTime** (*float*) - The start time. Depending on the value of startFrEpoch, start time can be expressed in minutes since epoch or days since 1950, UTC.
+		- **stopTime** (*float*) - The stop time. Depending on the value of stopFrEpoch, stop time can be expressed in minutes since epoch or days since 1950, UTC.
+		- **interval** (*float*) - The step size (minutes).
 	"""
 	# initialize return variables
 	startFrEpoch = c.c_int(0)
@@ -77,9 +77,10 @@ def Get6P():
 C_TIMEDLL.Get6PCardLine.argtypes = [c.c_char_p]
 def Get6PCardLine():
 	"""
-	python:function:: Get6PCardLine
 	Returns current prediction control parameters in the form of a 6P-Card string
-	:returns str card6PLine: string representation of prediction control parameters
+	
+	:return:
+		**card6PLine** (*str*) - String representation of prediction control parameters.
 	"""
 	card6PLine = c.c_char_p(bytes(512))
 	C_TIMEDLL.Get6PCardLine(card6PLine)
@@ -91,10 +92,12 @@ def Get6PCardLine():
 C_TIMEDLL.IsTConFileLoaded.restype = c.c_int
 def IsTConFileLoaded():
 	"""
-	python:function:: IsTConFileLoaded
 	Checks to see if timing constants have been loaded into memory
-	Note: the integer return type is preserved because I suspect SAA is using undocumented reason codes
-	:param int load_status: 1 if timing constants are loaded, another value if not
+	
+	..Note:: the integer return type is preserved because I suspect SAA is using undocumented reason codes
+
+	:return:
+		-**load_status** (*int*) - 1 if timing constants are loaded, another value if not.
 	"""
 	load_status = C_TIMEDLL.IsTConFileLoaded()
 	return load_status
@@ -103,15 +106,16 @@ def IsTConFileLoaded():
 C_TIMEDLL.Set6P.argtypes = [c.c_int, c.c_int, c.c_double, c.c_double, c.c_double]
 def Set6P(startFrEpoch, stopFrEpoch, startTime, stopTime, stepSize):
 	"""
-	python:function:: Set6P
 	Set the prediction control parameters
-	Note: SAA documentation uses the words "interval" and "stepSize" interchangeably
+	
+	..Note:: SAA documentation uses the words "interval" and "stepSize" interchangeably
+	
 	:param int startFrEpoch: Indicates whether startTime is expressed in minutes since epoch.(startFrEpoch = 1: Value of startTime is in minutes since epoch, startFrEpoch = 0: Value of startTime is in days since 1950, UTC)
 	:param int stopFrEpoch: Indicates whether stopTime is expressed in minutes since epoch. (stopFrEpoch = 1: Value of stopTime is in minutes since epoch, stopFrEpoch = 0: Value of stopTime is in days since 1950, UTC)
-	:param double startTime: TODO
-	:param double stopTime:TODO
-	:param double stepSize: TODO
-	"""
+	:param float startTime: The start time. Depending on the value of startFrEpoch, start time can be expressed in minutes since epoch or days since 1950, UTC.
+	:param float stopTime: The stop time. Depending on the value of stopFrEpoch, stop time can be expressed in minutes since epoch or days since 1950, UTC.
+	:param float stepSize: The step size (minutes).
+"""
 	startFrEpoch = c.c_int(startFrEpoch)
 	stopFrEpoch = c.c_int(stopFrEpoch)
 	startTime = c.c_double(startTime)
@@ -119,18 +123,17 @@ def Set6P(startFrEpoch, stopFrEpoch, startTime, stopTime, stepSize):
 	stepSize = c.c_double(stepSize)
 	# TODO: Add value checking
 	C_TIMEDLL.Set6P(startFrEpoch, stopFrEpoch, startTime, stopTime, stepSize)
-	
-	
 
 ## TAIToUT1
 C_TIMEDLL.TAIToUT1.restype = c.c_double
 C_TIMEDLL.TAIToUT1.argtypes = [c.c_double]
 def TAIToUT1(ds50TAI):
 	"""
-	python:function:: TAIToUT1
 	Converts a time in ds50TAI to a time in ds50UT1 using timing constants records in memory. If no timing constants records were loaded, ds50TAI and ds50UT1 are the same. 
-	:param double ds50TAI: Days since 1950, TAI to be converted.
-	:param double ds50UT1: The number of days since 1950, UT1. Partial days may be returned.
+	
+	:param float ds50TAI: Days since 1950, TAI to be converted.
+	:return:
+		**ds50UT1** (*float*) - The number of days since 1950, UT1. Partial days will be represented as decimal days.
 	"""
 	ds50UT1 = C_TIMEDLL.TAIToUT1(ds50TAI)
 	return ds50UT1
@@ -140,10 +143,11 @@ C_TIMEDLL.TAIToUTC.restype = c.c_double
 C_TIMEDLL.TAIToUTC.argtypes = [c.c_double]
 def TAIToUTC(ds50TAI):
 	"""
-	python:function:: TAIToUTC
 	Converts a time in ds50TAI to a time in ds50UTC using timing constants records in memory. If no timing constants records were loaded, ds50TAI and ds50UTC are the same. 
-	:param double ds50TAI: Days since 1950, TAI to be converted.
-	:param double ds50UTC: The number of Days since 1950, UTC. Partial days may be returned.
+
+	:param float ds50TAI: Days since 1950, TAI to be converted.
+	:return:
+		**ds50UTC** (*float*) - The number of Days since 1950, UTC. Partial days may be returned.
 	"""
 	ds50UTC = C_TIMEDLL.TAIToUTC(ds50TAI)
 	return ds50UTC
@@ -153,16 +157,17 @@ C_TIMEDLL.TConAddARec.restype = c.c_int
 C_TIMEDLL.TConAddARec.argtypes = [c.c_double] * 7
 def TConAddARec(refDs50UTC, leapDs50UTC, taiMinusUTC, ut1MinusUTC, ut1Rate, polarX, polarY):
 	"""
-	python:function:: TConAddARec
 	Adds a timing constant record to memory. Note that this function is solely for backward compatible with legacy software. The users should use TConLoadFile or TimeFuncLoadFile to load timing constants file instead. 
-	:param double refDs50UTC: Reference time (days since 1950, UTC)
-	:param double leapDs50UTC: Leap Second time (days since 1950, UTC)
-	:param double taiMinusUTC: TAI minus UTC offset at the reference time (seconds)
-	:param double ut1MinusUTC: UT1 minus UTC offset at the reference time (seconds)
-	:param double ut1Rate: UT1 rate of change versus UTC at the reference time (msec/day)
-	:param double polarX: Polar wander (X direction) at the reference time (arc-seconds)
-	:param double polarY: Polar wander (Y direction) at the reference time (arc-seconds)
-	:returns int retcode: 0 if timing constants are added to memory, !0 if there is an error
+	
+	:param float refDs50UTC: Reference time (days since 1950, UTC)
+	:param float leapDs50UTC: Leap Second time (days since 1950, UTC)
+	:param float taiMinusUTC: TAI minus UTC offset at the reference time (seconds)
+	:param float ut1MinusUTC: UT1 minus UTC offset at the reference time (seconds)
+	:param float ut1Rate: UT1 rate of change versus UTC at the reference time (msec/day)
+	:param float polarX: Polar wander (X direction) at the reference time (arc-seconds)
+	:param float polarY: Polar wander (Y direction) at the reference time (arc-seconds)
+	:return:
+		**retcode** (*int*) - 0 if timing constants are added to memory, !0 if there is an error.
 	"""
 	retcode = C_TIMEDLL.TConAddARec(refDs50UTC, leapDs50UTC, taiMinusUTC, ut1MinusUTC, ut1Rate, polarX, polarY)
 	return retcode
@@ -172,16 +177,17 @@ C_TIMEDLL.TConAddOne.restype = c.c_int
 C_TIMEDLL.TConAddOne.argtypes = [c.c_double] * 7
 def TConAddOne(refDs50UTC, leapDs50UTC, taiMinusUTC, ut1MinusUTC, ut1Rate, polarX, polarY):
 	"""
-	python:function:: TConAddOne
 	Adds one timing constant record to memory. This API can be used to avoid TConLoadFile's file I/O 
-	:param double refDs50UTC: Reference time (days since 1950, UTC)
-	:param double leapDs50UTC: Leap Second time (days since 1950, UTC)
-	:param double taiMinusUTC: TAI minus UTC offset at the reference time (seconds)
-	:param double ut1MinusUTC: UT1 minus UTC offset at the reference time (seconds)
-	:param double ut1Rate: UT1 rate of change versus UTC at the reference time (msec/day)
-	:param double polarX: Polar wander (X direction) at the reference time (arc-seconds)
-	:param double polarY: Polar wander (Y direction) at the reference time (arc-seconds)
-	:returns int retcode: 0 if timing constants are added to memory, !0 if there is an error
+	
+	:param float refDs50UTC: Reference time (days since 1950, UTC)
+	:param float leapDs50UTC: Leap Second time (days since 1950, UTC)
+	:param float taiMinusUTC: TAI minus UTC offset at the reference time (seconds)
+	:param float ut1MinusUTC: UT1 minus UTC offset at the reference time (seconds)
+	:param float ut1Rate: UT1 rate of change versus UTC at the reference time (msec/day)
+	:param float polarX: Polar wander (X direction) at the reference time (arc-seconds)
+	:param float polarY: Polar wander (Y direction) at the reference time (arc-seconds)
+	:return:
+		**retcode** (*int*) - 0 if timing constants are added to memory, !0 if there is an error.
 	"""
 	retcode = C_TIMEDLL.TConAddOne(refDs50UTC, leapDs50UTC, taiMinusUTC, ut1MinusUTC, ut1Rate, polarX, polarY)
 	return retcode
@@ -192,12 +198,12 @@ C_TIMEDLL.TConLoadFile.restype = c.c_int
 C_TIMEDLL.TConLoadFile.argtypes = [c.c_char_p]
 def TConLoadFile(tconfile):
 	"""
-	.. py:function:: TConLoadFile
+
+	Loads timing constants data from an input file. Time constants can be included directly in the main input file or they can be read from a separate file identified with "TIMFIL=[pathname/filename]". The input file is read in two passes. The function first looks for "TIMFIL=" lines, then it looks for timing constant data which was included directly. The result of this is that data entered using both methods will be processed, but the "TIMFIL=" data will be processed first. The time constants are also read in from each VCM. However, only the most recent time constants among VCMs are stored in the memory, see VCM.dll documentation. See the "Time Constants Data Description" section in the accompanying TimeFunc documentation file for supported formats.
 	
-		Loads timing constants data from an input file. Time constants can be included directly in the main input file or they can be read from a separate file identified with "TIMFIL=[pathname/filename]". The input file is read in two passes. The function first looks for "TIMFIL=" lines, then it looks for timing constant data which was included directly. The result of this is that data entered using both methods will be processed, but the "TIMFIL=" data will be processed first. The time constants are also read in from each VCM. However, only the most recent time constants among VCMs are stored in the memory, see VCM.dll documentation. See the "Time Constants Data Description" section in the accompanying TimeFunc documentation file for supported formats.
-		
-		:param str tconfile: The name of the time constant file to load
-		:return int retcode: 0 if file successfully loaded, nonzero if file not successfully loaded
+	:param str tconfile: The name of the time constant file to load
+	:return:
+		**retcode** (*int*) - 0 if file successfully loaded, nonzero if file not successfully loaded
 		
 	"""
 	tconfile = tconfile.encode('ascii')
@@ -210,9 +216,10 @@ def TConLoadFile(tconfile):
 C_TIMEDLL.TConRemoveAll.restype = c.c_int
 def TConRemoveAll():
 	"""
-	python:function:: TConRemoveAll
 	Removes all the timing constants records in memory.
-	:returns int retcode: 0 if all timing constants records are successfully removed from memory, non-0 if there is an error.
+	
+	:return:
+		**retcode** (*int*) - 0 if all timing constants records are successfully removed from memory, non-0 if there is an error.
 	"""
 	retcode = C_TIMEDLL.TConRemoveAll()
 	return retcode
@@ -222,11 +229,15 @@ C_TIMEDLL.TConSaveFile.restype = c.c_int
 C_TIMEDLL.TConSaveFile.argtypes = [c.c_char_p, c.c_int, c.c_int]
 def TConSaveFile(tconfile, saveMode, saveForm):
 	"""
-	python:function:: TConSaveFile
 	Saves currently loaded timing constants data to a file.
+
+	TODO: Determine if XML format has been implemented.
+	
 	:param str tconfile: The name of the file in which to save the timing constants data, 512 character limit
 	:param int saveMode: Specifies whether to create a new file or append to an existing one. (0 = Create new file, 1= Append to existing file)
 	:param int saveForm: Specifies the format in which to save the file. (0 = SPECTER Print Record format, 1 = XML format (future implementation))
+	:return:
+		**retcode** (*int*) - 0 if the data is successfully saved to the file, non-0 if there is an error.
 	"""
 	tconfile = tconfile.encode('ascii')
 	tconfile = settings.enforce_limit(tconfile, 512)
@@ -241,11 +252,12 @@ C_TIMEDLL.ThetaGrnwch.restype = c.c_double
 C_TIMEDLL.ThetaGrnwch.argtypes = [c.c_double, settings.stay_int64]
 def ThetaGrnwch(ds50UT1, envFk):
 	"""
-	python:function:: ThetaGrnwch
 	Computes right ascension of Greenwich at the specified time in ds50UT1. The Fk constants as you currently have them set up in EnvConst.dll are used.
-	:param double ds50UT1: Input days since 1950, UT1.
+
+	:param float ds50UT1: Input days since 1950, UT1.
 	:param stay_int64 envFk: A handle to the FK data. Use the value returned from envdll.EnvGetFkPtr()
-	:return double thetaGrnwhch: Right ascension of Greenwich in radians at the specified time.
+	:return:
+		**thetaGrnwhch** (*float*) - Right ascension of Greenwich in radians at the specified time.
 	"""
 	ds50UT1 = c.c_double(ds50UT1)
 	envFK = settings.stay_int64(envFk)
@@ -259,8 +271,8 @@ def ThetaGrnwchFK4(ds50UT1):
 	"""
 	python:function:: ThetaGrnwchFK4
 	Computes right ascension of Greenwich at the specified time in ds50UT1 using the Fourth Fundamental Catalogue (FK4). There is no need to load or initialize EnvConst.dll when computing right ascension using this function. 
-	:param double ds50UT1: Input days since 1950, UT1.
-	:return double thetaGrnwhchFK4: Right ascension of Greenwich in radians at the specified time using FK4.
+	:param float ds50UT1: Input days since 1950, UT1.
+	:return float thetaGrnwhchFK4: Right ascension of Greenwich in radians at the specified time using FK4.
 	"""
 	ds50UT1 = c.c_double(ds50UT1)
 	thetaGrnwchcFK4 = C_TIMEDLL.ThetaGrnwchFK4(ds50UT1)
@@ -273,7 +285,7 @@ def ThetaGrnwchFK5(ds50UT1):
 	"""
 	python:function:: ThetaGrnwchFK5
 	Computes right ascension of Greenwich at the specified time in ds50UT1 using the Fifth Fundamental Catalogue (FK5). There is no need to load or initialize EnvConst.dll when computing right ascension using this function. 
-	:param double ds50UT1: Input days since 1950, UT1.
+	:param float ds50UT1: Input days since 1950, UT1.
 	:return double thetaGrnwhchFK5: Right ascension of Greenwich in radians at the specified time using FK5.
 	"""
 	ds50UT1 = c.c_double(ds50UT1)
@@ -291,7 +303,7 @@ def TimeComps1ToUTC(year, dayOfYear, hh, mm, sss):
 	:param int dayOfYear: The day of the year
 	:param int hh: The hour of the day
 	:param int mm: The minute of the day
-	:param double sss:  The second, including decimal seconds if desired
+	:param float sss:  The second, including decimal seconds if desired
 	"""
 	year = c.c_int(year)
 	dayOfYear = c.c_int(dayOfYear)
@@ -313,7 +325,7 @@ def TimeComps2ToUTC(year, mon, dayOfMonth, hh, mm, sss):
 	:param int dayOfMonth: The day of the month
 	:param int hh: The hour of the day
 	:param int mm: The minute of the day
-	:param double sss:  The second, including decimal seconds if desired
+	:param float sss:  The second, including decimal seconds if desired
 	"""
 	year = c.c_int(year)
 	mon = c.c_int(mon)
@@ -472,7 +484,7 @@ def UTCToET(ds50UTC):
 	"""
 	python:function::UTCToET
 	Converts a time in ds50UTC to a time in ds50ET using timing constants records in memory. If no timing constants records were loaded, ds50UTC and ds50UT1 are the same. 
-	:param double ds50UTC: Days since 1950, UTC to be converted.
+	:param float ds50UTC: Days since 1950, UTC to be converted.
 	:return double ds50ET: The number of days since 1950, ET. Partial days may be returned.
 	"""
 	ds50UTC = c.c_double(ds50UTC)
@@ -486,7 +498,7 @@ def UTCToTAI(ds50UTC):
 	"""
 	python:function::UTCToTAI
 	Converts a time in ds50UTC to a time in ds50TAI using timing constants records in memory. If no timing constants records were loaded, ds50UTC and ds50TAI are the same. 
-	:param double ds50UTC: Days since 1950, UTC to be converted.
+	:param float ds50UTC: Days since 1950, UTC to be converted.
 	:return double ds50TAI: The number of days since 1950, TAI. Partial days may be returned.
 	"""
 	ds50UTC = c.c_double(ds50UTC)
