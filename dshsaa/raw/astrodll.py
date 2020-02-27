@@ -20,8 +20,7 @@ def AstroConvFrTo(xf_Conv, frArr):
 	:param float[<=128] frArr: The purpose of this parameter is not yet known
 
 	:return: 
-
-		- **toArr** (*float[128]*) - The output array of data
+		**toArr** (*float[128]*) - The output array of data
 	"""
 	xf_Conv = c.c_int(xf_Conv)
 	frArr_compatible = settings.double128()
@@ -38,8 +37,7 @@ def AstroFuncGetInfo():
 	Retrieves information about the current version of AstroFunc.dll.
 
 	:return:
-		
-		- **infoStr** (*str*) - A string describing version number, build date, and platform
+		**infoStr** (*str*) - A string describing version number, build date, and platform
 	"""
 	infoStr = c.c_char_p(bytes(128))
 	C_ASTRODLL.AstroFuncGetInfo(infoStr)
@@ -60,8 +58,7 @@ def AstroFuncInit(maindll_handle):
 	:param settings.stay_int64 maindll_handle: The handle that was reaturned by maindll.DllMainInit()
 
 	:return:
-
-		- **retcode** (*int*) - 0 if AstroFunc.dll is initialized successfully, non-0 if there is an error.
+		**retcode** (*int*) - 0 if AstroFunc.dll is initialized successfully, non-0 if there is an error.
 """
 	retcode = C_ASTRODLL.AstroFuncInit(maindll_handle)
 	return retcode
@@ -76,7 +73,7 @@ def AToN(a):
 	:param float a: Semi-major axis A (km).
 
 	:return: 
-		- **N** (*float*) - The mean motion N (revs/day).
+		**N** (*float*) - The mean motion N (revs/day).
 	"""
 	a = c.c_double(a)
 	N = C_ASTRODLL.AToN(a)
@@ -142,7 +139,7 @@ def BrouwerToKozai(eccen, incli, nBrouwer):
 	:param float incli: inclination (degrees)
 	:param float nBrouwer: Brouwer mean motion (revs/day).
 	:return:
-		- **kozai** (*float*) - Kozai mean motion (revs/day).
+		**kozai** (*float*) - Kozai mean motion (revs/day).
 	"""
 	eccen = c.c_double(eccen)
 	incli = c.c_double(incli)
@@ -158,7 +155,7 @@ def ClassToEqnx(metricClass):
 
 	:param float[6] metricClass: The set of classical elements to be converted. (double[6])
 	:return: 
-		- **metricEqnx** (*float[6]*) - The resulting set of equinoctial elements. (double[6])
+		**metricEqnx** (*float[6]*) - The resulting set of equinoctial elements. (double[6])
 	"""
 	metricClass_compatible = settings.double6()
 	metricEqnx_compatible = settings.double6()
@@ -239,7 +236,7 @@ def CompTrueAnomaly(metricKep):
 
 	:param float[6] metricKep: The set of Keplerian elements for which to compute true anomaly. (double[6])
 	:return:
-		- **true_anomaly** (*float*) - The true anomaly in degrees.
+		**true_anomaly** (*float*) - The true anomaly in degrees.
 	"""
 	metricKep = settings.list_to_array(metricKep)
 	true_anomaly = C_ASTRODLL.CompTrueAnomaly(metricKep)
@@ -255,7 +252,7 @@ def CovMtxPTWToUVW(pos, vel, ptwCovMtx):
 	:param float[3] vel: The input velocity vector (km/s). (double[3])
 	:param float[6][6] ptwCovMtx: The PTW covariance matrix to be converted. (double[6,6])
 	:return:
-		- **uvwCovMtx** (*float[6][6]*) - The resulting UVW covariance matrix. (double[6,6])
+		**uvwCovMtx** (*float[6][6]*) - The resulting UVW covariance matrix. (double[6,6])
 	"""
 	# initialize ctypes
 	pos_compatible = settings.double3()
@@ -280,9 +277,9 @@ def CovMtxUVWToPTW(pos, vel, uvwCovMtx):
 
 	:param float[3] pos: the input position vector (km) (double[3])
 	:param float[3] vel: the input velocity vector (km/s) (double[3])
-	:parm float[6][6] uvwCovMtx: the UVW covariance matrix to be converted. (double[6,6])
+	:param float[6][6] uvwCovMtx: the UVW covariance matrix to be converted. (double[6,6])
 	:return:
-		- **ptwCovMtx** (*float[6][6]*) - The resulting PTW covariance matrix (double[6,6])
+		**ptwCovMtx** (*float[6][6]*) - The resulting PTW covariance matrix (double[6,6])
 	"""
 	# initialize ctypes
 	# initialize ctypes
@@ -364,7 +361,7 @@ def ECIToTopoComps(theta, lat, senPos, satPos, satVel):
 	:param float[3] satPos: Satellite position in ECI (km). (double[3])
 	:param float[3] satVel: Satellite velocity in ECI (km/s). (double[3])
 	:return:
-		- **xa_topo** (*float[10]*) - An array that stores the resulting topocentric components. (double[10])
+		**xa_topo** (*float[10]*) - An array that stores the resulting topocentric components. (double[10])
 
 			- [0]: Resulting right ascension (RA) (deg) 
 			- [1]: Declination (deg) 
@@ -420,7 +417,7 @@ def EFGPosToLLH(posEFG):
 	
 	:param float[3] posEFG: The EFG position vector (km) to be converted. (double[3])
 	:return:
-		- **metricLLH** (*float[3]*) - The resulting geodetic north latitude (degree), east longitude (degree), and height (km). (double[3])
+		**metricLLH** (*float[3]*) - The resulting geodetic north latitude (degree), east longitude (degree), and height (km). (double[3])
 	"""
 	posEFG = settings.list_to_array(posEFG)
 	metricLLH = settings.double3()
@@ -480,11 +477,13 @@ def EFGToECR(polarX, polarY, posEFG, velEFG):
 C_ASTRODLL.EqnxToClass.argtypes = [settings.double6] * 2
 def EqnxToClass(metricEqnx):
 	"""
-	python:function::EqnxToClass
 	Converts a set of equinoctial elements to a set of classical elements
+	
 	TODO: Determine and document vector sequence
+	
 	:param float[6] metricEqnx: The set of equinoctial elements to be converted. (double[6])
-	:return float[6] metricClass: The resulting set of classical elements. (double[6])
+	:return:
+		**metricClass** (*float[6]*) - The resulting set of classical elements. (double[6])
 	"""
 	metricEqnx = settings.list_to_array(metricEqnx)
 	metricClass = settings.double6()
@@ -496,11 +495,13 @@ def EqnxToClass(metricEqnx):
 C_ASTRODLL.EqnxToKep.argtypes = [settings.double6] * 2
 def EqnxToKep(metricEqnx):
 	"""
-	python:function::EqnxToKep
 	Converts a set of equinoctial elements to a set of classical elements
+	
 	TODO: Determine and document vector sequence
+	
 	:param float[6] metricEqnx: The set of equinoctial elements to be converted. (double[6])
-	:return float[6] metricClass: The resulting set of classical elements. (double[6])
+	:return:
+		**metricClass** (*float[6]*) - The resulting set of classical elements. (double[6])
 	"""
 	metricEqnx = settings.list_to_array(metricEqnx)
 	metricKep = settings.double6()
@@ -512,11 +513,12 @@ def EqnxToKep(metricEqnx):
 C_ASTRODLL.EqnxToPosVel.argtypes = [settings.double6] + [settings.double3] * 2
 def EqnxToPosVel(metricEqnx):
 	"""
-	python:function::EqnxToPosVel
 	Converts a set of equinoctial elements to position and velocity vectors. 
+	
 	:param float[6] metricEqnx: The set of equinoctial elements to be converted. (double[6])
-	:return float[3] pos: The resulting position vector. (double[3])
-	:return float[3] vel: The resulting velocity vector. (double[3])
+	:return:
+		- **pos** (*float[3]*) - The resulting position vector. (double[3])
+		- **vel** (*float[3]*) - The resulting velocity vector. (double[3])
 	"""
 	metricEqnx = settings.list_to_array(metricEqnx)
 	pos = settings.double3()
@@ -530,12 +532,13 @@ def EqnxToPosVel(metricEqnx):
 C_ASTRODLL.GetInitialDrag.argtypes = [c.c_double] * 2 + [c.POINTER(c.c_double)] * 2
 def GetInitialDrag(semiMajorAxis, eccen):
 	"""
-	python:function::GetInitialDrag
 	Computes initial values for the SGP drag term NDOT and the SGP4 drag term BSTAR based upon eccentricity and semi-major axis. 
+	
 	:param float semiMajorAxis: Semi-major axis (km).
 	:param float eccen: Eccentricity (unitless).
-	:return float ndot: Ndot (revs/day^2).
-	:return float bstar: Bstar (1/earth radii).
+	:return:
+		- **ndot** (*float*) - Ndot (revs/day^2).
+		- **bstar** (*float*) - Bstar (1/earth radii).
 	"""
 	semiMajorAxis = c.c_double(semiMajorAxis)
 	eccen = c.c_double(eccen)
@@ -551,11 +554,12 @@ C_ASTRODLL.IsPointSunlit.argtypes = [c.c_double, settings.double3]
 C_ASTRODLL.IsPointSunlit.restype = c.c_int
 def IsPointSunlit(ds50ET, ptEci):
 	"""
-	python:function::IsPointSunlit
 	Determines if a point in space is sunlit at the input time ds50ET 
+	
 	:param float ds50ET: The number of days since 1950, ET for which to determine if the point is sunlit.
 	:param float ptEci: a position in ECI (km). (double[3])
-	:return int retcode: 0 if unlit, 1 if lit, possibly other values on error (undocumented)
+	:return:
+		**retcode** (*int*) - 0 if unlit, 1 if lit, possibly other values on error (undocumented)
 	"""
 	raise exceptions.KnownFault("IsPointSunlit method always returns 1, whether that is correct or not. This issue is under investigation but will not be resolved soon.")
 	ds50ET = c.c_double(ds50ET)
@@ -567,10 +571,11 @@ def IsPointSunlit(ds50ET, ptEci):
 C_ASTRODLL.KepOscToMean.argtypes = [settings.double6] * 2
 def KepOscToMean(metricOscKep):
 	"""
-	Python:function::KepOscToMean
 	Converts a set of osculating Keplerian elements to a set of mean Keplerian elements using method 9 algorithm. 
+	
 	:param float[6] metricOscKep: The set of osculating Keplerian elements to be converted. (double[6])
-	:return float[6] metricMeanKep: The resulting set of mean Keplerian elements. (double[6])
+	:return:
+		**metricMeanKep** (*float[6]*) - The resulting set of mean Keplerian elements. (double[6])
 	"""
 	metricOscKep = settings.list_to_array(metricOscKep)
 	metricMeanKep = settings.double6()
@@ -582,10 +587,11 @@ def KepOscToMean(metricOscKep):
 C_ASTRODLL.KepToEqnx.argtypes = [settings.double6] * 2
 def KepToEqnx(metricKep):
 	"""
-	python:function::KepToEqnx
 	Converts a set of Keplerian elements to a set of equinoctial elements. 
+	
 	:param float[6] metricKep: The set of Keplerian elements to be converted. (double[6])
-	:return float[6] metricEqnx: The resulting set of equinoctial elements. (double[6])
+	:return:
+		**metricEqnx** (*float[6]*) - The resulting set of equinoctial elements. (double[6])
 	"""
 	metricKep = settings.list_to_array(metricKep)
 	metricEqnx = settings.double6()
@@ -597,11 +603,12 @@ def KepToEqnx(metricKep):
 C_ASTRODLL.KepToPosVel.argtypes = [settings.double6] + [settings.double3] * 2
 def KepToPosVel(metricKep):
 	"""
-	python:function::KepToPosVel
 	Converts a set of osculating Keplerian elements to osculating position and velocity vectors. 
+	
 	:param float[6] metricKep: The set of Keplerian elements to be converted. (double[6])
-	:return float[3] pos: The resulting position vector. (double[3])
-	:return float[3] vel: The resulting velocity vector. (double[3])
+	:return:
+		- **pos** (*float[3]*) - The resulting position vector. (double[3])
+		- **vel** (*float[3]*) - The resulting velocity vector. (double[3])
 	"""
 	metricKep = settings.list_to_array(metricKep)
 	pos = settings.double3()
@@ -615,12 +622,13 @@ def KepToPosVel(metricKep):
 C_ASTRODLL.KepToUVW.argtypes = [settings.double6] + [settings.double3] * 3
 def KepToUVW(metricKep):
 	"""
-	python:function::KepToUVW
 	Converts a set of Keplerian elements to Ubar, Vbar, and Wbar vectors. 
+	
 	:param float[6] metricKep: The set of Keplerian elements to be converted. (double[6])
-	:return float[3] uBar: The resulting ubar vector. (double[3])
-	:return float[3] vBar: The resulting vbar vector. (double[3])
-	:return float[3] wBar: The resulting wbar vector. (double[3])
+	:return:
+		- **uBar** (*float[3]*) - The resulting ubar vector. (double[3])
+		- **vBar** (*float[3]*) - The resulting vbar vector. (double[3])
+		- **wBar** (*float[3]*) - The resulting wbar vector. (double[3])
 	"""
 	metricKep = settings.list_to_array(metricKep)
 	uBar = settings.double3()
@@ -637,12 +645,13 @@ C_ASTRODLL.KozaiToBrouwer.restype = c.c_double
 C_ASTRODLL.KozaiToBrouwer.argtypes = [c.c_double, c.c_double, c.c_double]
 def KozaiToBrouwer(eccen, incli, nKozai):
 	"""
-	python:function::KozaiToBrouwer
 	Converts Kozai mean motion to Brouwer mean motion. 
+	
 	:param float eccen: eccentricity
 	:param float incli: inclination (degrees)
 	:param float nKozai: Kozai mean motion (revs/day).
-	:return float nBrouwer: Brouwer mean motion (revs/day).
+	:return:
+		**nBrouwer** (*float*) - Brouwer mean motion (revs/day).
 	"""
 	eccen = c.c_double(eccen)
 	incli = c.c_double(incli)
@@ -654,10 +663,11 @@ def KozaiToBrouwer(eccen, incli, nKozai):
 C_ASTRODLL.LLHToEFGPos.argtypes = [settings.double3] * 2
 def LLHToEFGPos(metricLLH):
 	"""
-	python:function::LLHToEFGPos
 	Converts geodetic latitude, longitude, and height to an EFG position vector.
+	
 	:param float[3] metricLLH: An Array containing the geodetic north latitude (degree), east longitude (degree), and height (km) to be converted. (double[3])
-	:return float[3] posEFG: The resulting EFG position vector (km). (double[3])
+	:return:
+		**posEFG** (*float[3]*) - The resulting EFG position vector (km). (double[3])
 	"""
 	metricLLH = settings.list_to_array(metricLLH)
 	posEFG = settings.double3()
@@ -669,11 +679,12 @@ def LLHToEFGPos(metricLLH):
 C_ASTRODLL.LLHToXYZ.argtypes = [c.c_double] + [settings.double3] * 2
 def LLHToXYZ(thetaG, metricLLH):
 	"""
-	python:function::LLHToXYZ
 	Converts geodetic latitude, longitude, and height to an ECI position vector XYZ. 
+	
 	:param float thetaG: Theta - Greenwich mean sidereal time (rad).
 	:param float[3] metric LLH: An array containing geodetic north latitude (degree), east longitude (degree), and height (km) to be converted. (double[3])
-	:return float[3] metricXYZ: The resulting ECI (TEME of Date) position vector (km). (double[3])
+	:return:
+		**metricXYZ** (*float[3]*) - The resulting ECI (TEME of Date) position vector (km). (double[3])
 	"""
 	thetaG = c.c_double(thetaG)
 	metricLLH = settings.list_to_array(metricLLH)
@@ -687,10 +698,11 @@ C_ASTRODLL.NToA.restype = c.c_double
 C_ASTRODLL.NToA.argtypes = [c.c_double]
 def NToA(n):
 	"""
-	python:function::NToA
 	Converts mean motion N to semi-major axis A. 
+	
 	:param float n: Mean motion N (revs/day).
-	:return float a: The semi-major axis A (km).
+	:return:
+		**a** (*float*) - The semi-major axis A (km).
 	"""
 	n = c.c_double(n)
 	a = C_ASTRODLL.NToA(n)
@@ -701,12 +713,13 @@ def NToA(n):
 C_ASTRODLL.PosVelMuToEqnx.argtypes = [settings.double3] * 2 + [c.c_double, settings.double6]
 def PosVelMuToEqnx(pos, vel, mu):
 	"""
-	python function::PosVelMuToEqnx
 	Converts position and velocity vectors to a set of equinoctial elements with the given mu value.
+	
 	:param float[3] pos: The position vector to be converted. (double[3])
 	:param float[3] vel: The velocity vector to be converted. (double[3])
 	:param float mu: The value of mu.
-	:return float[6] metricEqnx: The resulting set of equinoctial elements. (double[6])
+	:return:
+		**metricEqnx** (*float[6]*) - The resulting set of equinoctial elements. (double[6])
 	"""
 	pos = settings.list_to_array(pos)
 	vel = settings.list_to_array(vel)
@@ -720,12 +733,13 @@ def PosVelMuToEqnx(pos, vel, mu):
 C_ASTRODLL.PosVelMuToKep.argtypes = [settings.double3] * 2 + [c.c_double, settings.double6]
 def PosVelMuToKep(pos, vel, mu):
 	"""
-	python:function::PosVelMuToKep
 	Converts osculating position and velocity vectors to a set of osculating Keplerian elements with the given value of mu.
+	
 	:param float[3] pos: The position vector to be converted. (double[3])
 	:param float[3] vel: The velocity vector to be converted. (double[3])
 	:param float mu: The value of mu.
-	:return float[6] metricKep: The resulting set of Keplerian elements. (double[6])
+	:return:
+		 **metricKep** (*float[6]*) - The resulting set of Keplerian elements. (double[6])
 	"""
 	pos = settings.list_to_array(pos)
 	vel = settings.list_to_array(vel)
@@ -739,11 +753,12 @@ def PosVelMuToKep(pos, vel, mu):
 C_ASTRODLL.PosVelToEqnx.argtypes = [settings.double3] * 2 + [settings.double6]
 def PosVelToEqnx(pos, vel):
 	"""
-	python:function::PosVelToEqnx
 	Converts position and velocity vectors to a set of equinoctial elements. 
+	
 	:param float[3] pos: The position vector to be converted. (double[3])
 	:param float[3] vel: The velocity vector to be converted. (double[3])
-	:return float[6] metricEqnx: The resulting set of equinoctial elements. (double[6])
+	:return:
+		 **metricEqnx** (*float[6]*) - The resulting set of equinoctial elements. (double[6])
 	"""
 	pos = settings.list_to_array(pos)
 	vel = settings.list_to_array(vel)
@@ -756,11 +771,12 @@ def PosVelToEqnx(pos, vel):
 C_ASTRODLL.PosVelToKep.argtypes = [settings.double3] * 2 + [settings.double6]
 def PosVelToKep(pos, vel):
 	"""
-	python:function::PosVelToKep
 	Converts osculating position and velocity vectors to a set of osculating Keplerian elements. 
+	
 	:param float[3] pos: The position vector to be converted. (double[3])
 	:param float[3] vel: The velocity vector to be converted. (double[3])
-	:return float[6] metricKep: The resulting set of Keplerian elements. (double[6])
+	:return:
+		**metricKep** (*float[6]*) - The resulting set of Keplerian elements. (double[6])
 	"""
 	pos = settings.list_to_array(pos)
 	vel = settings.list_to_array(vel)
@@ -773,17 +789,18 @@ def PosVelToKep(pos, vel):
 C_ASTRODLL.PosVelToPTW.argtypes = [settings.double3] * 5
 def PosVelToPTW(pos, vel):
 	"""
-	python:function::PosVelToPTW
 	Converts position and velocity vectors to U, V, W vectors.
 	The resulting vectors have the following meanings. 
 	U vector: V x W 
 	V vector: along velocity direction 
 	W vector: pos x vel 
+	
 	:param float[3] pos: The position vector to be converted. (double[3])
 	:param float[3] vel: The velocity vector to be converted. (double[3])
-	:return float[3] uVec: The resulting U vector. (double[3])
-	:return float[3] vVec: The resulting V vector. (double[3])
-	:return float[3] wVec: The resulting W vector. (double[3])
+	:return:
+		- **uVec** (*float[3]*) - The resulting U vector. (double[3])
+		- **vVec** (*float[3]*) - The resulting V vector. (double[3])
+		- **wVec** (*float[3]*) - The resulting W vector. (double[3])
 	"""
 	pos = settings.list_to_array(pos)
 	vel = settings.list_to_array(vel)
@@ -800,17 +817,17 @@ def PosVelToPTW(pos, vel):
 C_ASTRODLL.PosVelToUUVW.argtypes = [settings.double3] * 5
 def PosVelToUUVW(pos, vel):
 	"""
-	python:function::PosVelToUUVW
 	Converts position and velocity vectors to U, V, W vectors. 
 	The resulting vectors have the following meanings. 
 	U vector: along radial direction 
 	V vector: W x U 
 	W vector: pos x vel 
+	
 	:param float[3] pos: The position vector to be converted. (double[3])
 	:param float[3] vel: The velocity vector to be converted. (double[3])
-	:return float[3] uVec: The resulting U vector. (double[3])
-	:return float[3] vVec: The resulting V vector. (double[3])
-	:return float[3] wVec: The resulting W vector. (double[3])
+		- **uVec** (*float[3]*) - The resulting U vector. (double[3])
+		- **vVec** (*float[3]*) - The resulting V vector. (double[3])
+		- **wVec** (*float[3]*) - The resulting W vector. (double[3])
 	"""
 	pos = settings.list_to_array(pos)
 	vel = settings.list_to_array(vel)
@@ -827,15 +844,16 @@ def PosVelToUUVW(pos, vel):
 C_ASTRODLL.RaDecToAzEl.argtypes = [c.c_double] * 5 + [c.POINTER(c.c_double)] * 2
 def RaDecToAzEl(thetaG, lat, lon, RA, dec):
 	"""
-	python:function::RaDecToAzEl
 	Converts right ascension and declination in the topocentric reference frame to Azimuth/Elevation in the local horizon reference frame. 
+
 	:param float thetaG: Theta - Greenwich mean sidereal time (rad).
 	:param float lat: Station's astronomical latitude (deg). (+N) (-S)
 	:param float lon: Station's astronomical longitude (deg). (+E) (-W)
 	:param float RA: Right ascension (deg)
 	:param float dec: Declination (deg)
-	:return float az: Azimuth (deg)
-	:return float el: Elevation (deg)
+	:return:
+		- **az** (*float*) - Azimuth (deg)
+		- **el** (*float*) - Elevation (deg)
 	"""
 	thetaG = c.c_double(thetaG)
 	lat = c.c_double(lat)
@@ -853,13 +871,14 @@ def RaDecToAzEl(thetaG, lat, lon, RA, dec):
 C_ASTRODLL.RADecToLAD.argtypes = [c.c_double] * 2 + [settings.double3] * 3
 def RADecToLAD(RA, dec):
 	"""
-	python:function::RADecToLAD
 	Converts right ascension and declination to vector triad LAD in topocentric equatorial coordinate system. 
+	
 	:param float RA: Right ascension (deg)
 	:param float dec: Declination (deg)
-	:return float[3] L: The resulting unit vector from the station to the satellite (referred to the equatorial coordinate system axis). (double[3])
-	:return float[3] A_Tilde: The resulting unit vector perpendicular to the hour circle passing through the satellite, in the direction of increasing RA. (double[3])
-	:return float[3] D_Tilde: The resulting unit vector perpendicular to L and is directed toward the north, in the plane of the hour circle. (double[3])
+	:return:
+		- **L** (*float[3]*) - The resulting unit vector from the station to the satellite (referred to the equatorial coordinate system axis). (double[3])
+		- **A_Tilde** (*float[3]*) - The resulting unit vector perpendicular to the hour circle passing through the satellite, in the direction of increasing RA. (double[3])
+		- **D_Tilde** (*float[3]*) - The resulting unit vector perpendicular to L and is directed toward the north, in the plane of the hour circle. (double[3])
 	"""
 	RA = c.c_double(RA)
 	dec = c.c_double(dec)
@@ -876,22 +895,23 @@ def RADecToLAD(RA, dec):
 C_ASTRODLL.RAEToECI.argtypes = [c.c_double] * 2 + [settings.double6] + [settings.double3] * 3
 def RAEToECI(theta, astroLat, xa_rae):
 	"""
-	python:function::RAEToECI
 	Converts full state RAE (range, az, el, and their rates) to full state ECI (position and velocity)
-	Remarks:
-	The xa_rae array has the following structure: 
-	[0]: Range (km) 
-	[1]: Azimuth (deg) 
-	[2]: Elevation (deg) 
-	[3]: Range Dot (km/s) 
-	[4]: Azimuth Dot (deg/s) 
-	[5]: Elevation Dot (deg/s) 
+
 	:param float theta: Theta - local sidereal time(rad).
 	:param float astroLat: Astronomical latitude (ded).
-	:param float[6] xa_rae: An array contains input data. (double[6])
-	:return float[3] senPos: Sensor position in ECI (km). (double[3])
-	:return float[3] satPos: Satellite position in ECI (km). (double[3])
-	:return float[3] satVel: Satellite velocity in ECI (km/s). (double[3])
+	:param float[6] xa_rae: An array contains input data. The data at each index is listed below. (double[6])
+
+		- [0]: Range (km) 
+		- [1]: Azimuth (deg) 
+		- [2]: Elevation (deg) 
+		- [3]: Range Dot (km/s) 
+		- [4]: Azimuth Dot (deg/s) 
+		- [5]: Elevation Dot (deg/s) 
+	
+	:return:
+		- **senPos** (*float[3]*) - Sensor position in ECI (km). (double[3])
+		- **satPos** (*float[3]*) - Satellite position in ECI (km). (double[3])
+		- **satVel** (*float[3]*) - Satellite velocity in ECI (km/s). (double[3])
 	"""
 	theta = c.c_double(theta)
 	astroLat = c.c_double(astroLat)
@@ -909,15 +929,16 @@ def RAEToECI(theta, astroLat, xa_rae):
 C_ASTRODLL.RotDateToJ2K.argtypes = [c.c_int32] * 2 + [c.c_double] + [settings.double3] * 4
 def RotDateToJ2K(spectr, nutationTerms, ds50TAI, posDate, velDate):
 	"""
-	python:function::RotDateToJ2K
 	Rotates position and velocity vectors from coordinates of date to J2000. 
+	
 	:param float spectr: Specifies whether to run in SPECTR compatibility mode. A value of 1 means Yes.
 	:param float nutationTerms: Nutation terms (4-106, 4:less accurate, 106:most acurate).
 	:param float ds50TAI: Time in days since 1950, TAI for which the coordinates of position and velocity vectors are currently expressed.
 	:param float[3] posDate: The position vector from coordinates of Date. (double[3])
 	:param float[3] velDate: The velocity vector from coordinates of Date. (double[3])
-	:return float[3] posJ2K: The resulting position vector in coordinates of J2000. (double[3])
-	:return float[3] velJ2K: The resulting velocity vector in coordinates of J2000. (double[3])
+	:return:
+		- **posJ2K** (*float[3]*) - The resulting position vector in coordinates of J2000. (double[3])
+		- **velJ2K** (*float[3]*) - The resulting velocity vector in coordinates of J2000. (double[3])
 	"""
 	spectr = c.c_int32(spectr)
 	nutationTerms = c.c_int32(nutationTerms)
@@ -935,15 +956,16 @@ def RotDateToJ2K(spectr, nutationTerms, ds50TAI, posDate, velDate):
 C_ASTRODLL.RotJ2KToDate.argtypes = [c.c_int32] * 2 + [c.c_double] + [settings.double3] * 4
 def RotJ2KToDate(spectr, nutationTerms, ds50TAI, posDate, velDate):
 	"""
-	python:function::RotJ2KToDate
 	Rotates position and velocity vectors from coordinates of date to J2000. 
+	
 	:param float spectr: Specifies whether to run in SPECTR compatibility mode. A value of 1 means Yes.
 	:param float nutationTerms: Nutation terms (4-106, 4:less accurate, 106:most acurate).
 	:param float ds50TAI: Time in days since 1950, TAI for which the coordinates of position and velocity vectors are currently expressed.
 	:param float[3] posJ2K: The position vector from J2000. (double[3])
 	:param float[3] velJ2K: The velocity vector from J2000. (double[3])
-	:return float[3] posDate: The resulting position vector in coordinates of date, ds50TAI. (double[3])
-	:return float[3] velDate: The resulting velocity vector in coordinates of date, ds50TAI. (double[3])
+	:return:
+		- **posDate** (*float[3]*) - The resulting position vector in coordinates of date, ds50TAI. (double[3])
+		- **velDate** (*float[3]*) - The resulting velocity vector in coordinates of date, ds50TAI. (double[3])
 	"""
 	spectr = c.c_int32(spectr)
 	nutationTerms = c.c_int32(nutationTerms)
@@ -962,10 +984,11 @@ C_ASTRODLL.SolveKepEqtn.restype = c.c_double
 C_ASTRODLL.SolveKepEqtn.argtypes = [settings.double6]
 def SolveKepEqtn(metricKep):
 	"""
-	python:function::SolveKepEqtn
 	Solves Kepler's equation (M = E - e sin(E)) for the eccentric anomaly, E, by iteration. 
+	
 	:param float[6] metricKep: The set of Keplerian elements for which to solve the equation. (double[6])
-	:return float E: The eccentric anomaly "E"
+	:return:
+		**E** (*float*) - The eccentric anomaly "E"
 	"""
 	metricKep = settings.list_to_array(metricKep)
 	E = C_ASTRODLL.SolveKepEqtn(metricKep)
@@ -975,11 +998,12 @@ def SolveKepEqtn(metricKep):
 C_ASTRODLL.XYZToLLH.argtypes = [c.c_double] + [settings.double3] * 2
 def XYZToLLH(thetaG, metricPos):
 	"""
-	python:function::XYZToLLH
 	Converts an ECI position vector XYZ to geodetic latitude, longitude, and height. 
+	
 	:param float thetaG: ThetaG - Greenwich mean sidereal time (rad).
 	:param float[3] metricPos: The ECI (TEME of Date) position vector (km) to be converted. (double[3])
-	:return float[3] metricLLH: The resulting geodetic north latitude (degree), east longitude(degree), and height (km). (double[3])
+	:return:
+		**metricLLH** (*float[3]*) - The resulting geodetic north latitude (degree), east longitude(degree), and height (km). (double[3])
 	"""
 	thetaG = c.c_double(thetaG)
 	metricPos = settings.list_to_array(metricPos)
