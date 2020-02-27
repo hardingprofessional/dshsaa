@@ -15,6 +15,9 @@ C_MAINDLL = c.CDLL(settings.LIB_MAIN_NAME)
 def CloseLogFile():
 	"""
 	Closes the log file last opened by this process.
+	
+	:return:
+		**None** (*None*) - This is a true void function. The only way to verify that the function worked is to check whether the log file is in use by this process.
 	"""
 	C_MAINDLL.CloseLogFile()
 	# function is void, no return statement
@@ -25,7 +28,8 @@ def DllMainGetInfo():
 	"""
 	Returns information about DllMain DLL
 
-	:return str info: a regular python string describing DllMain DLL
+	:return:
+		**info** (*str*) - a regular python string describing DllMain DLL
 	"""
 	info = c.c_char_p(bytes(512))
 	C_MAINDLL.DllMainGetInfo(info)
@@ -38,7 +42,8 @@ def DllMainInit():
 	"""
 	Inits a DLLMain wrapper object in memory
 
-	:returns settings.stay_int64 maindll_handle: A 64 bit specialized integer used to help the other DLLs find the running instance of maindll
+	:return:
+		**maindll_handle** (*settings.stay_int64*) - A 64 bit integer (a "pointer" or "reference") used to help the other DLLs find the running instance of maindll
 	"""
 	maindll_handle = C_MAINDLL.DllMainInit()
 	return maindll_handle
@@ -50,6 +55,9 @@ def GetInitDllNames():
 	Returns a list of names of the Standardized Astrodynamic Algorithms DLLs that were initialized successfully. 
 
 	This function provides a quick way to check whether all of the prerequisite DLLs have been loaded and initialized correctly. Improper initialization of the Standardized Astrodynamic Algorithms DLLs is one of the most common causes of program crashes. 
+	
+	:return:
+		**initdllnames** (*str*) - a string representation of the DLLs that were successfully initialized. (byte[512])
 	"""
 	initdllnames = c.c_char_p(bytes(512))
 	C_MAINDLL.GetInitDllNames(initdllnames)
@@ -66,6 +74,9 @@ def GetLastErrMsg():
 	This function works with or without an opened log file. 
 
 	If you call this function before you have called DllMainInit(), the function will return an invalid string. This could result in undefined behavior. 
+
+	:return:
+		**lastErrMsg** (*str*) - a string representation of the last error message (byte[128])
 	"""
 	lastErrMsg = c.c_char_p(bytes(128))
 	C_MAINDLL.GetLastErrMsg(lastErrMsg)
@@ -83,6 +94,9 @@ def GetLastInfoMsg():
 	This function works with or without an opened log file. 
 
 	If you call this function before you have called DllMainInit(), the function will return an invalid string. This could result in undefined behavior. 
+
+	:return:
+		**lastInfoMsg** (*str*) - A string representation of the last logged informational message. (byte[128])
 	"""
 	lastInfoMsg = c.c_char_p(bytes(128))
 	C_MAINDLL.GetLastInfoMsg(lastInfoMsg)
@@ -99,9 +113,8 @@ def LogMessage(message):
 	
 	The message is limited to 128 characters. If the message is longer than this, it will be truncated. 
 
-	:return: retcode - 0 on success
-	:rtype: int
-
+	:return:
+		**None** (*None*) - This is a void function
 	"""
 	message = message.encode('ascii')
 	message = settings.enforce_limit(message, 128)
@@ -117,8 +130,8 @@ def OpenLogFile(logfile):
 	
 	:param str logfile: name of the file to write to
 	
-	:returns: (retcode) the return status of the linked function, 0 on success, <0 on various failures
-	:rtype: ctypes.c_int
+	:return:
+		**retcode** (*int*) - the return status of the linked function, 0 on success, <0 on various failures
 	"""
 	logfile = logfile.encode('ascii')
 	logfile = settings.enforce_limit(logfile, 128)
