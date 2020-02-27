@@ -20,23 +20,56 @@ LIB_SGP4_NAME = None
 
 ## Useful ctypes data objects
 double1 = c.c_double * 1
+"""A ctypes array double[1]"""
 double3 = c.c_double * 3
+"""A ctypes array double[3]"""
 double6 = c.c_double * 6
+"""A ctypes array double[6]"""
 double10 = c.c_double * 10
+"""A ctypes array double[10]"""
 double64 = c.c_double * 64
+"""A ctypes array double[64]"""
 double128 = c.c_double * 128
+"""A ctypes array double[128]"""
 double512 = c.c_double * 512
+"""A ctypes array double[512]"""
 double6x6 = (c.c_double * 6) * 6
+"""A 2D ctypes array double[6][6]"""
+
 class stay_int64(c.c_int64):
 	"""
-	ctypes primitives are automatically converted into python primitives unless subclassed. In order to consistently type check int64 numerical types (used as memory handles), I subclassed c_int64 but changed no properties or methods
+	ctypes primitives are automatically converted into python primitives unless subclassed. In order to consistently type check int64 numerical types (used as memory handles), c_int64 was subclassed but no changes were made to properties or methods
+
+	This class is used as instructions for ctypes.DLLNAME.restype and ctypes.DLLNAME.argtypes[] declaration. It is not intended to create new 64 bit integers.
+
+	You may verify that an object is a memory handle, you may use ``isinstance``. For example:
+
+	.. code-block:: python
+
+		if not isinstance(satKey, settings.stay_int64):
+			raise TypeError("satKey is type %s, should be type %s" % (type(satKey), settings.stay_int64))
+
 	"""
 
 ## Useful byte sequences
 string_term = (0).to_bytes(1, byteorder='little') #terminates strings
+""" 
+In many early compiled languages, such as those the SAA DLLs were built on, strings are created by building a null terminated character array. Those arrays were encoded roughly like this:
+
+``['s','t','r','i','n','g','\\0']``
+
+This ``string_term`` variable contains the ``\\0`` part of that structure. Some functions in ``settings`` use the ``terminator=`` optional argument. It is recommended that ``terminator=settings.string_term``.
+"""
 
 ## Useful ctypes conversion patterns
 def byte_to_str(byte_obj):
+	"""
+	Converts a ctypes byte output into a python string. This is usually used when the ``*.restype`` is set to ``ctypes.c_char_p`` and a string is returned from a binary DLL.
+
+	:param ctypes.c_char_p byte_obj: The byte object which needs to be encoded into a python string
+	:return:
+		**byte_obj** (*str*) - the byte object re-expressed as an *ASCII* string. NOT UTF-8! The AFSPC DLLs exclusively use ASCII and we need to respect that.
+	"""
 	byte_obj = byte_obj.value
 	byte_obj = byte_obj.decode('ascii')
 	byte_obj = byte_obj.rstrip()
@@ -44,12 +77,21 @@ def byte_to_str(byte_obj):
 	
 def str_to_byte(s, fixed_width=None, limit=None, terminator=None):
 	"""
-	python:function::str_to_byte
-	converts a python string into a DLL compatible bytes object
-	:param str s: the string that needs to be converted
-	:param int fixed_width: if provided, specifies the length of the byte array, padding with zeroes if necessary
-	:param int limit: if provided, specifies the limit to the length of the byte array, throwing an error if exceeded
-	:param bytes terminator: if provided, terminates the byte object with the provided bytes object
+	Converts a python string into a ctypes.c_char_p() compatible bytes object.
+
+	:param str s: The string that needs to be converted.
+
+	:param fixed_width: If provided, specifies the length of the byte array, padding with zeroes if necessary.
+	:type fixed_width: int, optional
+	
+	:param limit: The maximum number of characters allowed. An error is thrown if that limit is exceeded. This is often used if the DLL has an express limit, like 512 bytes.
+	:type limit: int, optional
+
+	:param terminator: If provided, terminates the byte object with the provided bytes object. It is recommended to use ``settings.string_term``, which is known to work well with the DLLs.
+	:type terminator: bytes, optional
+
+	:return:
+		**b** (*bytes*) - A python bytes representation of the ctypes string. Call ``settings.str_to_c_char_p`` to convert directly ctypes compatible string.
 	"""
 	# s for "string" (not technically a reserved keyword, but too popular to risk using)
 	if fixed_width and limit and fixed_width > limit:
@@ -68,21 +110,53 @@ def str_to_byte(s, fixed_width=None, limit=None, terminator=None):
 	return b
 
 def str_to_c_char_p(s, fixed_width=None, limit=None, terminator=None):
+	"""
+	Converts a python string to a ctypes.c_char_p type of object.
+
+	:param str s: The string that needs to be converted.
+
+	:param fixed_width: If provided, specifies the length of the byte array, padding with zeroes if necessary.
+	:type fixed_width: int, optional
+	
+	:param limit: The maximum number of characters allowed. An error is thrown if that limit is exceeded. This is often used if the DLL has an express limit, like 512 bytes.
+	:type limit: int, optional
+
+	:param terminator: If provided, terminates the byte object with the provided bytes object. It is recommended to use ``settings.string_term``, which is known to work well with the DLLs.
+	:type terminator: bytes, optional
+
+	:return:
+		**m** (*ctypes.c_char_p*) - A DLL compatible string. This is acceptable to input as a paramter to a DLL method call when the ``*.argtypes[]`` element is set to ``ctypes.c_char_p``.
+	"""
 	b = str_to_byte(s, fixed_width=fixed_width, limit=limit, terminator=terminator)
 	m = c.c_char_p(b)
 	return m
 
 def array_to_list(vector_obj):
-	# converts c.c_int[] and c.c_double[] arrays into lists
-	# does NOT work for any other data types!
+	"""
+	Converts c.c_int[] and c.c_double[] arrays into python lists of ints or floats.
+	This does NOT work for any other data types!
+
+	:param vector_obj: An array of integers or doubles managed by the ctypes library.
+	:type vector_obj: ctypes.c_int[?], ctypes.c_double[?]
+
+	:return:
+		**new_list** (*int[?] or float[?]*) - A list of ints or floats from the ctypes array.
+	"""
 	new_list = []
 	for item in vector_obj:
 		new_list.append(item)
 	return new_list
 	
 def array2d_to_list(ar):
-	# converts a 2d ctypes array into a list of equal shape
-	# only works for double and integer ctypes!
+	"""
+	Converts a 2d ctypes array into a list of equal shape. Only works for double and integer ctypes!
+
+	:param ar: A 2d ctypes array of doubles or integers.
+	:type ar: ctypes.c_int[?][?], ctypes.c_double[?][?]
+
+	:return:
+		**li** (*int[?][?] or float[?][?]*) - A list of ints or floats matching the input ``ar``
+	"""
 	ar_len_d1 = len(ar)
 	ar_len_d2 = len(ar[0])
 	for i in range(ar_len_d1):
