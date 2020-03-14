@@ -1,2 +1,3 @@
 #! /bin/bash
+export LD_LIBRARY_PATH=$(pwd)'/dshsaa/libdll'
 python3 -m unittest discover -v test

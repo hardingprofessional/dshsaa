@@ -204,8 +204,7 @@ class TestTimeDLL(unittest.TestCase):
 	def test_TimeConvFrTo(self):
 		funcIdx = 0
 		frArr = [0.0]
-		toArr = [1.0]
-		timedll.TimeConvFrTo(funcIdx, frArr, toArr)
+		toArr = timedll.TimeConvFrTo(funcIdx, frArr)
 		#TODO: when AFSPC tells us what this does, come up with a better test
 	
 	## TimeFuncGetInfo

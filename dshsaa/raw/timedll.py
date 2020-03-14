@@ -269,10 +269,11 @@ C_TIMEDLL.ThetaGrnwchFK4.restype = c.c_double
 C_TIMEDLL.ThetaGrnwchFK4.argtypes = [c.c_double]
 def ThetaGrnwchFK4(ds50UT1):
 	"""
-	python:function:: ThetaGrnwchFK4
 	Computes right ascension of Greenwich at the specified time in ds50UT1 using the Fourth Fundamental Catalogue (FK4). There is no need to load or initialize EnvConst.dll when computing right ascension using this function. 
+	
 	:param float ds50UT1: Input days since 1950, UT1.
-	:return float thetaGrnwhchFK4: Right ascension of Greenwich in radians at the specified time using FK4.
+	:return:
+		**thetaGrnwhchFK4** (*float*) - Right ascension of Greenwich in radians at the specified time using FK4.
 	"""
 	ds50UT1 = c.c_double(ds50UT1)
 	thetaGrnwchcFK4 = C_TIMEDLL.ThetaGrnwchFK4(ds50UT1)
@@ -283,10 +284,11 @@ C_TIMEDLL.ThetaGrnwchFK5.restype = c.c_double
 C_TIMEDLL.ThetaGrnwchFK5.argtypes = [c.c_double]
 def ThetaGrnwchFK5(ds50UT1):
 	"""
-	python:function:: ThetaGrnwchFK5
 	Computes right ascension of Greenwich at the specified time in ds50UT1 using the Fifth Fundamental Catalogue (FK5). There is no need to load or initialize EnvConst.dll when computing right ascension using this function. 
+
 	:param float ds50UT1: Input days since 1950, UT1.
-	:return double thetaGrnwhchFK5: Right ascension of Greenwich in radians at the specified time using FK5.
+	:return:
+		**thetaGrnwhchFK5** (*float*) - Right ascension of Greenwich in radians at the specified time using FK5.
 	"""
 	ds50UT1 = c.c_double(ds50UT1)
 	thetaGrnwchcFK5 = C_TIMEDLL.ThetaGrnwchFK5(ds50UT1)
@@ -297,13 +299,15 @@ C_TIMEDLL.TimeComps1ToUTC.restype = c.c_double
 C_TIMEDLL.TimeComps1ToUTC.argtypes = [c.c_int, c.c_int, c.c_int, c.c_int, c.c_double]
 def TimeComps1ToUTC(year, dayOfYear, hh, mm, sss):
 	"""
-	python:function:: TimeComps1ToUTC
 	Converts a set of time components (year, day of year, hour, minute, second) to a time in ds50UTC. Partial days may be returned. See "timedll.TimeComps2ToUTC" for a function which takes a month and day instead of a day of year value. 
+
 	:param int year: The year time component. Either a four digit or two digit year is accepted.
 	:param int dayOfYear: The day of the year
 	:param int hh: The hour of the day
 	:param int mm: The minute of the day
 	:param float sss:  The second, including decimal seconds if desired
+	:return:
+		**ds50UTC** (*float*) - The number of Days since 1950, UTC. Partial days may be returned.
 	"""
 	year = c.c_int(year)
 	dayOfYear = c.c_int(dayOfYear)
@@ -318,14 +322,16 @@ C_TIMEDLL.TimeComps2ToUTC.restype = c.c_double
 C_TIMEDLL.TimeComps2ToUTC.argtypes = [c.c_int, c.c_int, c.c_int, c.c_int, c.c_int, c.c_double]
 def TimeComps2ToUTC(year, mon, dayOfMonth, hh, mm, sss):
 	"""
-	python:function:: TimeComps2ToUTC
 	Converts a set of time components (year, month, day of month, hour, minute, second) to a time in ds50UTC. Partial days may be returned. See "TimeComps1ToUTC" for a function which takes a day of year value instead of a month and day. 
+
 	:param int year: The year time component. Either a four digit or two digit year is accepted.
 	:param int mon: the month as a number 1-12
 	:param int dayOfMonth: The day of the month
 	:param int hh: The hour of the day
 	:param int mm: The minute of the day
 	:param float sss:  The second, including decimal seconds if desired
+	:return:
+		**ds50UTC** (*float*) - The number of Days since 1950, UTC. Partial days may be returned.
 	"""
 	year = c.c_int(year)
 	mon = c.c_int(mon)
@@ -338,26 +344,27 @@ def TimeComps2ToUTC(year, mon, dayOfMonth, hh, mm, sss):
 
 ## TimeConvFrTo
 unknown_type = c.c_double * 512
-#C_TIMEDLL.TimeConvFrTo.argtypes = [c.c_int, c.c_double, unknown_type]
 C_TIMEDLL.TimeConvFrTo.argtypes = [c.c_int, unknown_type, unknown_type]
-def TimeConvFrTo(funcIdx, frArr, toArr):
+def TimeConvFrTo(funcIdx, frArr):
 	"""
-	python:function:: TimeConvFrTo
 	This function is intended for future use. No information is currently available. 
 	Developer note: because the interface has documented types, we "did our best"
 	The documentation incorrectly identifies the frArr data type to be a double instead of a double[]. No big deal.
 	It is unclear what the maximum array length is permitted to be. 
 	It is not memory safe to use this function until we constrain the index lengths.
+
 	:param int funcIdx: ?
-	:param int frArr: ?
-	:param int toArr: ?
+	:param float[] frArr: ?
+	:return:
+		**toArr** (*float[]*): ?
 	"""
 	funcIdx = c.c_int(funcIdx)
 	frArr_compatible = unknown_type()
 	toArr_compatible = unknown_type()
 	frArr_compatible = settings.feed_list_into_array(frArr, frArr_compatible)
-	toArr_compatible = settings.feed_list_into_array(toArr, toArr_compatible)
 	C_TIMEDLL.TimeConvFrTo(funcIdx, frArr_compatible, toArr_compatible)
+	toArr = settings.array_to_list(toArr_compatible)
+	return toArr
 
 
 ## TimeFuncGetInfo
