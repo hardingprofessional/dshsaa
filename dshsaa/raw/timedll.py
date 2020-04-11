@@ -356,7 +356,7 @@ def TimeConvFrTo(funcIdx, frArr):
 	:param int funcIdx: ?
 	:param float[] frArr: ?
 	:return:
-		**toArr** (*float[]*): ?
+		**toArr** (*float[]*) - ?
 	"""
 	funcIdx = c.c_int(funcIdx)
 	frArr_compatible = unknown_type()
@@ -371,9 +371,10 @@ def TimeConvFrTo(funcIdx, frArr):
 C_TIMEDLL.TimeFuncGetInfo.argtypes = [c.c_char_p]
 def TimeFuncGetInfo():
 	"""
-	python:function:: TimeFuncGetInfo
 	Returns the information about the TimeFunc DLL. 
-	:returns str infoStr: up to 128 characters describing TimeFunc DLL
+	
+	:returns:
+		**infoStr** (*str*) - up to 128 characters describing TimeFunc DLL
 	"""
 	infoStr = c.c_char_p(bytes(128))
 	C_TIMEDLL.TimeFuncGetInfo(infoStr)
@@ -385,10 +386,11 @@ C_TIMEDLL.TimeFuncInit.restype = c.c_int64
 C_TIMEDLL.TimeFuncInit.argtypes = [c.c_int64]
 def TimeFuncInit(maindll_handle):
 	"""
-	python:function:: TimeFuncInit
 	Initializes a TimeFuncDLL object attached to the MainDLL object specified by maindll_handle pointer
+	
 	:param c.c_int64 maindll_handle: an integer pointer to the location of maindll in memory, returned by maindll.DllMainInit()
-	:return int timedll_retcode: 0 on success, !0 on failure
+	:return:
+		**timedll_retcode** (*int*) - 0 on success, !0 on failure
 	"""
 	timedll_retcode = C_TIMEDLL.TimeFuncInit(maindll_handle)
 	return timedll_retcode
@@ -401,7 +403,8 @@ def TimeFuncLoadFile(tconfile):
 	Loads timing constants data and prediction control (6P-card) from an input file. Time constants can be included directly in the main input file or they can be read from a separate file identified with "TIMFIL=[pathname/filename]". The input file is read in two passes. The function first looks for "TIMFIL=" lines, then it looks for timing constant data which was included directly. The result of this is that data entered using both methods will be processed, but the "TIMFIL=" data will be processed first. The time constants are also read in from each VCM. However, only the most recent time constants among VCMs are stored in the memory, see VCM.dll documentation.
 	
 	:param str tconfile: the location of the timing constants and prediction control file
-	:return int retcode: 0 if input file loaded successfully, !0 otherwise
+	:return:
+		**retcode** (*int*) - 0 if input file loaded successfully, !0 otherwise
 	"""
 	tconfile = tconfile.encode('ascii')
 	tconfile = settings.enforce_limit(tconfile, 512)
@@ -415,10 +418,11 @@ C_TIMEDLL.UTCToDTG15.restype = c.c_char_p
 C_TIMEDLL.UTCToDTG15.argtypes = [c.c_double, c.c_char_p]
 def UTCToDTG15(ds50UTC):
 	"""
-	python:function:: UTCToDTG15
 	Converts a ds50UTC time value (numeric double representing time since some epoch, need to locate citable docs) to a string of the form "YYDDDHHMMSS.SSS"
+	
 	:param int ds50UTC: time since epoch
-	:return str dtg15: string representation of time
+	:return:
+		**dtg15** (*str*) - string representation of time
 	"""
 	if ds50UTC < 2192.0:
 		raise Exception("ds50UTC must be greater than 2192.0, which cooresponds to Jan 1 1956.")
@@ -433,10 +437,11 @@ C_TIMEDLL.UTCToDTG17.restype = c.c_char_p
 C_TIMEDLL.UTCToDTG17.argtypes = [c.c_double, c.c_char_p]
 def UTCToDTG17(ds50UTC):
 	"""
-	python:function:: UTCToDTG17
 	Converts a ds50UTC time value (numeric double representing time since some epoch, need to locate citable docs) to a string of the form "YYYY/DDD.DDDDDDDD"
+	
 	:param int ds50UTC: time since epoch
-	:return str dtg17: string representation of time
+	:return:
+		**dtg17** (*str*) - string representation of time
 	"""
 	if ds50UTC < 2192.0:
 		raise Exception("ds50UTC must be greater than 2192.0, which cooresponds to Jan 1 1956.")
@@ -452,10 +457,12 @@ C_TIMEDLL.UTCToDTG19.restype = c.c_char_p
 C_TIMEDLL.UTCToDTG19.argtypes = [c.c_double, c.c_char_p]
 def UTCToDTG19(ds50UTC):
 	"""
-	python:function:: UTCToDTG19
 	Converts a ds50UTC time value (numeric double representing time since some epoch, need to locate citable docs) to a string of the form "YYYYMonDDHHMMSS.SSS"
+	**THIS FUNCTION IS CURRENTLY DISABLED DUE TO AN UNKNOWN COREDUMP ISSUE**
+	
 	:param int ds50UTC: time since epoch
-	:return str dtg19: string representation of time
+	:return:
+		**dtg19** (*str*) - string representation of time
 	"""
 	if ds50UTC < 2192.0:
 		raise Exception("ds50UTC must be greater than 2192.0, which cooresponds to Jan 1 1956.")
@@ -472,10 +479,11 @@ C_TIMEDLL.UTCToDTG20.restype = c.c_char_p
 C_TIMEDLL.UTCToDTG20.argtypes = [c.c_double, c.c_char_p]
 def UTCToDTG20(ds50UTC):
 	"""
-	python:function:: UTCToDTG20
 	Converts a ds50UTC time value (numeric double representing time since some epoch, need to locate citable docs) to a string of the form "YYYY/DDD HHMM SS.SSS"
+
 	:param int ds50UTC: time since epoch
-	:return str dtg20: string representation of time
+	:return:
+		**dtg20** (*str*) - string representation of time
 	"""
 	if ds50UTC < 2192.0:
 		raise Exception("ds50UTC must be greater than 2192.0, which cooresponds to Jan 1 1956.")
@@ -489,10 +497,11 @@ C_TIMEDLL.UTCToET.restype = c.c_double
 C_TIMEDLL.UTCToET.argtypes = [c.c_double]
 def UTCToET(ds50UTC):
 	"""
-	python:function::UTCToET
 	Converts a time in ds50UTC to a time in ds50ET using timing constants records in memory. If no timing constants records were loaded, ds50UTC and ds50UT1 are the same. 
+
 	:param float ds50UTC: Days since 1950, UTC to be converted.
-	:return double ds50ET: The number of days since 1950, ET. Partial days may be returned.
+	:return:
+		**ds50ET** (*float*) - The number of days since 1950, ET. Partial days may be returned.
 	"""
 	ds50UTC = c.c_double(ds50UTC)
 	ds50ET = C_TIMEDLL.UTCToET(ds50UTC)
@@ -503,10 +512,11 @@ C_TIMEDLL.UTCToTAI.restype = c.c_double
 C_TIMEDLL.UTCToTAI.argtypes = [c.c_double]
 def UTCToTAI(ds50UTC):
 	"""
-	python:function::UTCToTAI
 	Converts a time in ds50UTC to a time in ds50TAI using timing constants records in memory. If no timing constants records were loaded, ds50UTC and ds50TAI are the same. 
+
 	:param float ds50UTC: Days since 1950, UTC to be converted.
-	:return double ds50TAI: The number of days since 1950, TAI. Partial days may be returned.
+	:return:
+		**ds50TAI** (*double*) - The number of days since 1950, TAI. Partial days may be returned.
 	"""
 	ds50UTC = c.c_double(ds50UTC)
 	ds50TAI = C_TIMEDLL.UTCToTAI(ds50UTC)
@@ -516,14 +526,15 @@ def UTCToTAI(ds50UTC):
 C_TIMEDLL.UTCToTConRec.argtypes = [c.c_double] + [c.POINTER(c.c_double)] * 5
 def UTCToTConRec(ds50UTC):
 	"""
-	python:function::UTCToTConRec
 	Retrieves the timing constants record, if exists, at the requested input time in ds50UTC. If the requested record is not found, 0's will be returned for all of the constants. You can use this fact to determine whether the record was found or not. Simply check the taiMinusUTC value after calling this function. Since that value can never be 0 for a valid record, if it is 0 the record was not found. 
+
 	:param float ds50UTC: Input days since 1950, UTC
-	:return float taiMinusUTC: Returned TAI minus UTC offset at requested time (seconds)
-	:return float ut1MinusUTC: Returned UT1 minus UTC offset at requested time (seconds)
-	:return float ut1Rate: Returned UT1 rate of change versus UTC at Reference time (msec/day)
-	:return float polarX: Returned interpolated polar wander (X direction) at requested time (arc-seconds)
-	:return float polarY: Returned interpolated polar wander (Y direction) at requested time (arc-seconds)
+	:return:
+		* **taiMinusUTC** (*float*) - Returned TAI minus UTC offset at requested time (seconds)
+		* **ut1MinusUTC** (*float*) - Returned UT1 minus UTC offset at requested time (seconds)
+		* **ut1Rate** (*float*) - Returned UT1 rate of change versus UTC at Reference time (msec/day)
+		* **polarX** (*float*) - Returned interpolated polar wander (X direction) at requested time (arc-seconds)
+		* **polarY** (*float*) - Returned interpolated polar wander (Y direction) at requested time (arc-seconds)
 	"""
 	taiMinusUTC = c.c_double()
 	ut1MinusUTC = c.c_double()
@@ -542,7 +553,15 @@ def UTCToTConRec(ds50UTC):
 C_TIMEDLL.UTCToTimeComps1.argtypes = [c.c_double] + [c.POINTER(c.c_int)] * 4 + [c.POINTER(c.c_double)]
 def UTCToTimeComps1(ds50UTC):
 	"""
-	python:function::UTCToTimeComps1
+	Converts a time in ds50UTC to its individual components (year, day of year, hour, minute, second). 	
+	
+	:param float ds50UTC: Days since 1950, UTC to be converted.
+	:return:
+		* **year** (*int*) - A reference to a variable in which to store the 4-digit year.
+		* **dayOfYear** (*int*) - The day of the year referred to by ds50UTC.
+		* **hh** (*int*) - The hour of the day referred to by ds50UTC.
+		* **mm** (*int*) - The minute of the hour referred to by ds50UTC.
+		* **sss** (*double*) - The second of the minute referred to by ds50UTC, with decimal parts if necessary.
 	"""
 	ds50UTC = c.c_double(ds50UTC)
 	year = c.c_int()
@@ -562,7 +581,16 @@ def UTCToTimeComps1(ds50UTC):
 C_TIMEDLL.UTCToTimeComps2.argtypes = [c.c_double] + [c.POINTER(c.c_int)] * 5 + [c.POINTER(c.c_double)]
 def UTCToTimeComps2(ds50UTC):
 	"""
-	python:function::UTCToTimeCOmps2
+	Converts a time in ds50UTC to its individual components (year, month, day of month, hour, minute, second). 
+	
+	:param float ds50UTC: Days since 1950, UTC to be converted.
+	:return:
+		* **year** (*int*) - A reference to a variable in which to store the 4-digit year.
+		* **month** (*int*) - The month of the year referred to by ds50UTC.
+		* **dayOfMonth** (*int*) - The day of the month referred to by ds50UTC.
+		* **hh** (*int*) - The hour of the day referred to by ds50UTC.
+		* **mm** (*int*) - The minute of the hour referred to by ds50UTC.
+		* **sss** (*float*) - The second of the minute referred to by ds50UTC, with decimal parts if necessary.
 	"""
 	ds50UTC = c.c_double(ds50UTC)
 	year = c.c_int()
@@ -585,7 +613,11 @@ C_TIMEDLL.UTCToUT1.restype = c.c_double
 C_TIMEDLL.UTCToUT1.argtypes = [c.c_double]
 def UTCToUT1(ds50UTC):
 	"""
-	python:function::UTCToUT1
+	Converts a time in ds50UTC to a time in ds50UT1 using timing constants records in memory. If no timing constants records were loaded, ds50UTC and ds50UT1 are the same. 
+	
+	:param float ds50UTC: Days since 1950, UTC to be converted.
+	:return:
+		**ds50UT1** (*float*) - The number of days since 1950, UT1. Partial days may be returned.
 	"""
 	ds50UTC = c.c_double(ds50UTC)
 	ds50UT1 = C_TIMEDLL.UTCToUT1(ds50UTC)
@@ -595,7 +627,12 @@ def UTCToUT1(ds50UTC):
 C_TIMEDLL.UTCToYrDays.argtypes = [c.c_double, c.POINTER(c.c_int), c.POINTER(c.c_double)]
 def UTCToYrDays(ds50UTC):
 	"""
-	python:function::UTCToYrDays
+	Converts a time in ds50UTC to a year and day of year. 
+	
+	:param float ds50UTC: Days since 1950, UTC to be converted.
+	:return:
+		**year** (*int*) - The four digit year referred to by ds50UTC.
+		**dayOfYear** (*float*) - The day of the year referred to by ds50UTC. Decimal parts are used if partial days must be expressed.
 	"""
 	ds50UTC = c.c_double(ds50UTC)
 	year = c.c_int()
@@ -610,7 +647,12 @@ C_TIMEDLL.YrDaysToUTC.restype = c.c_double
 C_TIMEDLL.YrDaysToUTC.argtypes = [c.c_int, c.c_double]
 def YrDaysToUTC(year, dayOfYear):
 	"""
-	python:function::YrDaysToUTC
+	Converts a year and a number of days to a time in ds50UTC.
+	
+	:param int year: Two or four digit years are accepted.
+	:param float dayOfYear: The day of year. Partial days can be specified.
+	:return:
+		**ds50UTC** (*float*) - The number of days since 1950, UTC. Partial days may be returned.
 	"""
 	year = c.c_int(year)
 	dayOfYear = c.c_double(dayOfYear)

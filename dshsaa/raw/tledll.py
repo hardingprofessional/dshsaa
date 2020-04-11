@@ -10,11 +10,12 @@ C_TLEDLL.TleAddSatFrArray.restype = settings.stay_int64
 C_TLEDLL.TleAddSatFrArray.argtypes = [settings.double64, c.c_char_p]
 def TleAddSatFrArray(xa_tle, xs_tle):
 	"""
-	python:function::TleAddSatFrArray
 	Adds a TLE (satellite), using its data stored in the input parameters.
+	
 	:param float[64] xa_tle: Array containing TLE's numerical fields, see XA_TLE_? for array arrangement (double[64])
 	:param str xs_tle: Input string that contains all TLE's text fields, see XS_TLE_? for column arrangement (string[512])
-	:return settings.stay_int64 satKey: The satKey of the newly added TLE on success, a negative value on error.
+	:return:
+		**satKey** (*settings.stay_int64*) - The satKey of the newly added TLE on success, a negative value on error.
 	"""
 	xa_tle = settings.list_to_array(xa_tle)
 	xs_tle = settings.str_to_c_char_p(xs_tle, fixed_width=512)
@@ -26,11 +27,12 @@ C_TLEDLL.TleAddSatFrArrayML.restype = settings.stay_int64
 C_TLEDLL.TleAddSatFrArrayML.argtypes = [settings.double64, c.c_char_p]
 def TleAddSatFrArrayML(xa_tle, xs_tle):
 	"""
-	python:function::TleAddSatFrArrayML
-	This function is similar to TleAddSatFrArray but designed to be used in Matlab. 
+	This function is similar to TleAddSatFrArray but designed to be used in Matlab.
+	
 	:param float[64] xa_tle: Array containing TLE's numerical fields, see XA_TLE_? for array arrangement (double[64])
 	:param str xs_tle: Input string that contains all TLE's text fields, see XS_TLE_? for column arrangement (string[512])
-	:return settings.stay_int64 satKey: The satKey of the newly added TLE on success, a negative value on error.
+	:return:
+		**satKey** (*settings.stay_int64*) - The satKey of the newly added TLE on success, a negative value on error.
 	"""
 	xa_tle = settings.list_to_array(xa_tle)
 	xs_tle = settings.str_to_c_char_p(xs_tle, fixed_width=512)
@@ -56,8 +58,8 @@ C_TLEDLL.TleAddSatFrFieldsGP.argtypes = [c.c_int32,
 										 c.c_int32]
 def TleAddSatFrFieldsGP(satNum, secClass, satName, epochYr, epochDays, bstar, ephType, elsetNum, incli, node, eccen, omega, mnAnomaly, mnMotion, revNum):
 	"""
-	python:function::TleAddSatFrFieldsGP
 	Adds a GP TLE using its individually provided field values.
+	
 	:param int satNum: satellite number
 	:param str secClass: security classification
 	:param str satName: Satellite international designator (string[8])
@@ -73,7 +75,8 @@ def TleAddSatFrFieldsGP(satNum, secClass, satName, epochYr, epochDays, bstar, ep
 	:param float mnAnomaly: mean anomaly (degrees)
 	:param float mnMotion: mean motion (rev/day) (ephType = 0: Kozai mean motion, ephType = 2: Brouwer mean motion)
 	:param int revNum: revolution number at epoch
-	:return satKey: The satKey of the newly added TLE on success, a negative value on error.
+	:return:
+		**satKey** (*settings.stay_int64*) - The satKey of the newly added TLE on success, a negative value on error.
 	"""
 	satNum    = c.c_int32(satNum)
 	secClass  = c.c_char(secClass.encode('ascii', 'strict'))
@@ -114,8 +117,8 @@ C_TLEDLL.TleAddSatFrFieldsGP2.argtypes = [c.c_int32,
 										 c.c_double]
 def TleAddSatFrFieldsGP2(satNum, secClass, satName, epochYr, epochDays, bstar, ephType, elsetNum, incli, node, eccen, omega, mnAnomaly, mnMotion, revNum, nDotO2, n2DotO6):
 	"""
-	python:function::TleAddSatFrFieldsGP2
 	This function is similar to TleAddSatFrFieldsGP but includes nDotO2 and n2DotO6. nDotO2 and n2DotO6 values are not used in the SGP4 propagator. However, some users still want to preserve the integrity of all input data. 
+	
 	:param int satNum: satellite number
 	:param str secClass: security classification
 	:param str satName: Satellite international designator (string[8])
@@ -133,7 +136,8 @@ def TleAddSatFrFieldsGP2(satNum, secClass, satName, epochYr, epochDays, bstar, e
 	:param int revNum: revolution number at epoch
 	:param float nDotO2: Mean motion derivative (rev/day /2)
 	:param float n2DotO6: Mean motion second derivative (rev/day**2 /6)
-	:return satKey: 
+	:return:
+		**satKey** (*settings.stay_int64*) - The satKey of the newly added TLE on success, a negative value on error.
 	"""
 	satNum    = c.c_int(satNum)
 	secClass  = c.c_char(secClass.encode('ascii', 'strict'))
@@ -177,8 +181,8 @@ C_TLEDLL.TleAddSatFrFieldsGP2ML.argtypes = [c.c_int32,
 										 c.c_double]
 def TleAddSatFrFieldsGP2ML(satNum, secClass, satName, epochYr, epochDays, bstar, ephType, elsetNum, incli, node, eccen, omega, mnAnomaly, mnMotion, revNum, nDotO2, n2DotO6):
 	"""
-	python:function::TleAddSatFrFieldsGP2ML
-	This function is similar to TleAddSatFrFieldsGP2 but designed to be used in Matlab. Matlab doesn't seem to correctly return the 19-digit satellite key using TleAddSatFrFieldsGP2. This method is an alternative way to return the satKey output. This function is similar to TleAddSatFrFieldsGP but includes nDotO2 and n2DotO6. nDotO2 and n2DotO6 values are not used in the SGP4 propagator. However, some users still want to preserve the integrity of all input data. 
+	This function is similar to TleAddSatFrFieldsGP2 but designed to be used in Matlab. Matlab doesn't seem to correctly return the 19-digit satellite key using TleAddSatFrFieldsGP2. This method is an alternative way to return the satKey output. This function is similar to TleAddSatFrFieldsGP but includes nDotO2 and n2DotO6. nDotO2 and n2DotO6 values are not used in the SGP4 propagator. However, some users still want to preserve the integrity of all input data.
+	
 	:param int satNum: satellite number
 	:param str secClass: security classification
 	:param str satName: Satellite international designator (string[8])
@@ -196,7 +200,8 @@ def TleAddSatFrFieldsGP2ML(satNum, secClass, satName, epochYr, epochDays, bstar,
 	:param int revNum: revolution number at epoch
 	:param float nDotO2: Mean motion derivative (rev/day /2)
 	:param float n2DotO6: Mean motion second derivative (rev/day**2 /6)
-	:return satKey: 
+	:return:
+		**satKey** (*settings.stay_int64*) - The satKey of the newly added TLE on success, a negative value on error.
 	"""
 	satNum = c.c_int(satNum)
 	secClass = c.c_char(secClass.encode('ascii', 'strict'))
@@ -239,9 +244,9 @@ C_TLEDLL.TleAddSatFrFieldsSP.argtypes = [c.c_int32,
 										 c.c_int32]
 def TleAddSatFrFieldsSP(satNum, secClass, satName, epochYr, epochDays, bTerm, ogParm, agom, elsetNum, incli, node, eccen, omega, mnAnomaly, mnMotion, revNum):
 	"""
-	python:function::TleAddSatFrFieldsSP
 	Adds an SP satellite using the individually provided field values. Only applies to SP propagator.
 	Review https://www.sat.dundee.ac.uk/fle.html for more information on SP 4 line element sets.
+	
 	:param int satNum: Satellite number
 	:param str secClass: Security classification
 	:param str satName: Satellite international designator (string[8])
@@ -258,7 +263,8 @@ def TleAddSatFrFieldsSP(satNum, secClass, satName, epochYr, epochDays, bTerm, og
 	:param float mnAnomaly: Mean anomaly (degrees)
 	:param float mnMotion: Mean motion (rev/day)
 	:param int revNum: Revolution number at epoch
-	:return settings.stay_int64 satKey: The satKey of the newly added TLE on success, a negative value on error.
+	:return:
+		**satKey** (*settings.stay_int64*) - The satKey of the newly added TLE on success, a negative value on error.
 	"""
 	satNum = c.c_int32(satNum)
 	secClass = c.c_char(secClass.encode('ascii', 'strict'))
@@ -299,9 +305,9 @@ C_TLEDLL.TleAddSatFrFieldsSPML.argtypes = [c.c_int32,
 										 c.c_int32]
 def TleAddSatFrFieldsSPML(satNum, secClass, satName, epochYr, epochDays, bTerm, ogParm, agom, elsetNum, incli, node, eccen, omega, mnAnomaly, mnMotion, revNum):
 	"""
-	python:function::TleAddSatFrFieldsSPML
 	Adds an SP satellite using the individually provided field values. This function is similar to TleAddSatFrFieldsSP but designed to be used in Matlab. Matlab doesn't correctly return the 19-digit satellite key using TleAddSatFrFieldsSP. This method is an alternative way to return the satKey output. Only applies to SP propagator.
 	Review https://www.sat.dundee.ac.uk/fle.html for more information on SP 4 line element sets.
+	
 	:param int satNum: Satellite number
 	:param str secClass: Security classification
 	:param str satName: Satellite international designator (string[8])
@@ -318,7 +324,8 @@ def TleAddSatFrFieldsSPML(satNum, secClass, satName, epochYr, epochDays, bTerm, 
 	:param float mnAnomaly: Mean anomaly (degrees)
 	:param float mnMotion: Mean motion (rev/day)
 	:param int revNum: Revolution number at epoch
-	:return settings.stay_int64 satKey: The satKey of the newly added TLE on success, a negative value on error.
+	:return:
+		**satKey** (*settings.stay_int64*) - The satKey of the newly added TLE on success, a negative value on error.	
 	"""
 	satNum = c.c_int32(satNum)
 	secClass = c.c_char(secClass.encode('ascii', 'strict'))
@@ -344,12 +351,13 @@ C_TLEDLL.TleAddSatFrLines.restype = settings.stay_int64
 C_TLEDLL.TleAddSatFrLines.argtypes = [c.c_char_p, c.c_char_p]
 def TleAddSatFrLines(line1, line2):
 	"""
-	python:function::TleAddSatFrArray
 	Adds a TLE (satellite), using its directly specified first and second lines.
 	Note: Adding two sets of TLEs which are exactly the same will cause the second initialization to fail. Make them distinct by modifying the satellite ID.
+	
 	:param str line1: The first line of a two line element set. (string[512])
 	:param str line2: The second line of a two line element set (string[512])
-	:param settings.stay_int64 satKey: The satKey of the newly added TLE on success, a negative value on error.
+	:return:
+		**satKey** (*settings.stay_int64*) - The satKey of the newly added TLE on success, a negative value on error.	
 	"""
 	line1 = settings.str_to_c_char_p(line1, fixed_width=None, limit=None, terminator=None)
 	line2 = settings.str_to_c_char_p(line2, fixed_width=None, limit=None, terminator=None)
@@ -361,12 +369,13 @@ C_TLEDLL.TleAddSatFrLinesML.restype = settings.stay_int64
 C_TLEDLL.TleAddSatFrLinesML.argtypes = [c.c_char_p, c.c_char_p]
 def TleAddSatFrLinesML(line1, line2):
 	"""
-	python:function::TleAddSatFrArray
 	Adds a TLE (satellite), using its directly specified first and second lines.This function is similar to TleAddSatFrLines but designed to be used in Matlab. Matlab doesn't correctly return the 19-digit satellite key using TleAddSatFrLines. This method is an alternative way to return the satKey output. 
 	Note: Adding two sets of TLEs which are exactly the same will cause the second initialization to fail. Make them distinct by modifying the satellite ID.
+	
 	:param str line1: The first line of a two line element set. (string[512])
 	:param str line2: The second line of a two line element set (string[512])
-	:param settings.stay_int64 satKey: The satKey of the newly added TLE on success, a negative value on error.
+	:return:
+		**satKey** (*settings.stay_int64*) - The satKey of the newly added TLE on success, a negative value on error.
 	"""
 	line1 = settings.str_to_c_char_p(line1, fixed_width=None, limit=None, terminator=None)
 	line2 = settings.str_to_c_char_p(line2, fixed_width=None, limit=None, terminator=None)
@@ -378,12 +387,13 @@ C_TLEDLL.TleDataToArray.restype = c.c_int
 C_TLEDLL.TleDataToArray.argtypes = [settings.stay_int64, settings.double64, c.c_char_p]
 def TleDataToArray(satKey):
 	"""
-	python:function::TleDataToArray
-	Retrieves TLE data and stored it in the passing parameters 
+	Retrieves TLE data and stored it in the passing parameters
+	
 	:param settings.stay_int64 satKey: The satellite's unique key
-	:return int retcode: 0 if all values are retrieved successfully, non-0 if there is an error
-	:return float[64] xa_tle: Array containing TLE's numerical fields, see XA_TLE_? for array arrangement (double[64])
-	:return str xs_tle: Output string that contains all TLE's text fields, see XS_TLE_? for column arrangement (byte[512])
+	:return:
+		* **retcode** (*int*) - 0 if all values are retrieved successfully, non-0 if there is an error
+		* **xa_tle** (*float[64]*) - Array containing TLE's numerical fields, see XA_TLE_? for array arrangement (double[64])
+		* **xs_tle** (*str*) - Output string that contains all TLE's text fields, see XS_TLE_? for column arrangement (byte[512])
 	"""
 	if not isinstance(satKey, settings.stay_int64):
 		raise TypeError("satKey is type %s, should be type %s" % (type(satKey), settings.stay_int64))
@@ -399,16 +409,17 @@ C_TLEDLL.TleFieldsToSatKey.restype = settings.stay_int64
 C_TLEDLL.TleFieldsToSatKey.argtypes = [c.c_int32, c.c_int32, c.c_double, c.c_int32]
 def TleFieldsToSatKey(satNum, epochYr, epochDays, ephType):
 	"""
-	python:function::TleFieldsToSatKey
 	Computes a satKey from the input data.
 	There is no need for a matching satellite to be loaded prior to using this function. The function simply computes the satKey from the provided fields. 
-	This is the proper way to reconstruct a satKey from its fields. If you use your own routine to do this, the computed satKey might be different. 
-	A negative value will be returned if there is an error. 
+	This is the proper way to reconstruct a satKey from its fields. If you use your own routine to do this, the computed satKey might be different.
+	A negative value will be returned if there is an error.
+	
 	:param int satNum: Satellite number
 	:param int epochYr: Element epoch time - year, [YY]YY
 	:param float epochDays: Element epoch time - day of year, DDD.DDDDDDDD
 	:param int ephType: Ephemeris type
-	:return settings.stay_int64 satKey: The resulting satellite key if the computation is successful; a negative value if there is an error.
+	:return:
+		**satKey** (*settings.stay_int64*) - The satKey of the newly added TLE on success, a negative value on error.
 	"""
 	satNum = c.c_int32(satNum)
 	epochYr = c.c_int32(epochYr)
@@ -422,16 +433,17 @@ C_TLEDLL.TleFieldsToSatKeyML.restype = settings.stay_int64
 C_TLEDLL.TleFieldsToSatKeyML.argtypes = [c.c_int32, c.c_int32, c.c_double, c.c_int32]
 def TleFieldsToSatKeyML(satNum, epochYr, epochDays, ephType):
 	"""
-	python:function::TleFieldsToSatKeyML
 	This function is similar to TleFieldsToSatKey but designed to be used in Matlab. Computes a satKey from the input data.
 	There is no need for a matching satellite to be loaded prior to using this function. The function simply computes the satKey from the provided fields. 
 	This is the proper way to reconstruct a satKey from its fields. If you use your own routine to do this, the computed satKey might be different. 
-	A negative value will be returned if there is an error. 
+	A negative value will be returned if there is an error.
+	
 	:param int satNum: Satellite number
 	:param int epochYr: Element epoch time - year, [YY]YY
 	:param float epochDays: Element epoch time - day of year, DDD.DDDDDDDD
 	:param int ephType: Ephemeris type
-	:return settings.stay_int64 satKey: The resulting satellite key if the computation is successful; a negative value if there is an error.
+	:return:
+		**satKey** (*settings.stay_int64*) - The resulting satellite key if the computation is successful; a negative value if there is an error.
 	"""
 	satNum = c.c_int32(satNum)
 	epochYr = c.c_int32(epochYr)
@@ -460,26 +472,27 @@ C_TLEDLL.TleGetAllFieldsGP.argtypes = [settings.stay_int64,
 									   c.POINTER(c.c_int32)]
 def TleGetAllFieldsGP(satKey):
 	"""
-	python:function::TleGetAllFieldsGP
 	Retrieves all of the data for a GP satellite in a single function call.
-	This function only works for GP satellites. The field values are placed in the corresponding parameters of the function. 
+	This function only works for GP satellites. The field values are placed in the corresponding parameters of the function.
+	
 	:param settings.stay_int64 satKey: The satellite's unique key
-	:return int retcode: 0 if all values are retrieved successfully, non-0 if there is an error.
-	:return int satNum: Satellite number
-	:return str secClass: Security classification
-	:return str satName: Satellite international designator (byte[8])
-	:return int epochYr: Element epoch time - year, [YY]YY
-	:return float epochDays: Element epoch time - day of year, DDD.DDDDDDDD
-	:return float bstar: B* drag term (1/er)
-	:return int ephType: Satellite ephemeris type (0: SGP, 2: SGP4, 6: SP)
-	:return int elsetNum: Element set number
-	:return float incli: Orbit inclination (degrees)
-	:return float node: Right ascension of ascending node (degrees)
-	:return float eccen: Eccentricity
-	:return float omega: Argument of perigee (degrees)
-	:return float mnAnomaly: Mean anomaly (deg)
-	:return float mnMotion: Mean motion (rev/day) (ephType = 0: Kozai mean motion, ephType = 2: Brouwer mean motion)
-	:return int revNum: Revolution number at epoch
+	:return:
+		* **retcode** (*int*) - 0 if all values are retrieved successfully, non-0 if there is an error.
+		* **satNum** (*int*) - Satellite number
+		* **secClass** (*str*) - Security classification
+		* **satName** (*str*) - Satellite international designator (byte[8])
+		* **epochYr** (*int*) - Element epoch time - year, [YY]YY
+		* **epochDays** (*float*) - Element epoch time - day of year, DDD.DDDDDDDD
+		* **bstar** (*float*) - B* drag term (1/er)
+		* **ephType** (*int*) - Satellite ephemeris type (0: SGP, 2: SGP4, 6: SP)
+		* **elsetNum** (*int*) - Element set number
+		* **incli** (*float*) - Orbit inclination (degrees)
+		* **node** (*float*) - Right ascension of ascending node (degrees)
+		* **eccen** (*float*) - Eccentricity
+		* **omega** (*float*) - Argument of perigee (degrees)
+		* **mnAnomaly** (*float*) - Mean anomaly (deg)
+		* **mnMotion** (*float*) - Mean motion (rev/day) (ephType = 0: Kozai mean motion, ephType = 2: Brouwer mean motion)
+		* **revNum** (*int*) - Revolution number at epoch
 	"""
 	if not isinstance(satKey, settings.stay_int64):
 		raise TypeError("satKey is type %s, should be type %s" % (type(satKey), settings.stay_int64))
@@ -555,29 +568,30 @@ C_TLEDLL.TleGetAllFieldsGP2.argtypes = [settings.stay_int64,
 									   c.POINTER(c.c_double)]
 def TleGetAllFieldsGP2(satKey):
 	"""
-	python:function::TleGetAllFieldsGP2
 	Retrieves all of the data (including nDotO2 and n2DotO6) for a GP satellite in a single function call. 
 	This function only works for GP satellites. The field values are placed in the corresponding parameters of the function. 
-	This function is similar to TleGetAllFieldsGP but also includes nDotO2 and n2DotO6. 
+	This function is similar to TleGetAllFieldsGP but also includes nDotO2 and n2DotO6.
+	
 	:param settings.stay_int64 satKey: The satellite's unique key
-	:return int retcode: 0 if all values are retrieved successfully, non-0 if there is an error.
-	:return int satNum: Satellite number
-	:return str secClass: Security classification
-	:return str satName: Satellite international designator (byte[8])
-	:return int epochYr: Element epoch time - year, [YY]YY
-	:return float epochDays: Element epoch time - day of year, DDD.DDDDDDDD
-	:return float bstar: B* drag term (1/er)
-	:return int ephType: Satellite ephemeris type (0: SGP, 2: SGP4, 6: SP)
-	:return int elsetNum: Element set number
-	:return float incli: Orbit inclination (degrees)
-	:return float node: Right ascension of ascending node (degrees)
-	:return float eccen: Eccentricity
-	:return float omega: Argument of perigee (degrees)
-	:return float mnAnomaly: Mean anomaly (deg)
-	:return float mnMotion: Mean motion (rev/day) (ephType = 0: Kozai mean motion, ephType = 2: Brouwer mean motion)
-	:return int revNum: Revolution number at epoch
-	:return float nDotO2: Mean motion derivative (rev/day /2)
-	:return float n2DotO6: Mean motion second derivative (rev/day**2 /6)
+	:return:
+		* **retcode** (*int*) - 0 if all values are retrieved successfully, non-0 if there is an error.
+		* **satNum** (*int*) - Satellite number
+		* **secClass** (*str*) - Security classification
+		* **satName** (*str*) - Satellite international designator (byte[8])
+		* **epochYr** (*int*) - Element epoch time - year, [YY]YY
+		* **epochDays** (*float*) - Element epoch time - day of year, DDD.DDDDDDDD
+		* **bstar** (*float*) - B* drag term (1/er)
+		* **ephType** (*int*) - Satellite ephemeris type (0: SGP, 2: SGP4, 6: SP)
+		* **elsetNum** (*int*) - Element set number
+		* **incli** (*float*) - Orbit inclination (degrees)
+		* **node** (*float*) - Right ascension of ascending node (degrees)
+		* **eccen** (*float*) - Eccentricity
+		* **omega** (*float*) - Argument of perigee (degrees)
+		* **mnAnomaly** (*float*) - Mean anomaly (deg)
+		* **mnMotion** (*float*) - Mean motion (rev/day) (ephType = 0: Kozai mean motion, ephType = 2: Brouwer mean motion)
+		* **revNum** (*int*) - Revolution number at epoch
+		* **nDotO2** (*float*) - Mean motion derivative (rev/day /2)
+		* **n2DotO6** (*float*) - Mean motion second derivative (rev/day**2 /6)
 	"""
 	if not isinstance(satKey, settings.stay_int64):
 		raise TypeError("satKey is type %s, should be type %s" % (type(satKey), settings.stay_int64))
@@ -658,27 +672,27 @@ C_TLEDLL.TleGetAllFieldsSP.argtypes = [settings.stay_int64,
 									   c.POINTER(c.c_int32)]
 def TleGetAllFieldsSP(satKey):
 	"""
-	python:function::TleGetAllFieldsSP
 	Retrieves all of the data for an SP satellite in a single function call. Only applies to SP propagator. 
 	This function only works for SP satellites. The field values are placed in the corresponding parameters of the function. 
 	:param settings.stay_int64 satKey: The satellite's unique key
-	:return int retcode: 0 if all values are retrieved successfully, non-0 if there is an error.
-	:return int satNum: Satellite number
-	:return str secClass: Security classification
-	:return str satname: Satellite international designator (byte[8])
-	:return int epochYr: Element epoch time - year, [YY]YY
-	:return float epochDays: Element epoch time - day of year, DDD.DDDDDDDD
-	:return float bTerm: Ballistic coefficient (m^2/kg)
-	:return float ogParm: Outgassing parameter/Thrust Acceleration (km/s^2)
-	:return float agom: Agom (m^2/kg)
-	:return int elsetNum: Element set number
-	:return float incli: Orbit inclination (degrees)
-	:return float node: Right ascension of ascending node (degrees)
-	:return float eccen: Eccentricity
-	:return float omega: Argument of perigee (degrees)
-	:return float mnAnomaly: Mean anomaly (degrees)
-	:return float mnMotion: Mean motion (rev/day)
-	:return int revNum: Revolution number at epoch
+	:return:
+		* **retcode** (*int*) - 0 if all values are retrieved successfully, non-0 if there is an error.
+		* **satNum** (*int*) - Satellite number
+		* **secClass** (*str*) - Security classification
+		* **satname** (*str*) - Satellite international designator (byte[8])
+		* **epochYr** (*int*) - Element epoch time - year, [YY]YY
+		* **epochDays** (*float*) - Element epoch time - day of year, DDD.DDDDDDDD
+		* **bTerm** (*float*) - Ballistic coefficient (m^2/kg)
+		* **ogParm** (*float*) - Outgassing parameter/Thrust Acceleration (km/s^2)
+		* **agom** (*float*) - Agom (m^2/kg)
+		* **elsetNum** (*int*) - Element set number
+		* **incli** (*float*) - Orbit inclination (degrees)
+		* **node** (*float*) - Right ascension of ascending node (degrees)
+		* **eccen** (*float*) - Eccentricity
+		* **omega** (*float*) - Argument of perigee (degrees)
+		* **mnAnomaly** (*float*) - Mean anomaly (degrees)
+		* **mnMotion** (*float*) - Mean motion (rev/day)
+		* **revNum** (*int*) - Revolution number at epoch
 	"""
 	if not isinstance(satKey, settings.stay_int64):
 		raise TypeError("satKey is type %s, should be type %s" % (type(satKey), settings.stay_int64))
@@ -739,11 +753,11 @@ def TleGetAllFieldsSP(satKey):
 C_TLEDLL.TleGetCount.restype = c.c_int
 def TleGetCount():
 	"""
-	python:function::TleGetCount
-	Returns the number of TLEs currently loaded. 
-	See TleGetLoaded for an example. 
-	This function is useful for dynamically allocating memory for the array that is passed to the function TleGetLoaded(). 
-	:return int tle_count: The number of TLEs currently loaded.
+	Returns the number of TLEs currently loaded.
+	Note: In other languages, like C, functions such as TleGetLoaded() require that you use TleGetCount() to properly size the input array to the function. In this python module, that sizing is handled automatically by calling this function in a manner that should be transparent to the user. See the source code for tledll.TleGetLoaded() to see how calls to tledll.TleGetCount() are handled automatically.
+	
+	:return:
+		**tle_count** (*int*) - The number of TLEs currently loaded.
 	"""
 	tle_count = C_TLEDLL.TleGetCount()
 	return tle_count
@@ -753,31 +767,50 @@ C_TLEDLL.TleGetField.restype = c.c_int
 C_TLEDLL.TleGetField.argtypes = [settings.stay_int64, c.c_int32, c.c_char_p]
 def TleGetField(satKey, xf_Tle):
 	"""
-	python:function::TleGetField
 	Retrieves the value of a specific field of a TLE. 
-	The table below indicates which index values correspond to which fields. Make sure to use the appropriate field index for GP TLEs and SP TLEs. For indexes 5, 15 and 16, the interpretation depends on the ephemeris type of the TLE. 
-	index | index Interpretation
-	============================
-	1 | Satellite number
-	2 | Security classification
-	3 | Satellite international designator
-	4 | Epoch
-	5 | Ephemeris type = 0,2: B* drag term (1/er), Ephemeris type = 6 : SP radiation pressure coefficient Agom (m2/kg)
-	6 | Ephemeris type
-	7 | Element set number
-	8 | Orbit inclination (degrees)
-	9 | Right ascension of ascending node (degrees)
-	10 | Eccentricity
-	11 | Argument of perigee (degrees)
-	12 | Mean anomaly (degrees)
-	13 | Mean motion (rev/day)
-	14 | Revolution number at epoch
-	15 | Ephemeris type = 0: SGP mean motion derivative (rev/day /2) or Ephemeris type = 6: SP ballistic coefficient (m2/kg)
-	16 | Ephemeris type = 0: SGP mean motion second derivative (rev/day**2 /6) or Ephemeris type = 6: SP Outgassing parameter/Thrust Acceleration (km/s2)
+	The table below indicates which index values correspond to which fields. Make sure to use the appropriate field index for GP TLEs and SP TLEs. For indexes 5, 15 and 16, the interpretation depends on the ephemeris type of the TLE.
+	
+	+-------+--------------------------------------------------------------------------------------------------------------------------------------------------+
+	| index | index Interpretation                                                                                                                             |
+	+-------+--------------------------------------------------------------------------------------------------------------------------------------------------+
+	|     1 | Satellite number                                                                                                                                 |
+	+-------+--------------------------------------------------------------------------------------------------------------------------------------------------+
+	|     2 | Security classification                                                                                                                          |
+	+-------+--------------------------------------------------------------------------------------------------------------------------------------------------+
+	|     3 | Satellite international designator                                                                                                               |
+	+-------+--------------------------------------------------------------------------------------------------------------------------------------------------+
+	|     4 | Epoch                                                                                                                                            |
+	+-------+--------------------------------------------------------------------------------------------------------------------------------------------------+
+	|     5 | Ephemeris type = 0,2: B* drag term (1/er), Ephemeris type = 6 : SP radiation pressure coefficient Agom (m2/kg)                                   |
+	+-------+--------------------------------------------------------------------------------------------------------------------------------------------------+
+	|     6 | Ephemeris type                                                                                                                                   |
+	+-------+--------------------------------------------------------------------------------------------------------------------------------------------------+
+	|     7 | Element set number                                                                                                                               |
+	+-------+--------------------------------------------------------------------------------------------------------------------------------------------------+
+	|     8 | Orbit inclination (degrees)                                                                                                                      |
+	+-------+--------------------------------------------------------------------------------------------------------------------------------------------------+
+	|     9 | Right ascension of ascending node (degrees)                                                                                                      |
+	+-------+--------------------------------------------------------------------------------------------------------------------------------------------------+
+	|    10 | Eccentricity                                                                                                                                     |
+	+-------+--------------------------------------------------------------------------------------------------------------------------------------------------+
+	|    11 | Argument of perigee (degrees)                                                                                                                    |
+	+-------+--------------------------------------------------------------------------------------------------------------------------------------------------+
+	|    12 | Mean anomaly (degrees)                                                                                                                           |
+	+-------+--------------------------------------------------------------------------------------------------------------------------------------------------+
+	|    13 | Mean motion (rev/day)                                                                                                                            |
+	+-------+--------------------------------------------------------------------------------------------------------------------------------------------------+
+	|    14 | Revolution number at epoch                                                                                                                       |
+	+-------+--------------------------------------------------------------------------------------------------------------------------------------------------+
+	|    15 | Ephemeris type = 0: SGP mean motion derivative (rev/day /2) or Ephemeris type = 6: SP ballistic coefficient (m2/kg)                              |
+	+-------+--------------------------------------------------------------------------------------------------------------------------------------------------+
+	|    16 | Ephemeris type = 0: SGP mean motion second derivative (rev/day**2 /6) or Ephemeris type = 6: SP Outgassing parameter/Thrust Acceleration (km/s2) |
+	+-------+--------------------------------------------------------------------------------------------------------------------------------------------------+
+	
 	:param settings.stay_int64 satKey: The satellite's unique key.
 	:param int xf_Tle: Predefined number specifying which field to retrieve. See remarks.
-	:return int retcode: 0 if the TLE data is successfully retrieved, non-0 if there is an error.
-	:return str valueStr: A string to contain the value of the requested field. (byte[512])
+	:return:
+		* **retcode** (*int*) - 0 if the TLE data is successfully retrieved, non-0 if there is an error.
+		* **valueStr** (*str*) - A string to contain the value of the requested field. (byte[512])
 	"""
 	if not isinstance(satKey, settings.stay_int64):
 		raise TypeError("satKey is type %s, should be type %s" % (type(satKey), settings.stay_int64))
@@ -791,9 +824,10 @@ def TleGetField(satKey, xf_Tle):
 C_TLEDLL.TleGetInfo.argtypes = [c.c_char_p]
 def TleGetInfo():
 	"""
-	python:function::TleGetInfo
-	Returns the information about the Tle DLL. The returned string provides information about the version number, build date, and the platform of the Tle DLL. 
-	:return str infoStr: A string to hold the information about the Tle DLL. (byte[128])
+	Returns the information about the Tle DLL. The returned string provides information about the version number, build date, and the platform of the Tle DLL.
+	
+	:return:
+		**infoStr** (*str*) - A string to hold the information about the Tle DLL. (byte[128])
 	"""
 	infoStr = c.c_char_p(bytes(128))
 	C_TLEDLL.TleGetInfo(infoStr)
@@ -805,12 +839,13 @@ C_TLEDLL.TleGetLines.restype = c.c_int32
 C_TLEDLL.TleGetLines.argtypes = [settings.stay_int64, c.c_char_p, c.c_char_p]
 def TleGetLines(satKey):
 	"""
-	python:function::TleGetLines
-	Returns the first and second lines representation of a TLE of a satellite. 
+	Returns the first and second lines representation of a TLE of a satellite.
+	
 	:param settings.stay_int64 satKey: 
-	:return int retcode: 0 if successful, non-0 on error.
-	:return str line1: A string to hold the first line of the TLE. (byte[512])
-	:return str line2: A string to hold the second line of the TLE (if available, line3 can be extracted from line2's 101-180th columns). (byte[512])
+	:return:
+		**retcode** (*int*) - 0 if successful, non-0 on error.
+		**line1** (*str*) - A string to hold the first line of the TLE. (byte[512])
+		**line2** (*str*) - A string to hold the second line of the TLE (if available, line3 can be extracted from line2's 101-180th columns). (byte[512])
 	"""
 	if not isinstance(satKey, settings.stay_int64):
 		raise TypeError("satKey is type %s, should be type %s" % (type(satKey), settings.stay_int64))
@@ -823,12 +858,25 @@ def TleGetLines(satKey):
 
 ##TleGetLoaded
 # argtypes are set within the function due to a dynamically allocated array
-def TleGetLoaded(order):
+def TleGetLoaded(order=9):
 	"""
-	python:function::TleGetLoaded
-	Retrieves all of the currently loaded satKeys. These satKeys can be used to access the internal data for the TLE's. 
-	:param int order: Specifies the order in which the satKeys should be returned. 0 = sort in ascending order of satKeys, 1 = sort in descending order of satKeys, 2 = sort in the order in which the satKeys were loaded in memory, 9 = Quickest: sort in the order in which the satKeys were stored in the tree
-	:return settings.stay_int64[?] satKeys: An array of satKey objects
+	Retrieves all of the currently loaded satKeys. These satKeys can be used to access the internal data for the TLE's. Various orders (sequences) can be retrieved by setting the "order" parameter appropriately. By default, order will be set to 9 for quickest retrieval.
+	
+	+-------+--------------------------------------------------------------------------+
+	| order | meaning                                                                  |
+	+-------+--------------------------------------------------------------------------+
+	|     0 | sort in ascending order of satKeys                                       |
+	+-------+--------------------------------------------------------------------------+
+	|     1 | sort in descending order of satKeys                                      |
+	+-------+--------------------------------------------------------------------------+
+	|     2 | sort in the order in which the satKeys were loaded in memory             |
+	+-------+--------------------------------------------------------------------------+
+	|     9 | Quickest: sort in the order in which the satKeys were stored in the tree |
+	+-------+--------------------------------------------------------------------------+
+		
+	:param int order: Specifies the order in which the satKeys should be returned.
+	:return:
+		**satKeys** (*settings.stay_int64[?]*) - An array of satKey objects.
 	"""
 	# convert data type
 	order = c.c_int32(order)
@@ -849,11 +897,12 @@ C_TLEDLL.TleGetSatKey.restype = settings.stay_int64
 C_TLEDLL.TleGetSatKey.argtypes = [c.c_int32]
 def TleGetSatKey(satNum):
 	"""
-	python:function::TleGetSatKey
-	Returns the first satKey from the currently loaded set of TLEs that contains the specified satellite number. This function is useful when Tle.dll is used in applications that require only one record (one TLE entry) for one satellite, and which refer to that TLE by its satellite number. This function can be used to retrieve a satKey in that situation, which is useful since the Standardized Astrodynamic Algorithms library works only with satKeys. 
+	Returns the first satKey from the currently loaded set of TLEs that contains the specified satellite number. This function is useful when Tle.dll is used in applications that require only one record (one TLE entry) for one satellite, and which refer to that TLE by its satellite number. This function can be used to retrieve a satKey in that situation, which is useful since the Standardized Astrodynamic Algorithms library works only with satKeys.
 	A negative value will be returned if there is an error. 
-	:param int satNum: Satellite number
-	:return settings.stay_int64 satKey: The satellite's unique key
+	
+	:param int satNum: Satellite number.
+	:return:
+		**satKey** (*settings.stay_int64*) - The satellite's unique key.
 	"""
 	satNum = c.c_int32(satNum)
 	satKey = C_TLEDLL.TleGetSatKey(satNum)
@@ -864,13 +913,14 @@ C_TLEDLL.TleGetSatKeyML.restype = settings.stay_int64
 C_TLEDLL.TleGetSatKeyML.argtypes = [c.c_int32]
 def TleGetSatKeyML(satNum):
 	"""
-	python:function::TleGetSatKeyML
 	Returns the first satKey from the currently loaded set of TLEs that contains the specified satellite number. This function is useful when Tle.dll is used in applications that require only one record (one TLE entry) for one satellite, and which refer to that TLE by its satellite number. This function can be used to retrieve a satKey in that situation, which is useful since the Standardized Astrodynamic Algorithms library works only with satKeys. 
 	A negative value will be returned if there is an error. 
 	This function is similar to TleGetSatKey but designed to be used in Matlab. 
 	Matlab doesn't correctly return the 19-digit satellite key using TleGetSatKey. This method is an alternative way to return the satKey output. 
+
 	:param int satNum: Satellite number
-	:return settings.stay_int64 satKey: The satellite's unique key
+	:return:
+		**satKey** (*settings.stay_int64*) - The satellite's unique key.
 	"""
 	satNum = c.c_int32(satNum)
 	satKey = C_TLEDLL.TleGetSatKey(satNum)
@@ -880,12 +930,13 @@ def TleGetSatKeyML(satNum):
 C_TLEDLL.TleGPArrayToLines.argtypes = [settings.double64] + [c.c_char_p] * 3
 def TleGPArrayToLines(xa_tle, xs_tle):
 	"""
-	python:function::TleGPArrayToLines
 	Constructs a TLE from GP data stored in the input parameters. 
+
 	:param float[64] xa_tle: Array containing TLE's numerical fields, see XA_TLE_? for array arrangement (double[64])
 	:param str xs_tle: Input string that contains all TLE's text fields, see XS_TLE_? for column arrangement (string[512])
-	:return str line1: Returned first line of a TLE. (byte[512])
-	:return str line2: Returned second line of a TLE (if available, line3 can be extracted from line2's 101-180th columns). (byte[512])
+	:return:
+		* **line1** (*str*) - Returned first line of a TLE. (byte[512])
+		* **line2** (*str*) - Returned second line of a TLE (if available, line3 can be extracted from line2's 101-180th columns). (byte[512])
 	"""
 	xa_tle = settings.list_to_array(xa_tle)
 	xs_tle = settings.str_to_byte(xs_tle, fixed_width=512)
@@ -918,10 +969,10 @@ C_TLEDLL.TleGPFieldsToLines.argtypes = [c.c_int32,
 										c.c_char_p]
 def TleGPFieldsToLines(satNum, secClass, satName, epochYr, epochDays, nDotO2, n2DotO6, bstar, ephType, elsetNum, incli, node, eccen, omega, mnAnomaly, mnMotion, revNum):
 	"""
-	python:function::TleGPFieldsToLines
 	Constructs a TLE from individually provided GP data fields. 
 	This function only parses data from the input fields but DOES NOT load/add the TLE to memory. 
 	Returned line1 and line2 will be empty if the function fails to construct the lines as requested. 
+
 	:param int satNum: Satellite number
 	:param str secClass: Security classification
 	:param str satName: Satellite international designator (string[8])
@@ -939,8 +990,9 @@ def TleGPFieldsToLines(satNum, secClass, satName, epochYr, epochDays, nDotO2, n2
 	:param float mnAnomaly: Mean anomaly (degrees)
 	:param float mnMotion: Mean motion (rev/day) (ephType = 0: Kozai mean motion, ephType = 2: Brouwer mean motion)
 	:param int revNum: Revolution number at epoch
-	:return str line1: Returned first line of a TLE. (byte[512])
-	:return str line2: Returned second line of a TLE. (byte[512])
+	:return:
+		* **line1** (*str*) - Returned first line of a TLE. (byte[512])
+		* **line2** (*str*) - Returned second line of a TLE. (byte[512])
 	"""
 	satNum    = c.c_int32(satNum)
 	secClass  = settings.str_to_byte(secClass, fixed_width=1)
@@ -989,10 +1041,11 @@ C_TLEDLL.TleInit.restype = c.c_int64
 C_TLEDLL.TleInit.argtypes = [settings.stay_int64]
 def TleInit(apPtr):
 	"""
-	python:function::TleInit
 	Initializes Tle DLL for use in the program.
+	
 	:param settings.stay_int64 apPtr: The handle that was returned from DllMainInit. See the documentation for DllMain.dll for details.
-	:return int retcode: 0 if Tle.dll is initialized successfully, non-0 if there is an error.
+	:return:
+		**retcode** (*int*) - 0 if Tle.dll is initialized successfully, non-0 if there is an error.
 	"""
 	retcode = C_TLEDLL.TleInit(apPtr)
 	return retcode
@@ -1002,14 +1055,15 @@ C_TLEDLL.TleLinesToArray.restype = c.c_int64
 C_TLEDLL.TleLinesToArray.argtypes = [c.c_char_p] * 2 + [settings.double64] + [c.c_char_p]
 def TleLinesToArray(line1, line2):
 	"""
-	python:function::TleLinesToArray
 	Parses GP data from the input first and second lines of a two line element set and store that data back into the output parameters. 
-	This function only parses data from the input TLE but DOES NOT load/add the input TLE to memory. 
+	This function only parses data from the input TLE but DOES NOT load/add the input TLE to memory.
+	
 	:param str line1: The first line of the two line element set. (string[512])
 	:param str line2: The second line of the two line element set (if needed, line3 can be inserted into line2's 101-180th column). (string[512])
-	:return float[64] xa_tle: Array containing TLE's numerical fields, see XA_TLE_? for array arrangement (double[64])
-	:return str xs_tle: Output string that contains all TLE's text fields, see XS_TLE_? for column arrangement (byte[512])
-	:return int retcode: 0 if the TLE is parsed successfully, non-0 if there is an error.
+	:return:
+		* **xa_tle** (*float[64]*) - Array containing TLE's numerical fields, see XA_TLE_? for array arrangement (double[64])
+		* **xs_tle** (*str*) - Output string that contains all TLE's text fields, see XS_TLE_? for column arrangement (byte[512])
+		* **retcode** (*int*) - 0 if the TLE is parsed successfully, non-0 if there is an error.
 	"""
 	line1 = settings.str_to_c_char_p(line1, fixed_width=None, limit=None, terminator=None)
 	line2 = settings.str_to_c_char_p(line2, fixed_width=None, limit=None, terminator=None)
@@ -1019,8 +1073,6 @@ def TleLinesToArray(line1, line2):
 	xa_tle = settings.array_to_list(xa_tle)
 	xs_tle = settings.byte_to_str(xs_tle)
 	return (retcode, xa_tle, xs_tle)
-
-
 
 ##TleLoadFile
 C_TLEDLL.TleLoadFile.restype = c.c_int
@@ -1033,7 +1085,8 @@ def TleLoadFile(tleFile):
 	The input file is read in two passes. The function first looks for "ELTFIL=" and "VECFIL=" lines, then it looks for TLEs which were included directly. The result of this is that data entered using both methods will be processed, but the "ELTFIL=" and "VECFIL=" data will be processed first. 
 	
 	:param str tleFile: The name of the file containing two line element sets to be loaded. (string[512])
-	:return int retcode: 0 if the two line element sets in the file are successfully loaded, non-0 if there is an error.
+	:return:
+		**retcode** (*int*) - 0 if the two line element sets in the file are successfully loaded, non-0 if there is an error.
 	"""
 	tleFile = settings.str_to_byte(tleFile)
 	retcode = C_TLEDLL.TleLoadFile(tleFile)
@@ -1062,29 +1115,30 @@ C_TLEDLL.TleParseGP.argtypes = [c.c_char_p,
 								c.POINTER(c.c_int32)]
 def TleParseGP(line1, line2):
 	"""
-	python:function::TleParseGP
 	Parses GP data from the input first and second lines of a two line element set. 
 	This function only parses data from the input TLE but DOES NOT load/add the input TLE to memory. 
+	
 	:param str line1: The first line of the two line element set. (string[512])
 	:param str line2: The second line of the two line element set. (string[512])
-	:return int retcode: 0 if the TLE is parsed successfully, non-0 if there is an error.
-	:return int satNum: Satellite number
-	:param str secClass: Security classification
-	:param str satName: Satellite international designator (byte[8])
-	:param int epochYr: Element epoch time - year, [YY]YY
-	:param float epochDays: Element epoch time - day of year, DDD.DDDDDDDD
-	:param float nDotO2: n-dot/2 (for SGP, ephType = 0)
-	:param float n2DotO6: n-double-dot/6 (for SGP, ephType = 0)
-	:param float bstar: B* drag term (1/er)
-	:param int ephType: Satellite ephemeris type (0: SGP, 2: SGP4, 6: SP)
-	:param int elsetNum: Element set number
-	:param float incli: Orbit inclination (degrees)
-	:param float node: Right ascension of ascending node (degrees).
-	:param float eccen: Eccentricity
-	:param float omega: Argument of perigee (degrees)
-	:param float mnAnomaly: Mean anomaly (degrees)
-	:param float mnMotion: Mean motion (rev/day) (ephType = 0: Kozai mean motion, ephType = 2: Brouwer mean motion)
-	:param int revNum: Revolution number at epoch
+	:return:
+		* **retcode** (*int*) - 0 if the TLE is parsed successfully, non-0 if there is an error.
+		* **satNum** (*int*) - Satellite number
+		* **secClass** (*str*) - Security classification
+		* **satName** (*str*) - Satellite international designator (byte[8])
+		* **epochYr** (*int*) - Element epoch time - year, [YY]YY
+		* **epochDays** (*float*) - Element epoch time - day of year, DDD.DDDDDDDD
+		* **nDotO2** (*float*) - n-dot/2 (for SGP, ephType = 0)
+		* **n2DotO6** (*float*) - n-double-dot/6 (for SGP, ephType = 0)
+		* **bstar** (*float*) - B* drag term (1/er)
+		* **ephType** (*int*) - Satellite ephemeris type (0: SGP, 2: SGP4, 6: SP)
+		* **elsetNum** (*int*) - Element set number
+		* **incli** (*float*) - Orbit inclination (degrees)
+		* **node** (*float*) - Right ascension of ascending node (degrees).
+		* **eccen** (*float*) - Eccentricity
+		* **omega** (*float*) - Argument of perigee (degrees)
+		* **mnAnomaly** (*float*) - Mean anomaly (degrees)
+		* **mnMotion** (*float*) - Mean motion (rev/day) (ephType = 0: Kozai mean motion, ephType = 2: Brouwer mean motion)
+		* **revNum** (*int*) - Revolution number at epoch
 	"""
 	line1     = settings.str_to_byte(line1)
 	line2     = settings.str_to_byte(line2)
@@ -1166,29 +1220,30 @@ C_TLEDLL.TleParseSP.argtypes = [c.c_char_p,
 								c.POINTER(c.c_int)]
 def TleParseSP(line1, line2):
 	"""
-	python:function::TleParseSP
 	Parses SP data from the input first and second lines of a two line element set. 
 	Only applies to SP propagator. 
 	This function only parses data from the input TLE but DOES NOT load/add the input TLE to memory.
+	
 	:param str line1: The first line of the two line element set. (string[512])
 	:param str line2: The second line of the two line element set. (string[512])
-	:return int retcode: 0 if the TLE is parsed successfully, non-0 if there is an error.
-	:return int satNum: Satellite number
-	:return str secClass: Security classification
-	:return str satName: Satellite international designator (byte[8])
-	:return int epochYr: Element epoch time - year, [YY]YY
-	:return float epochDays: Element epoch time - day of year, DDD.DDDDDDDD
-	:return float bTerm: Ballistic coefficient (m^2/kg).
-	:return float ogParm: Outgassing parameter/Thrust Acceleration (km/s^2)
-	:return float agom: Agom (m^2/kg)
-	:return int elsetNum: Element set number
-	:return float incli: Orbit inclination (degrees)
-	:return float node: Right ascension of ascending node (degrees)
-	:return float eccen: Eccentricity
-	:return float omega: Argument of perigee (degrees)
-	:return float mnAnomaly: Mean anomaly (degrees)
-	:return float mnMotion: Mean motion (rev/day)
-	:return int revNum: Revolution number at epoch
+	:return:
+		* **retcode** (*int*) - 0 if the TLE is parsed successfully, non-0 if there is an error.
+		* **satNum** (*int*) - Satellite number
+		* **secClass** (*str*) - Security classification
+		* **satName** (*str*) - Satellite international designator (byte[8])
+		* **epochYr** (*int*) - Element epoch time - year, [YY]YY
+		* **epochDays** (*float*) - Element epoch time - day of year, DDD.DDDDDDDD
+		* **bTerm** (*float*) - Ballistic coefficient (m^2/kg).
+		* **ogParm** (*float*) - Outgassing parameter/Thrust Acceleration (km/s^2)
+		* **agom** (*float*) - Agom (m^2/kg)
+		* **elsetNum** (*int*) - Element set number
+		* **incli** (*float*) - Orbit inclination (degrees)
+		* **node** (*float*) - Right ascension of ascending node (degrees)
+		* **eccen** (*float*) - Eccentricity
+		* **omega** (*float*) - Argument of perigee (degrees)
+		* **mnAnomaly** (*float*) - Mean anomaly (degrees)
+		* **mnMotion** (*float*) - Mean motion (rev/day)
+		* **revNum** (*int*) - Revolution number at epoch
 	"""
 	line1     = settings.str_to_byte(line1, limit=512)
 	line2     = settings.str_to_byte(line2, limit=512)
@@ -1244,16 +1299,15 @@ def TleParseSP(line1, line2):
 	mnMotion  = mnMotion.value
 	revNum    = revNum.value
 	return (retcode, satNum, secClass, satName, epochYr, epochDays, bTerm, ogParm, agom, elsetNum, incli, node, eccen, omega, mnAnomaly, mnMotion, revNum)
-								
-
 
 ##TleRemoveAllSats
 C_TLEDLL.TleRemoveAllSats.restype = c.c_int
 def TleRemoveAllSats():
 	"""
-	python:function::TleRemoveAllSats
 	Removes all the TLEs from memory.
-	:return int retcode: 0 if all TLE's are removed successfully from memory, non-0 if there is an error.
+	
+	:return:
+		**retcode** (*int*) - 0 if all TLE's are removed successfully from memory, non-0 if there is an error.
 	"""
 	retcode = C_TLEDLL.TleRemoveAllSats()
 	return retcode
@@ -1263,11 +1317,11 @@ C_TLEDLL.TleRemoveSat.restype = c.c_int
 C_TLEDLL.TleRemoveSat.argtypes = [settings.stay_int64]
 def TleRemoveSat(satKey):
 	"""
-	python:function::TleRemoveSat
 	Removes a TLE represented by the satKey from memory. 
 	If the users enter an invalid satKey (a non-existing satKey), the function will return a non-zero value indicating an error. 
 	:param settings.stay_int64 satKey: The unique key of the satellite to be removed.
-	:return int retcode: 0 if the TLE is removed successfully, non-0 if there is an error.
+	:return:
+		**retcode** (*int*) - 0 if the TLE is removed successfully, non-0 if there is an error.
 	"""
 	if not isinstance(satKey, settings.stay_int64):
 		raise TypeError("satKey is type %s, should be type %s" % (type(satKey), settings.stay_int64))
@@ -1279,12 +1333,13 @@ C_TLEDLL.TleSaveFile.restype = c.c_int
 C_TLEDLL.TleSaveFile.argtypes = [c.c_char_p, c.c_int32, c.c_int32]
 def TleSaveFile(tleFile, saveMode, xf_tleForm = 0):
 	"""
-	python:function::TleSaveFile
 	Saves currently loaded TLEs to a file. In append mode, if the specified file does not exist it will be created. 
+	
 	:param str tleFile: The name of the file in which to save the TLE's. (string[512])
 	:param int saveMode: Specifies whether to create a new file or append to an existing file. (0 = create new file, 1= append to existing file)
 	:param int xf_tleForm = 0: Specifies the format in which to save the file. (0 = two-line element set format, others = future implementation)
-	:return retcode: 0 if the data is successfully saved to the file, non-0 if there is an error.
+	:return:
+		**retcode** (*int*) - 0 if the data is successfully saved to the file, non-0 if there is an error.
 	"""
 	tleFile = settings.str_to_byte(tleFile, limit=512)
 	saveMode = c.c_int32(saveMode)
@@ -1297,34 +1352,51 @@ C_TLEDLL.TleSetField.restype = c.c_int
 C_TLEDLL.TleSetField.argtypes = [settings.stay_int64, c.c_int32, c.c_char_p]
 def TleSetField(satKey, xf_Tle, valueStr):
 	"""
-	python:function::TleSetField
 	Updates the value of a field of a TLE. This function can be used for both GP and SP satellites. 
 	The table below indicates which index values correspond to which fields. Make sure to use the appropriate field index for GP TLEs and SP TLEs. For indexes 5, 15 and 16, the interpretation depends on the ephemeris type of the TLE. 
 	Satnum (1), Epoch (4), and Ephemeris Type (5) cannot be altered. 
 	
-	index|index Interpretation
-	=====|====================
-	1    | Satellite number
-	2    | Security classification
-	3    | Satellite international designator
-	4    | Epoch
-	5    | Ephemeris type = 0,2: B* drag term (1/er) Ephemeris type = 6 : SP radiation pressure coefficient Agom (m2/kg)
-	6    | Ephemeris type
-	7    | Element set number
-	8    | Orbit inclination (degrees)
-	9    | Right ascension of ascending node (degrees)
-	10   | Eccentricity
-	11   | Argument of perigee (degrees)
-	12   | Mean anomaly (degrees)
-	13   | Mean motion (rev/day)
-	14   | Revolution number at epoch
-	15   | Ephemeris type = 0: SGP mean motion derivative (rev/day /2) or Ephemeris type = 6: SP ballistic coefficient (m2/kg)
-	16   | Ephemeris type = 0: SGP mean motion second derivative (rev/day**2 /6) or Ephemeris type = 6: SP Outgassing parameter/Thrust Acceleration (km/s2)
+	+-------+--------------------------------------------------------------------------------------------------------------------------------------------------+
+	| index |index Interpretation                                                                                                                              |
+	+-------+--------------------------------------------------------------------------------------------------------------------------------------------------+
+	|     1 | Satellite number                                                                                                                                 |
+	+-------+--------------------------------------------------------------------------------------------------------------------------------------------------+
+	|     2 | Security classification                                                                                                                          |
+	+-------+--------------------------------------------------------------------------------------------------------------------------------------------------+
+	|     3 | Satellite international designator                                                                                                               |
+	+-------+--------------------------------------------------------------------------------------------------------------------------------------------------+
+	|     4 | Epoch                                                                                                                                            |
+	+-------+--------------------------------------------------------------------------------------------------------------------------------------------------+
+	|     5 | Ephemeris type = 0,2: B* drag term (1/er) Ephemeris type = 6 : SP radiation pressure coefficient Agom (m2/kg)                                    |
+	+-------+--------------------------------------------------------------------------------------------------------------------------------------------------+
+	|     6 | Ephemeris type                                                                                                                                   |
+	+-------+--------------------------------------------------------------------------------------------------------------------------------------------------+
+	|     7 | Element set number                                                                                                                               |
+	+-------+--------------------------------------------------------------------------------------------------------------------------------------------------+
+	|     8 | Orbit inclination (degrees)                                                                                                                      |
+	+-------+--------------------------------------------------------------------------------------------------------------------------------------------------+
+	|     9 | Right ascension of ascending node (degrees)                                                                                                      |
+	+-------+--------------------------------------------------------------------------------------------------------------------------------------------------+
+	|    10 | Eccentricity                                                                                                                                     |
+	+-------+--------------------------------------------------------------------------------------------------------------------------------------------------+
+	|    11 | Argument of perigee (degrees)                                                                                                                    |
+	+-------+--------------------------------------------------------------------------------------------------------------------------------------------------+
+	|    12 | Mean anomaly (degrees)                                                                                                                           |
+	+-------+--------------------------------------------------------------------------------------------------------------------------------------------------+
+	|    13 | Mean motion (rev/day)                                                                                                                            |
+	+-------+--------------------------------------------------------------------------------------------------------------------------------------------------+
+	|    14 | Revolution number at epoch                                                                                                                       |
+	+-------+--------------------------------------------------------------------------------------------------------------------------------------------------+
+	|    15 | Ephemeris type = 0: SGP mean motion derivative (rev/day /2) or Ephemeris type = 6: SP ballistic coefficient (m2/kg)                              |
+	+-------+--------------------------------------------------------------------------------------------------------------------------------------------------+
+	|    16 | Ephemeris type = 0: SGP mean motion second derivative (rev/day**2 /6) or Ephemeris type = 6: SP Outgassing parameter/Thrust Acceleration (km/s2) |
+	+-------+--------------------------------------------------------------------------------------------------------------------------------------------------+
 
 	:param settings.stay_int64 satKey: The satellite's unique key.
 	:param int xf_Tle: Predefined number specifying which field to set.
 	:param str valueStr: The new value of the specified field, expressed as a string. (string[512])
-	:return int retcode: 0 if the TLE is successfully updated, non-0 if there is an error
+	:return:
+		**retcode** (*int*) - 0 if the TLE is successfully updated, non-0 if there is an error
 	"""
 	if not isinstance(satKey, settings.stay_int64):
 		raise TypeError("satKey is type %s, should be type %s" % (type(satKey), settings.stay_int64))
@@ -1354,10 +1426,10 @@ C_TLEDLL.TleSPFieldsToLines.argtypes = [c.c_int32,
 										c.c_char_p]
 def TleSPFieldsToLines(satNum, secClass, satName, epochYr, epochDays, bTerm, ogParm, agom, elsetNum, incli, node, eccen, omega, mnAnomaly, mnMotion, revNum):
 	"""
-	python:function::TleSPFieldsToLines
 	Constructs a TLE from individually provided SP data fields. Only applies to SP propagator. 
 	This function only parses data from the input fields but DOES NOT load/add the TLE to memory. 
 	Returned line1 and line2 will be empty if the function fails to construct the lines as requested.
+	
 	:param int satNum: Satellite number
 	:param str secClass: Security classification
 	:param str satName: Satellite international designator (string[8])
@@ -1374,8 +1446,9 @@ def TleSPFieldsToLines(satNum, secClass, satName, epochYr, epochDays, bTerm, ogP
 	:param float mnAnomaly: Mean anomaly (degrees)
 	:param float mnMotion: Mean motion (rev/day)
 	:param int revNum: Revolution number at epoch
-	:return str line1: Returned first line of a TLE. (byte[512])
-	:return str line2: Returned second line of a TLE. (byte[512])
+	:return:
+		* **line1** (*str*) - Returned first line of a TLE. (byte[512])
+		* **line2** (*str*) - Returned second line of a TLE. (byte[512])
 	"""
 	satNum = c.c_int32(satNum)
 	secClass = c.c_char(secClass.encode('ascii', 'strict'))
@@ -1406,14 +1479,13 @@ C_TLEDLL.TleUpdateSatFrArray.restype = c.c_int
 C_TLEDLL.TleUpdateSatFrArray.argtypes = [settings.stay_int64, settings.double64, c.c_char_p]
 def TleUpdateSatFrArray(satKey, xa_tle, xs_tle):
 	"""
-	python:function::TleUpdateSatFrArray
-	Updates existing TLE data with the provided new data stored in the input parameters 
+	Updates existing TLE data with the provided new data stored in the input parameters.
+	
 	:param settings.stay_int64 satKey: The satellite's unique key
 	:param float[64] xa_tle: Array containing TLE's numerical fields, see XA_TLE_? for array arrangement (double[64])
 	:param str xs_tle: Input string that contains all TLE's text fields, see XS_TLE_? for column arrangement (string[512])
-	:return int retcode: 0 if the TLE is successfully updated, non-0 if there is an error.
-	xa_tle = settings.list_to_array(xa_tle)
-	xs_tle = settings.str_to_c_char_p(xs_tle, fixed_width=512)
+	:return:
+		**retcode** (*int*) -  : 0 if the TLE is successfully updated, non-0 if there is an error.
 	"""
 	if not isinstance(satKey, settings.stay_int64):
 		raise TypeError("satKey is type %s, should be type %s" % (type(satKey), settings.stay_int64))
@@ -1439,8 +1511,8 @@ C_TLEDLL.TleUpdateSatFrFieldsGP.argtypes = [settings.stay_int64,
 
 def TleUpdateSatFrFieldsGP(satKey, secClass, satName, bstar, elsetNum, incli, node, eccen, omega, mnAnomaly, mnMotion, revNum):
 	"""
-	python:function::TleUpdateSatFrFieldsGP
 	Updates a GP satellite's data in memory by providing its individual field values.
+	
 	:param settings.stay_int64 satKey: The satellite's unique key
 	:param str secClass: Security classification 
 	:param str satName: Satellite international designator (string[8])
@@ -1453,7 +1525,8 @@ def TleUpdateSatFrFieldsGP(satKey, secClass, satName, bstar, elsetNum, incli, no
 	:param float mnAnomaly: Mean anomaly (degrees)
 	:param float mnMotion: Mean motion (rev/day) (ephType = 0: Kozai mean motion, ephType = 2: Brouwer mean motion)
 	:param int revNum: Revolution number at epoch
-	:return int retcode: 0 if the TLE is successfully updated, non-0 if there is an error.
+	:return:
+		**retcode** (*int*) - 0 if the TLE is successfully updated, non-0 if there is an error.
 	"""
 	if not isinstance(satKey, settings.stay_int64):
 		raise TypeError("satKey is type %s, should be type %s" % (type(satKey), settings.stay_int64))
@@ -1490,8 +1563,8 @@ C_TLEDLL.TleUpdateSatFrFieldsGP2.argtypes = [settings.stay_int64,
 
 def TleUpdateSatFrFieldsGP2(satKey, secClass, satName, bstar, elsetNum, incli, node, eccen, omega, mnAnomaly, mnMotion, revNum, nDot02, n2Dot06):
 	"""
-	python:function::TleUpdateSatFrFieldsGP2
-	This function is similar to TleUpdateSatFrFieldsGP but includes nDotO2 and n2DotO6. 
+	This function is similar to TleUpdateSatFrFieldsGP but includes nDotO2 and n2DotO6.
+	
 	:param settings.stay_int64 satKey: The satellite's unique key
 	:param str secClass: Security classification 
 	:param str satName: Satellite international designator (string[8])
@@ -1506,7 +1579,8 @@ def TleUpdateSatFrFieldsGP2(satKey, secClass, satName, bstar, elsetNum, incli, n
 	:param int revNum: Revolution number at epoch
 	:param float nDot02: Mean motion derivative (rev/day /2)
 	:param float n2Dot06: Mean motion second derivative (rev/day**2 /6)
-	:return int retcode: 0 if the TLE is successfully updated, non-0 if there is an error.
+	:return:
+		**retcode** (*int*) - 0 if the TLE is successfully updated, non-0 if there is an error.
 	"""
 	if not isinstance(satKey, settings.stay_int64):
 		raise TypeError("satKey is type %s, should be type %s" % (type(satKey), settings.stay_int64))
@@ -1545,8 +1619,8 @@ C_TLEDLL.TleUpdateSatFrFieldsSP.argtypes = [settings.stay_int64,
 
 def TleUpdateSatFrFieldsSP(satKey, secClass, satName, bterm, ogParm, agom, elsetNum, incli, node, eccen, omega, mnAnomaly, mnMotion, revNum):
 	"""
-	python:function::TleUpdateSatFrFieldsSP
 	Updates an SP satellite's data in memory using its individually provided field values.
+	
 	:param settings.stay_int64 satKey: The satellite's unique key
 	:param str secClass: Security classification
 	:param str satName: Satellite international designator (string[8])
@@ -1561,7 +1635,8 @@ def TleUpdateSatFrFieldsSP(satKey, secClass, satName, bterm, ogParm, agom, elset
 	:param float mnAnomaly: Mean anomaly (degrees)
 	:param float mnMotion: Mean motion (rev/day)
 	:param int revNum: Revolution number at epoch
-	:return int retcode: 0 if the TLE is successfully updated, non-0 if there is an error.
+	:return:
+		**retcode** (*int*) - 0 if the TLE is successfully updated, non-0 if there is an error.
 	"""
 	if not isinstance(satKey, settings.stay_int64):
 		raise TypeError("satKey is type %s, should be type %s" % (type(satKey), settings.stay_int64))
