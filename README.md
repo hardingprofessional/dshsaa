@@ -81,6 +81,7 @@ If you don't have pip installed, install it.
 ```
 $ sudo apt update
 $ sudo apt install python3-pip
+$ sudo apt install python3-venv
 ```
 
 Establish a virtual environment.
