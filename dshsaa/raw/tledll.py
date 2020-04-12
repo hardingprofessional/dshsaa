@@ -673,7 +673,9 @@ C_TLEDLL.TleGetAllFieldsSP.argtypes = [settings.stay_int64,
 def TleGetAllFieldsSP(satKey):
 	"""
 	Retrieves all of the data for an SP satellite in a single function call. Only applies to SP propagator. 
+	
 	This function only works for SP satellites. The field values are placed in the corresponding parameters of the function. 
+	
 	:param settings.stay_int64 satKey: The satellite's unique key
 	:return:
 		* **retcode** (*int*) - 0 if all values are retrieved successfully, non-0 if there is an error.
@@ -1319,6 +1321,7 @@ def TleRemoveSat(satKey):
 	"""
 	Removes a TLE represented by the satKey from memory. 
 	If the users enter an invalid satKey (a non-existing satKey), the function will return a non-zero value indicating an error. 
+
 	:param settings.stay_int64 satKey: The unique key of the satellite to be removed.
 	:return:
 		**retcode** (*int*) - 0 if the TLE is removed successfully, non-0 if there is an error.
